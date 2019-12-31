@@ -4,7 +4,7 @@ final class Moon: NSView {
     var percent = Double() {
         didSet {
             let path = {
-                $0.addArc(center: .init(x: CGFloat(percent) * 100, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+                $0.addArc(center: .init(x: CGFloat(percent) * 200, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
                 return $0
             } (CGMutablePath()) as CGPath
             let animation = CABasicAnimation(keyPath: "path")
@@ -29,7 +29,7 @@ final class Moon: NSView {
         out.lineWidth = 2
         out.strokeColor = .init(gray: 1, alpha: 0.2)
         out.path = {
-            $0.addArc(center: .init(x: 50, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 100, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
         layer = out
@@ -38,7 +38,7 @@ final class Moon: NSView {
         let mask = CAShapeLayer()
         mask.fillColor = .white
         mask.path = {
-            $0.addArc(center: .init(x: 50, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 100, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
         
@@ -52,7 +52,7 @@ final class Moon: NSView {
         on.mask = mask
         self.on = on
         
-        widthAnchor.constraint(equalToConstant: 100).isActive = true
+        widthAnchor.constraint(equalToConstant: 200).isActive = true
         heightAnchor.constraint(equalToConstant: 100).isActive = true
     }
 }

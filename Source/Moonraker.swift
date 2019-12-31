@@ -2,11 +2,48 @@ import Foundation
 import Combine
 
 public final class Moonraker {
-    public let subject = CurrentValueSubject<Double, Never>(0)
+    public let visible = CurrentValueSubject<Double, Never>(0)
     
     public init() {
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 5) {
-            self.subject.send(0.3)
+        print(Date().timeIntervalSince1970)
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 1) {
+            self.visible.send(0.5)
         }
     }
+    
+    private func fraction() {
+        
+    }
 }
+
+/*
+ 
+ var dayMs = 1000 * 60 * 60 * 24,
+     J1970 = 2440588,
+     J2000 = 2451545;
+
+ function toJulian(date) { return date.valueOf() / dayMs - 0.5 + J1970; }
+ function fromJulian(j)  { return new Date((j + 0.5 - J1970) * dayMs); }
+ function toDays(date)   { return toJulian(date) - J2000; }
+ 
+ SunCalc.getMoonIllumination = function (date) {
+
+     var d = toDays(date || new Date()),
+         s = sunCoords(d),
+         m = moonCoords(d),
+
+         sdist = 149598000, // distance from Earth to Sun in km
+
+         phi = acos(sin(s.dec) * sin(m.dec) + cos(s.dec) * cos(m.dec) * cos(s.ra - m.ra)),
+         inc = atan(sdist * sin(phi), m.dist - sdist * cos(phi)),
+         angle = atan(cos(s.dec) * sin(s.ra - m.ra), sin(s.dec) * cos(m.dec) -
+                 cos(s.dec) * sin(m.dec) * cos(s.ra - m.ra));
+
+     return {
+         fraction: (1 + cos(inc)) / 2,
+         phase: 0.5 + 0.5 * inc * (angle < 0 ? -1 : 1) / Math.PI,
+         angle: angle
+     };
+ };
+ 
+ */

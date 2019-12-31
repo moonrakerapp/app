@@ -3,14 +3,17 @@ import AppKit
 final class Moon: NSView {
     var percent = Double() {
         didSet {
-            let x = CGFloat(percent) * bounds.width / 2
-            let animation = CABasicAnimation(keyPath: "frame.origin.x")
+            let path = {
+                $0.addArc(center: .init(x: CGFloat(percent) * 100, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+                return $0
+            } (CGMutablePath()) as CGPath
+            let animation = CABasicAnimation(keyPath: "path")
             animation.duration = 1
-            animation.fromValue = on.frame.origin.x
-            animation.toValue = x
+            animation.fromValue = on.path
+            animation.toValue = path
             animation.timingFunction = .init(name: .easeOut)
-            on.frame.origin.x = x
-            on.add(animation, forKey: "frame.origin.x")
+            on.path = path
+            on.add(animation, forKey: "path")
         }
     }
     
@@ -42,7 +45,7 @@ final class Moon: NSView {
         let on = CAShapeLayer()
         on.fillColor = .white
         on.path = {
-            $0.addArc(center: .init(x: 50, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 0, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
         out.addSublayer(on)

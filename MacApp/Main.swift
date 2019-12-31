@@ -1,6 +1,9 @@
+import Moonraker
 import AppKit
 
 final class Main: NSWindow {
+    private let moonraker = Moonraker()
+    
     override var canBecomeKey: Bool { true }
     override var acceptsFirstResponder: Bool { true }
 
@@ -16,6 +19,12 @@ final class Main: NSWindow {
         contentView!.wantsLayer = true
         contentView!.layer!.cornerRadius = 10
         contentView!.layer!.backgroundColor = .black
+        
+        let moon = Moon()
+        contentView!.addSubview(moon)
+        
+        moon.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
+        moon.centerYAnchor.constraint(equalTo: contentView!.centerYAnchor).isActive = true
     }
     
     override func becomeKey() {
@@ -30,7 +39,9 @@ final class Main: NSWindow {
         contentView!.subviews.forEach { $0.alphaValue = 0.4 }
     }
     
-    override func close() { app.terminate(nil) }
+    override func close() {
+        NSApp.terminate(nil)
+    }
     
     override func zoom(_ sender: Any?) {
         contentView!.layer!.cornerRadius = isZoomed ? 10 : 0

@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5831A123BB8A8C00AD5BBB /* Moon.swift */; };
 		DACB8ECD23BB7C1600ADBCB2 /* TestMoon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ECB23BB7C1600ADBCB2 /* TestMoon.swift */; };
-		DACB8ED123BB7C2B00ADBCB2 /* Moon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED023BB7C2B00ADBCB2 /* Moon.swift */; };
+		DACB8ED123BB7C2B00ADBCB2 /* Moonraker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED023BB7C2B00ADBCB2 /* Moonraker.swift */; };
 		DACB8EDD23BB7C4000ADBCB2 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED623BB7C3F00ADBCB2 /* Main.swift */; };
 		DACB8EDE23BB7C4000ADBCB2 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED723BB7C3F00ADBCB2 /* App.swift */; };
 		DACB8EE023BB7C4000ADBCB2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DACB8EDA23BB7C4000ADBCB2 /* Localizable.strings */; };
@@ -34,9 +35,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA5831A123BB8A8C00AD5BBB /* Moon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moon.swift; sourceTree = "<group>"; };
 		DACB8ECB23BB7C1600ADBCB2 /* TestMoon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestMoon.swift; sourceTree = "<group>"; };
 		DACB8ECC23BB7C1600ADBCB2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		DACB8ED023BB7C2B00ADBCB2 /* Moon.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Moon.swift; sourceTree = "<group>"; };
+		DACB8ED023BB7C2B00ADBCB2 /* Moonraker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Moonraker.swift; sourceTree = "<group>"; };
 		DACB8ED223BB7C2B00ADBCB2 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DACB8ED523BB7C3F00ADBCB2 /* MacApp.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MacApp.entitlements; sourceTree = "<group>"; };
 		DACB8ED623BB7C3F00ADBCB2 /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
@@ -82,15 +84,15 @@
 			children = (
 				DACB8EE323BB7C5000ADBCB2 /* .gitignore */,
 				DACB8EE123BB7C5000ADBCB2 /* LICENSE */,
+				DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */,
+				DACB8EE523BB7E2D00ADBCB2 /* Moonraker.app */,
 				DACB8EE223BB7C5000ADBCB2 /* README.md */,
 				DACB8ED223BB7C2B00ADBCB2 /* Tests.xctest */,
 				DACB8ED923BB7C4000ADBCB2 /* Base.lproj */,
+				DACB8EE623BB843500ADBCB2 /* Frameworks */,
 				DACB8ED423BB7C3F00ADBCB2 /* MacApp */,
 				DACB8ECF23BB7C2B00ADBCB2 /* Source */,
 				DACB8ECA23BB7C1600ADBCB2 /* Tests */,
-				DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */,
-				DACB8EE523BB7E2D00ADBCB2 /* Moonraker.app */,
-				DACB8EE623BB843500ADBCB2 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -106,7 +108,7 @@
 		DACB8ECF23BB7C2B00ADBCB2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				DACB8ED023BB7C2B00ADBCB2 /* Moon.swift */,
+				DACB8ED023BB7C2B00ADBCB2 /* Moonraker.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -118,6 +120,7 @@
 				DACB8ED823BB7C3F00ADBCB2 /* Info.plist */,
 				DACB8ED723BB7C3F00ADBCB2 /* App.swift */,
 				DACB8ED623BB7C3F00ADBCB2 /* Main.swift */,
+				DA5831A123BB8A8C00AD5BBB /* Moon.swift */,
 			);
 			path = MacApp;
 			sourceTree = "<group>";
@@ -266,7 +269,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DACB8ED123BB7C2B00ADBCB2 /* Moon.swift in Sources */,
+				DACB8ED123BB7C2B00ADBCB2 /* Moonraker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -283,6 +286,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DACB8EDD23BB7C4000ADBCB2 /* Main.swift in Sources */,
+				DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */,
 				DACB8EDE23BB7C4000ADBCB2 /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

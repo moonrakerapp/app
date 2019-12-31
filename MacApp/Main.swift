@@ -1,7 +1,9 @@
 import Moonraker
+import Combine
 import AppKit
 
 final class Main: NSWindow {
+    private var disposables = Set<AnyCancellable>()
     private let moonraker = Moonraker()
     
     override var canBecomeKey: Bool { true }
@@ -25,6 +27,10 @@ final class Main: NSWindow {
         
         moon.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
         moon.centerYAnchor.constraint(equalTo: contentView!.centerYAnchor).isActive = true
+        
+        moonraker.subject.receive(on: DispatchQueue.main).sink {
+            moon.percent = $0
+        }.store(in: &disposables)
     }
     
     override func becomeKey() {

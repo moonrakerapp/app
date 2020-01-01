@@ -32,14 +32,22 @@ public final class Moonraker {
     func sunCoords(_ days: Double) -> (Double, Double) {
         {
             (declination(0, $0), rightAscension(0, $0))
-        } (eclipticLongitude(solarMeanAnomaly(days)))
+        } (sunEclipticLongitude(solarMeanAnomaly(days)))
+    }
+    
+    func moonCoords(_ days: Double) -> (Double, Double, Double) {
+        {
+            {
+               (rightAscension($1, $2), declination($1, $2), moonDistanceKm($0))
+            } ($0, moonLatitude(moonMeanDistance(days)), moonLongitude(moonEclipticLongitude(days), $0))
+        } (moonMeanAnomaly(days))
     }
     
     func solarMeanAnomaly(_ days: Double) -> Double {
         radians * (357.5291 + 0.98560028 * days)
     }
     
-    func eclipticLongitude(_ anomaly: Double) -> Double {
+    func sunEclipticLongitude(_ anomaly: Double) -> Double {
         anomaly + equationOfCenter(anomaly) + earthPerihelion + .pi
     }
     
@@ -53,6 +61,30 @@ public final class Moonraker {
     
     private func equationOfCenter(_ anomaly: Double) -> Double {
         radians * (1.9148 * sin(anomaly) + 0.02 * sin(2 * anomaly) + 0.0003 * sin(3 * anomaly))
+    }
+    
+    private func moonEclipticLongitude(_ days: Double) -> Double {
+        radians * (218.316 + 13.176396 * days)
+    }
+    
+    private func moonMeanAnomaly(_ days: Double) -> Double {
+        radians * (134.963 + 13.064993 * days)
+    }
+    
+    private func moonMeanDistance(_ days: Double) -> Double {
+        radians * (93.272 + 13.229350 * days)
+    }
+    
+    private func moonLatitude(_ distance: Double) -> Double {
+        radians * 5.128 * sin(distance)
+    }
+    
+    private func moonLongitude(_ eclipticLongitude: Double, _ anomaly: Double) -> Double {
+        eclipticLongitude + (radians * 6.289 * sin(anomaly))
+    }
+    
+    private func moonDistanceKm(_ anomaly: Double) -> Double {
+        385001 - (20905 * cos(anomaly))
     }
 }
 

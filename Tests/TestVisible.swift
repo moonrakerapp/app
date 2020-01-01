@@ -8,8 +8,16 @@ final class TestVisible: XCTestCase {
         moonraker = .init()
     }
     
-    func testVisible() {
-        XCTAssertEqual(0.5490432602177777, moonraker.visible(1300000000))
+    func testPhase() {
+        XCTAssertEqual(.waxingGibbous, moonraker.illumination(1300000000).0)
+    }
+    
+    func testFraction() {
+        XCTAssertEqual(0.5490432602177777, moonraker.illumination(1300000000).1)
+    }
+    
+    func testAngle() {
+        XCTAssertEqual(-1.5893102315841525, moonraker.illumination(1300000000).2)
     }
     
     func testDays() {

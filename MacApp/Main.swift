@@ -3,7 +3,7 @@ import Combine
 import AppKit
 
 final class Main: NSWindow {
-    private var disposables = Set<AnyCancellable>()
+    private var cancellables = Set<AnyCancellable>()
     private let moonraker = Moonraker()
     
     override var canBecomeKey: Bool { true }
@@ -28,9 +28,9 @@ final class Main: NSWindow {
         moon.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
         moon.centerYAnchor.constraint(equalTo: contentView!.centerYAnchor).isActive = true
         
-        moonraker.visible.receive(on: DispatchQueue.main).sink {
-            moon.percent = $0
-        }.store(in: &disposables)
+        moonraker.phase.receive(on: DispatchQueue.main).sink { moon.phase = $0 }.store(in: &cancellables)
+        moonraker.fraction.receive(on: DispatchQueue.main).sink { moon.fraction = $0 }.store(in: &cancellables)
+        moonraker.angle.receive(on: DispatchQueue.main).sink { moon.angle = $0 }.store(in: &cancellables)
     }
     
     override func becomeKey() {

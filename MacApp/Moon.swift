@@ -1,10 +1,17 @@
+import Moonraker
 import AppKit
 
 final class Moon: NSView {
-    var percent = Double() {
+    var phase = Phase.new {
+        didSet {
+            
+        }
+    }
+    
+    var fraction = Double() {
         didSet {
             let path = {
-                $0.addArc(center: .init(x: CGFloat(percent) * 200, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+                $0.addArc(center: .init(x: CGFloat(fraction) * 200, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
                 return $0
             } (CGMutablePath()) as CGPath
             let animation = CABasicAnimation(keyPath: "path")
@@ -14,6 +21,12 @@ final class Moon: NSView {
             animation.timingFunction = .init(name: .easeOut)
             on.path = path
             on.add(animation, forKey: "path")
+        }
+    }
+    
+    var angle = Double() {
+        didSet {
+            
         }
     }
     

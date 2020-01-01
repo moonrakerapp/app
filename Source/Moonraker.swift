@@ -2,13 +2,16 @@ import Foundation
 import Combine
 
 public final class Moonraker {
-    public let visible = CurrentValueSubject<Double, Never>(0)
+    public let phase = CurrentValueSubject<Phase, Never>(.new)
+    public let fraction = CurrentValueSubject<Double, Never>(0)
+    public let angle = CurrentValueSubject<Double, Never>(0)
     private let queue = DispatchQueue(label: "", qos: .background, target: .global(qos: .background))
     private let J1970 = Double(2440588)
     private let J2000 = Double(2451545)
     private let radians = Double.pi / 180
     private let earthPerihelion = Double.pi / 180 * 102.9372
     private let earthObliquity = Double.pi / 180 * 23.4397
+    private let sunDistanceKm = Double(149598000)
     
     public init() {
         
@@ -16,13 +19,16 @@ public final class Moonraker {
     
     public func update(_ date: Date) {
         queue.async { [weak self] in
-            self?.visible.send(self?.visible(date.timeIntervalSince1970) ?? 0)
+            guard let illumination = self?.illumination(date.timeIntervalSince1970) else { return }
+            self?.phase.send(illumination.0)
+            self?.fraction.send(illumination.1)
+            self?.angle.send(illumination.2)
         }
     }
     
-    func visible(_ time: TimeInterval) -> Double {
-        let _days = days(time)
-        return 0
+    func illumination(_ time: TimeInterval) -> (Phase, Double, Double) {
+//        let _days = days(time)
+        return (.new, 0, 0)
     }
     
     func days(_ time: TimeInterval) -> Double {

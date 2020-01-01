@@ -15,6 +15,7 @@
 		DACB8EE723BB843500ADBCB2 /* libMoonraker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */; };
 		DACB8EEA23BB843F00ADBCB2 /* libMoonraker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */; };
 		DAEAD2F223BC8FC10053EBEA /* TestVisible.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F123BC8FC10053EBEA /* TestVisible.swift */; };
+		DAEAD2F423BCAE470053EBEA /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F323BCAE470053EBEA /* Phase.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -50,6 +51,7 @@
 		DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMoonraker.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DACB8EE523BB7E2D00ADBCB2 /* Moonraker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moonraker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAEAD2F123BC8FC10053EBEA /* TestVisible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVisible.swift; sourceTree = "<group>"; };
+		DAEAD2F323BCAE470053EBEA /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -109,6 +111,7 @@
 			isa = PBXGroup;
 			children = (
 				DACB8ED023BB7C2B00ADBCB2 /* Moonraker.swift */,
+				DAEAD2F323BCAE470053EBEA /* Phase.swift */,
 			);
 			path = Source;
 			sourceTree = "<group>";
@@ -270,6 +273,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DACB8ED123BB7C2B00ADBCB2 /* Moonraker.swift in Sources */,
+				DAEAD2F423BCAE470053EBEA /* Phase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -27,12 +27,13 @@ public final class Moonraker {
     }
     
     func illumination(_ time: TimeInterval) -> (Phase, Double, Double) {
-        let _days = days(time)
-        let _sunCoords = sunCoords(_days)
-        let _moonCoords = moonCoords(_days)
-        let _inclination = inclination(phi(_sunCoords, _moonCoords), _moonCoords.2)
-        let _angle = angle(_sunCoords, _moonCoords)
-        return (phase(_inclination, _angle), fraction(_inclination), _angle)
+        {
+            {
+                {
+                    (phase($0, $1), fraction($0), $1)
+                } (inclination(phi($0, $1), $1.2), angle($0, $1))
+            } (sunCoords($0), moonCoords($0))
+        } (days(time))
     }
     
     func days(_ time: TimeInterval) -> Double {

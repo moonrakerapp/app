@@ -27,8 +27,12 @@ public final class Moonraker {
     }
     
     func illumination(_ time: TimeInterval) -> (Phase, Double, Double) {
-//        let _days = days(time)
-        return (.new, 0, 0)
+        let _days = days(time)
+        let _sunCoords = sunCoords(_days)
+        let _moonCoords = moonCoords(_days)
+        let _inclination = inclination(phi(_sunCoords, _moonCoords), _moonCoords.2)
+        let _angle = angle(_sunCoords, _moonCoords)
+        return (phase(_inclination, _angle), fraction(_inclination), _angle)
     }
     
     func days(_ time: TimeInterval) -> Double {
@@ -92,36 +96,34 @@ public final class Moonraker {
     private func moonDistanceKm(_ anomaly: Double) -> Double {
         385001 - (20905 * cos(anomaly))
     }
+    
+    private func fraction(_ inclination: Double) -> Double {
+        (1 + cos(inclination)) / 2
+    }
+    
+    private func angle(_ sunCoords: (Double, Double), _ moonCoords: (Double, Double, Double)) -> Double {
+        atan2(cos(sunCoords.0) * sin(sunCoords.1 - moonCoords.0),
+              sin(sunCoords.0) * cos(moonCoords.1) - cos(sunCoords.0) * sin(moonCoords.1) * cos(sunCoords.1 - moonCoords.0))
+    }
+    
+    private func phi(_ sunCoords: (Double, Double), _ moonCoords: (Double, Double, Double)) -> Double {
+        acos(sin(sunCoords.0) * sin(moonCoords.1) + cos(sunCoords.0) * cos(moonCoords.1) * cos(sunCoords.1 - moonCoords.0))
+    }
+    
+    private func inclination(_ phi: Double, _ moonDistanceKm: Double) -> Double {
+        atan2(sunDistanceKm * sin(phi), moonDistanceKm - sunDistanceKm * cos(phi))
+    }
+    
+    private func phase(_ inclination: Double, _ angle: Double) -> Phase {
+        switch 0.5 + ((0.5 * inclination) * (angle < 0 ? -1 : 1) / .pi) {
+        case 0: return .new
+        case let phase where phase < 0.25: return .waxingCrescent
+        case 0.25: return .firstQuarter
+        case let phase where phase > 0.25 && phase < 0.5: return .waxingGibbous
+        case 0.5: return .full
+        case let phase where phase > 5 && phase < 0.75: return .waningGibbous
+        case 0.75: return .lastQuarter
+        default: return .waningCrescent
+        }
+    }
 }
-
-/*
- 
- var dayMs = 1000 * 60 * 60 * 24,
-     J1970 = 2440588,
-     J2000 = 2451545;
-
- function toJulian(date) { return date.valueOf() / dayMs - 0.5 + J1970; }
- function fromJulian(j)  { return new Date((j + 0.5 - J1970) * dayMs); }
- function toDays(date)   { return toJulian(date) - J2000; }
- 
- SunCalc.getMoonIllumination = function (date) {
-
-     var d = toDays(date || new Date()),
-         s = sunCoords(d),
-         m = moonCoords(d),
-
-         sdist = 149598000, // distance from Earth to Sun in km
-
-         phi = acos(sin(s.dec) * sin(m.dec) + cos(s.dec) * cos(m.dec) * cos(s.ra - m.ra)),
-         inc = atan(sdist * sin(phi), m.dist - sdist * cos(phi)),
-         angle = atan(cos(s.dec) * sin(s.ra - m.ra), sin(s.dec) * cos(m.dec) -
-                 cos(s.dec) * sin(m.dec) * cos(s.ra - m.ra));
-
-     return {
-         fraction: (1 + cos(inc)) / 2,
-         phase: 0.5 + 0.5 * inc * (angle < 0 ? -1 : 1) / Math.PI,
-         angle: angle
-     };
- };
- 
- */

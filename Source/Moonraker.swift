@@ -2,9 +2,7 @@ import Foundation
 import Combine
 
 public final class Moonraker {
-    public let phase = CurrentValueSubject<Phase, Never>(.new)
-    public let fraction = CurrentValueSubject<Double, Never>(0)
-    public let angle = CurrentValueSubject<Double, Never>(0)
+    public let illumination = CurrentValueSubject<(Phase, Double, Double), Never>((.new, 0, 0))
     private let queue = DispatchQueue(label: "", qos: .background, target: .global(qos: .background))
     private let J1970 = Double(2440588)
     private let J2000 = Double(2451545)
@@ -19,10 +17,8 @@ public final class Moonraker {
     
     public func update(_ date: Date) {
         queue.async { [weak self] in
-            guard let illumination = self?.illumination(date.timeIntervalSince1970) else { return }
-            self?.phase.send(illumination.0)
-            self?.fraction.send(illumination.1)
-            self?.angle.send(illumination.2)
+            guard let self = self else { return }
+            self.illumination.send(self.illumination(date.timeIntervalSince1970))
         }
     }
     

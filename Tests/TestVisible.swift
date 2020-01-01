@@ -59,6 +59,4 @@ final class TestVisible: XCTestCase {
     func testRightAscension() {
         XCTAssertEqual(2.928664200072675, moonraker.rightAscension(0, 97.15794246793237))
     }
-    
-    
 }

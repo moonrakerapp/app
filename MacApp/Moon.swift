@@ -2,70 +2,129 @@ import Moonraker
 import AppKit
 
 final class Moon: NSView {
-    var phase = Phase.new {
-        didSet {
-            
-        }
+    var phase = Phase.new
+    var fraction = Double()
+    var angle = Double()
+    private weak var ring: CAShapeLayer!
+    private weak var face: CAShapeLayer!
+    private let duration = TimeInterval(0.5)
+    private let map = [Phase.new : new,
+                       .waxingCrescent : waxingCrescent,
+                       .firstQuarter : firstQuarter,
+                       .waxingGibbous : waxingGibbous,
+                       .full : full,
+                       .waningGibbous : waningGibbous,
+                       .lastQuarter : lastQuarter,
+                       .waningCrescent : waningCrescent]
+    
+    private var radius: CGFloat {
+        min(bounds.width, bounds.height) * 0.4
     }
     
-    var fraction = Double() {
-        didSet {
-            let path = {
-                $0.addArc(center: .init(x: CGFloat(fraction) * 200, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-                return $0
-            } (CGMutablePath()) as CGPath
-            let animation = CABasicAnimation(keyPath: "path")
-            animation.duration = 1
-            animation.fromValue = on.path
-            animation.toValue = path
-            animation.timingFunction = .init(name: .easeOut)
-            on.path = path
-            on.add(animation, forKey: "path")
-        }
+    private var center: CGPoint {
+        .init(x: bounds.width / 2, y: bounds.height / 2)
     }
-    
-    var angle = Double() {
-        didSet {
-            
-        }
-    }
-    
-    private weak var on: CAShapeLayer!
     
     required init?(coder: NSCoder) { nil }
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        
-        let out = CAShapeLayer()
-        out.fillColor = .clear
-        out.lineWidth = 2
-        out.strokeColor = .init(gray: 1, alpha: 0.2)
-        out.path = {
-            $0.addArc(center: .init(x: 100, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            return $0
-        } (CGMutablePath())
-        layer = out
         wantsLayer = true
         
-        let mask = CAShapeLayer()
-        mask.fillColor = .white
-        mask.path = {
-            $0.addArc(center: .init(x: 100, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+        let face = CAShapeLayer()
+        face.fillColor = .white
+        layer!.addSublayer(face)
+        self.face = face
+        
+        let ring = CAShapeLayer()
+        ring.fillColor = .clear
+        ring.lineWidth = 4
+        ring.strokeColor = NSColor.red.cgColor
+        layer!.addSublayer(ring)
+        self.ring = ring
+    }
+    
+    override func viewDidEndLiveResize() {
+        super.viewDidEndLiveResize()
+        resize()
+    }
+    
+    func resize() {
+        let path = {
+            $0.addArc(center: center, radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath()) as CGPath
+        let animation = CABasicAnimation(keyPath: "path")
+        animation.duration = duration
+        animation.fromValue = ring.path
+        animation.toValue = path
+        animation.timingFunction = .init(name: .easeOut)
+        ring.path = path
+        ring.add(animation, forKey: "path")
+        update()
+    }
+    
+    func update() {
+        let path = map[phase]!(self)()
+        let animation = CABasicAnimation(keyPath: "path")
+        animation.duration = duration
+        animation.fromValue = face.path
+        animation.toValue = path
+        animation.timingFunction = .init(name: .easeOut)
+        face.path = path
+        face.add(animation, forKey: "path")
+    }
+    
+    private func new() -> CGPath {
+        CGMutablePath()
+    }
+    
+    private func waxingCrescent() -> CGPath {
+        {
+            $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
+            $0.addLine(to: .init(x: center.x, y: center.y - radius))
+            $0.addQuadCurve(to: .init(x: center.x, y: center.y + radius), control: .init(x: center.x + radius - ((radius * 2) * .init(fraction)), y: center.y))
             return $0
         } (CGMutablePath())
-        
-        let on = CAShapeLayer()
-        on.fillColor = .white
-        on.path = {
-            $0.addArc(center: .init(x: 0, y: 50), radius: 40, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+    }
+    
+    private func firstQuarter() -> CGPath {
+        {
+            $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
             return $0
         } (CGMutablePath())
-        out.addSublayer(on)
-        on.mask = mask
-        self.on = on
-        
-        widthAnchor.constraint(equalToConstant: 200).isActive = true
-        heightAnchor.constraint(equalToConstant: 100).isActive = true
+    }
+    
+    private func waxingGibbous() -> CGPath {
+        {
+            $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
+            $0.addLine(to: .init(x: center.x, y: center.y - radius))
+            $0.addCurve(to: .init(x: center.x, y: center.y + radius),
+                        control1: .init(x: center.x - (radius * 1.5), y: center.y - (radius * 0.5)),
+                        control2: .init(x: center.x - (radius * 1.5), y: center.y + (radius * 0.5)))
+            return $0
+        } (CGMutablePath())
+    }
+    
+    private func full() -> CGPath {
+        {
+            $0.addArc(center: center, radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath())
+    }
+    
+    private func waningGibbous() -> CGPath {
+        CGMutablePath()
+    }
+    
+    private func lastQuarter() -> CGPath {
+        {
+            $0.addArc(center: center, radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
+            return $0
+        } (CGMutablePath())
+    }
+    
+    private func waningCrescent() -> CGPath {
+        CGMutablePath()
     }
 }

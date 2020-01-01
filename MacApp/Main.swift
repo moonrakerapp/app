@@ -25,18 +25,30 @@ final class Main: NSWindow {
         let moon = Moon()
         contentView!.addSubview(moon)
         
-        moon.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
-        moon.centerYAnchor.constraint(equalTo: contentView!.centerYAnchor).isActive = true
+        moon.topAnchor.constraint(equalTo: contentView!.topAnchor).isActive = true
+        moon.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor).isActive = true
+        moon.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
+        moon.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
         
-        moonraker.phase.receive(on: DispatchQueue.main).sink { moon.phase = $0 }.store(in: &cancellables)
-        moonraker.fraction.receive(on: DispatchQueue.main).sink { moon.fraction = $0 }.store(in: &cancellables)
-        moonraker.angle.receive(on: DispatchQueue.main).sink { moon.angle = $0 }.store(in: &cancellables)
+//        moonraker.illumination.receive(on: DispatchQueue.main).sink { [weak moon] in
+//            moon?.phase = $0.0
+//            moon?.fraction = $0.1
+//            moon?.angle = $0.2
+//            moon?.update()
+//        }.store(in: &cancellables)
+        
+        moon.phase = .waxingGibbous
+        moon.fraction = 1
+        
+        DispatchQueue.main.async { [weak moon] in moon?.resize() }
     }
     
     override func becomeKey() {
         super.becomeKey()
         hasShadow = true
         contentView!.subviews.forEach { $0.alphaValue = 1 }
+        print("update")
+        moonraker.update(.init())
     }
     
     override func resignKey() {

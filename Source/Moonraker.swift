@@ -3,16 +3,20 @@ import Combine
 
 public final class Moonraker {
     public let visible = CurrentValueSubject<Double, Never>(0)
+    private let queue = DispatchQueue(label: "", qos: .background, target: .global(qos: .background))
     
     public init() {
-        print(Date().timeIntervalSince1970)
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 1) {
-            self.visible.send(0.5)
+        
+    }
+    
+    public func update(_ date: Date) {
+        queue.async { [weak self] in
+            self?.visible.send(self?.visible(date.timeIntervalSince1970) ?? 0)
         }
     }
     
-    private func fraction() {
-        
+    func visible(_ timestamp: TimeInterval) -> Double {
+        return 0
     }
 }
 

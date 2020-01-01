@@ -37,8 +37,8 @@ final class Main: NSWindow {
 //            moon?.update()
 //        }.store(in: &cancellables)
         
-        moon.phase = .waxingGibbous
-        moon.fraction = 0
+        moon.phase = .waxingCrescent
+        moon.fraction = 0.0
         
         DispatchQueue.main.async { [weak moon] in moon?.resize() }
     }

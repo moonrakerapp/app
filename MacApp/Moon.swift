@@ -83,7 +83,9 @@ final class Moon: NSView {
         {
             $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
             $0.addLine(to: .init(x: center.x, y: center.y - radius))
-            $0.addQuadCurve(to: .init(x: center.x, y: center.y + radius), control: .init(x: center.x + radius - ((radius * 2) * .init(fraction)), y: center.y))
+            $0.addCurve(to: .init(x: center.x, y: center.y + radius),
+                        control1: .init(x: center.x + (radius * 1.25) - (2 * radius * .init(fraction)), y: center.y - (radius * 0.75)),
+                        control2: .init(x: center.x + (radius * 1.25) - (2 * radius * .init(fraction)), y: center.y + (radius * 0.75)))
             return $0
         } (CGMutablePath())
     }
@@ -97,16 +99,13 @@ final class Moon: NSView {
     
     private func waxingGibbous() -> CGPath {
         {
-            {
-                $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
-                $0.addLine(to: $1)
-                $0.addCurve(to: $2, control1: $4.0, control2: $4.1)
-                $0.addCurve(to: $3, control1: $5.0, control2: $5.1)
-                return $0
-            } (CGMutablePath(), $0, $1, $2, controls($0, $1), controls($1, $2))
-        } (CGPoint(x: center.x, y: center.y - radius),
-           CGPoint(x: center.x - radius, y: center.y),
-           CGPoint(x: center.x, y: center.y + radius))
+            $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
+            $0.addLine(to: .init(x: center.x, y: center.y - radius))
+            $0.addCurve(to: .init(x: center.x, y: center.y + radius),
+                        control1: .init(x: center.x - ((radius * 1.25) * .init(fraction)), y: center.y - (radius * 0.75)),
+                        control2: .init(x: center.x - ((radius * 1.25) * .init(fraction)), y: center.y + (radius * 0.75)))
+            return $0
+        } (CGMutablePath())
     }
     
     private func full() -> CGPath {

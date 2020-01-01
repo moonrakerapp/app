@@ -97,13 +97,16 @@ final class Moon: NSView {
     
     private func waxingGibbous() -> CGPath {
         {
-            $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
-            $0.addLine(to: .init(x: center.x, y: center.y - radius))
-            $0.addCurve(to: .init(x: center.x, y: center.y + radius),
-                        control1: .init(x: center.x - (radius * 1.5), y: center.y - (radius * 0.5)),
-                        control2: .init(x: center.x - (radius * 1.5), y: center.y + (radius * 0.5)))
-            return $0
-        } (CGMutablePath())
+            {
+                $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
+                $0.addLine(to: $1)
+                $0.addCurve(to: $2, control1: $4.0, control2: $4.1)
+                $0.addCurve(to: $3, control1: $5.0, control2: $5.1)
+                return $0
+            } (CGMutablePath(), $0, $1, $2, controls($0, $1), controls($1, $2))
+        } (CGPoint(x: center.x, y: center.y - radius),
+           CGPoint(x: center.x - radius, y: center.y),
+           CGPoint(x: center.x, y: center.y + radius))
     }
     
     private func full() -> CGPath {
@@ -126,5 +129,17 @@ final class Moon: NSView {
     
     private func waningCrescent() -> CGPath {
         CGMutablePath()
+    }
+    
+    private func controls(_ start: CGPoint, _ end: CGPoint) -> (CGPoint, CGPoint) {
+        let ax = start.x - center.x
+        let ay = start.y - center.y
+        let bx = end.x - center.x
+        let by = end.y - center.y
+        let q1 = (ax * ax) + (ay * ay)
+        let q2 = q1 + (ax * bx) + (ay * by)
+        let k2 = 4 / 3 * (sqrt(2 * q1 * q2) - q2) / ((ax * by) - (ay * bx))
+        return (.init(x: center.x + ax - (k2 * ay), y: center.y + ay + (k2 * ax)),
+                .init(x: center.x + bx + (k2 * by), y: center.y + by - (k2 * bx)))
     }
 }

@@ -5,6 +5,7 @@ import AppKit
 final class Main: NSWindow {
     private var cancellables = Set<AnyCancellable>()
     private let moonraker = Moonraker()
+    
     override var canBecomeKey: Bool { true }
     override var acceptsFirstResponder: Bool { true }
 
@@ -27,10 +28,18 @@ final class Main: NSWindow {
         let moon = Moon()
         contentView!.addSubview(moon)
         
+        let horizon = Horizon()
+        contentView!.addSubview(horizon)
+        
         moon.topAnchor.constraint(equalTo: contentView!.topAnchor).isActive = true
-        moon.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor).isActive = true
         moon.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
         moon.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
+        moon.bottomAnchor.constraint(equalTo: horizon.topAnchor).isActive = true
+        
+        horizon.heightAnchor.constraint(equalTo: contentView!.heightAnchor, multiplier: 0.3).isActive = true
+        horizon.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor).isActive = true
+        horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
+        horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
         
         moonraker.illumination.receive(on: DispatchQueue.main).sink { [weak moon] in
             moon?.phase = $0.0

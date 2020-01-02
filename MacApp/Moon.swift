@@ -7,7 +7,6 @@ final class Moon: NSView {
     var angle = Double()
     private weak var ring: CAShapeLayer!
     private weak var face: CAShapeLayer!
-    private let duration = TimeInterval(0.5)
     private let map = [Phase.new : new,
                        .waxingCrescent : waxingCrescent,
                        .firstQuarter : firstQuarter,
@@ -48,14 +47,14 @@ final class Moon: NSView {
         
         let face = CAShapeLayer()
         face.fillColor = .haze()
-        layer!.addSublayer(face)
+        ring.addSublayer(face)
         self.face = face
     }
     
     func update() {
         let path = map[phase]!(self)()
         let animation = CABasicAnimation(keyPath: "path")
-        animation.duration = duration
+        animation.duration = 0.5
         animation.fromValue = face.path
         animation.toValue = path
         animation.timingFunction = .init(name: .easeOut)
@@ -64,18 +63,11 @@ final class Moon: NSView {
     }
     
     private func resize() {
-        let path = {
+        ring.path = {
             $0.addArc(center: center, radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
             return $0
-        } (CGMutablePath()) as CGPath
-        let animation = CABasicAnimation(keyPath: "path")
-        animation.duration = duration
-        animation.fromValue = ring.path
-        animation.toValue = path
-        animation.timingFunction = .init(name: .easeOut)
-        ring.path = path
-        ring.add(animation, forKey: "path")
-        update()
+        } (CGMutablePath())
+        face.path = map[phase]!(self)()
     }
     
     private func new() -> CGPath {
@@ -145,17 +137,5 @@ final class Moon: NSView {
                         control2: .init(x: center.x - (radius * 1.25) + (2 * radius * .init(fraction)), y: center.y - (radius * 0.75)))
             return $0
         } (CGMutablePath())
-    }
-    
-    private func controls(_ start: CGPoint, _ end: CGPoint) -> (CGPoint, CGPoint) {
-        let ax = start.x - center.x
-        let ay = start.y - center.y
-        let bx = end.x - center.x
-        let by = end.y - center.y
-        let q1 = (ax * ax) + (ay * ay)
-        let q2 = q1 + (ax * bx) + (ay * by)
-        let k2 = 4 / 3 * (sqrt(2 * q1 * q2) - q2) / ((ax * by) - (ay * bx))
-        return (.init(x: center.x + ax - (k2 * ay), y: center.y + ay + (k2 * ax)),
-                .init(x: center.x + bx + (k2 * by), y: center.y + by - (k2 * bx)))
     }
 }

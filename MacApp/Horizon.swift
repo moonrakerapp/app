@@ -31,6 +31,13 @@ final class Horizon: NSView {
         .init(x: bounds.width / 2, y: bounds.height / 2)
     }
     
+    private var location: CGPath {
+        {
+            $0.addArc(center: .init(x: center.x - radius + (CGFloat(altitude) / CGFloat.pi * diameter), y: center.y - (sin(.init(altitude * 3)) * amplitude)), radius: radius / 5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            return $0
+        } (CGMutablePath())
+    }
+    
     override var mouseDownCanMoveWindow: Bool { false }
     
     required init?(coder: NSCoder) { nil }
@@ -71,14 +78,14 @@ final class Horizon: NSView {
     }
     
     func update() {
-//        let path = map[phase]!(self)()
-//        let animation = CABasicAnimation(keyPath: "path")
-//        animation.duration = duration
-//        animation.fromValue = face.path
-//        animation.toValue = path
-//        animation.timingFunction = .init(name: .easeOut)
-//        face.path = path
-//        face.add(animation, forKey: "path")
+        let path = location
+        let animation = CABasicAnimation(keyPath: "path")
+        animation.duration = 1
+        animation.fromValue = moon.path
+        animation.toValue = path
+        animation.timingFunction = .init(name: .easeOut)
+        moon.path = path
+        moon.add(animation, forKey: "path")
     }
     
     private func resize() {
@@ -102,11 +109,6 @@ final class Horizon: NSView {
             return p
         } (CGMutablePath())
         
-        moon.path = {
-            $0.addArc(center: .init(x: center.x - radius + (CGFloat(altitude) / CGFloat.pi * diameter),
-                                    y: center.y - (sin(.init(altitude * 3)) * amplitude)),
-                      radius: radius / 5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            return $0
-        } (CGMutablePath())
+        moon.path = location
     }
 }

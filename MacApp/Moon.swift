@@ -54,7 +54,7 @@ final class Moon: NSView {
     func update() {
         let path = map[phase]!(self)()
         let animation = CABasicAnimation(keyPath: "path")
-        animation.duration = 0.5
+        animation.duration = 1
         animation.fromValue = face.path
         animation.toValue = path
         animation.timingFunction = .init(name: .easeOut)

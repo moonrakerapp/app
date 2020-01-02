@@ -47,12 +47,18 @@ final class Main: NSWindow {
             moon?.angle = $0.2
             moon?.update()
         }.store(in: &cancellables)
+        
+        moonraker.position.receive(on: DispatchQueue.main).sink { [weak horizon] in
+            horizon?.azimuth = $0.0
+            horizon?.altitude = $0.1
+            horizon?.update()
+        }.store(in: &cancellables)
     }
     
     override func becomeKey() {
         super.becomeKey()
         contentView!.subviews.forEach { $0.alphaValue = 1 }
-        moonraker.update(.init())
+        moonraker.update(.init(), latitude: 52.483343, longitude: 13.452053)
     }
     
     override func resignKey() {

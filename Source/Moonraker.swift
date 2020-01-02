@@ -33,16 +33,15 @@ public final class Moonraker {
     }
     
     func position(_ time: TimeInterval, _ latitude: Double, _ longitude: Double) -> (Double, Double, Double, Double) {
-        let lw = radians * -longitude
-        let phi = radians * latitude
-        let _days = days(time)
-        let coords = moonCoords(_days)
-        let h = siderealTime(_days, lw) - coords.0
-        let _altitude = altitude(h, phi, coords.1)
-        let parallacticeAngle = atan2(sin(h), tan(phi) * cos(coords.1) - sin(coords.1) * cos(h))
-        let corrected = _altitude + astroRefraction(_altitude)
-        let _azimuth = azimuth(h, phi, coords.1)
-        return (_azimuth, corrected, coords.2, parallacticeAngle)
+        {
+            {
+                {
+                    {
+                        (azimuth($2, $0, $1.1), $3 + astroRefraction($3), $1.2, atan2(sin($2), tan($0) * cos($1.1) - sin($1.1) * cos($2)))
+                    } ($0, $1, $2, altitude($2, $0, $1.1))
+                } ($1, $3, siderealTime($2, $0) - $3.0)
+            } ($0, $1, $2, moonCoords($2))
+        } (radians * -longitude, radians * latitude, days(time))
     }
     
     func days(_ time: TimeInterval) -> Double {

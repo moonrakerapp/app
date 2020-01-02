@@ -29,19 +29,19 @@ final class Moon: NSView {
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
+        
+        let ring = CAShapeLayer()
+        ring.fillColor = .clear
+        ring.lineWidth = 4
+        ring.strokeColor = .init(gray: 1, alpha: 0.2)
+        layer = ring
         wantsLayer = true
+        self.ring = ring
         
         let face = CAShapeLayer()
         face.fillColor = .white
         layer!.addSublayer(face)
         self.face = face
-        
-        let ring = CAShapeLayer()
-        ring.fillColor = .clear
-        ring.lineWidth = 4
-        ring.strokeColor = NSColor.red.cgColor
-        layer!.addSublayer(ring)
-        self.ring = ring
     }
     
     override func viewDidEndLiveResize() {
@@ -116,7 +116,14 @@ final class Moon: NSView {
     }
     
     private func waningGibbous() -> CGPath {
-        CGMutablePath()
+        {
+            $0.addArc(center: center, radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
+            $0.addLine(to: .init(x: center.x, y: center.y + radius))
+            $0.addCurve(to: .init(x: center.x, y: center.y - radius),
+                        control1: .init(x: center.x + ((radius * 1.25) * .init(fraction)), y: center.y + (radius * 0.75)),
+                        control2: .init(x: center.x + ((radius * 1.25) * .init(fraction)), y: center.y - (radius * 0.75)))
+            return $0
+        } (CGMutablePath())
     }
     
     private func lastQuarter() -> CGPath {
@@ -127,7 +134,14 @@ final class Moon: NSView {
     }
     
     private func waningCrescent() -> CGPath {
-        CGMutablePath()
+        {
+            $0.addArc(center: center, radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
+            $0.addLine(to: .init(x: center.x, y: center.y + radius))
+            $0.addCurve(to: .init(x: center.x, y: center.y - radius),
+                        control1: .init(x: center.x - (radius * 1.25) + (2 * radius * .init(fraction)), y: center.y + (radius * 0.75)),
+                        control2: .init(x: center.x - (radius * 1.25) + (2 * radius * .init(fraction)), y: center.y - (radius * 0.75)))
+            return $0
+        } (CGMutablePath())
     }
     
     private func controls(_ start: CGPoint, _ end: CGPoint) -> (CGPoint, CGPoint) {

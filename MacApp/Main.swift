@@ -30,15 +30,12 @@ final class Main: NSWindow {
         moon.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
         moon.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
         
-//        moonraker.illumination.receive(on: DispatchQueue.main).sink { [weak moon] in
-//            moon?.phase = $0.0
-//            moon?.fraction = $0.1
-//            moon?.angle = $0.2
-//            moon?.update()
-//        }.store(in: &cancellables)
-        
-        moon.phase = .waxingCrescent
-        moon.fraction = 0.0
+        moonraker.illumination.receive(on: DispatchQueue.main).sink { [weak moon] in
+            moon?.phase = $0.0
+            moon?.fraction = $0.1
+            moon?.angle = $0.2
+            moon?.update()
+        }.store(in: &cancellables)
         
         DispatchQueue.main.async { [weak moon] in moon?.resize() }
     }
@@ -47,7 +44,6 @@ final class Main: NSWindow {
         super.becomeKey()
         hasShadow = true
         contentView!.subviews.forEach { $0.alphaValue = 1 }
-        print("update")
         moonraker.update(.init())
     }
     

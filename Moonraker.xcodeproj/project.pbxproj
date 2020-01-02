@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA05ACDE23BE1F8D00B888E9 /* TestPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */; };
 		DA077C2623BDF81100682BFE /* Horizon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA077C2523BDF81100682BFE /* Horizon.swift */; };
 		DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5831A123BB8A8C00AD5BBB /* Moon.swift */; };
 		DA86B41B23BDE11700F448B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA86B41A23BDE11700F448B2 /* Assets.xcassets */; };
@@ -17,7 +18,7 @@
 		DACB8EE023BB7C4000ADBCB2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DACB8EDA23BB7C4000ADBCB2 /* Localizable.strings */; };
 		DACB8EE723BB843500ADBCB2 /* libMoonraker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */; };
 		DACB8EEA23BB843F00ADBCB2 /* libMoonraker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */; };
-		DAEAD2F223BC8FC10053EBEA /* TestVisible.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F123BC8FC10053EBEA /* TestVisible.swift */; };
+		DAEAD2F223BC8FC10053EBEA /* TestIllumination.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */; };
 		DAEAD2F423BCAE470053EBEA /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F323BCAE470053EBEA /* Phase.swift */; };
 /* End PBXBuildFile section */
 
@@ -39,6 +40,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPosition.swift; sourceTree = "<group>"; };
 		DA077C2523BDF81100682BFE /* Horizon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horizon.swift; sourceTree = "<group>"; };
 		DA5831A123BB8A8C00AD5BBB /* Moon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moon.swift; sourceTree = "<group>"; };
 		DA86B41A23BDE11700F448B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -56,7 +58,7 @@
 		DACB8EE323BB7C5000ADBCB2 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMoonraker.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DACB8EE523BB7E2D00ADBCB2 /* Moonraker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moonraker.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DAEAD2F123BC8FC10053EBEA /* TestVisible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVisible.swift; sourceTree = "<group>"; };
+		DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIllumination.swift; sourceTree = "<group>"; };
 		DAEAD2F323BCAE470053EBEA /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -118,7 +120,8 @@
 			isa = PBXGroup;
 			children = (
 				DACB8ECC23BB7C1600ADBCB2 /* Info.plist */,
-				DAEAD2F123BC8FC10053EBEA /* TestVisible.swift */,
+				DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */,
+				DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */,
 			);
 			path = Tests;
 			sourceTree = "<group>";
@@ -299,7 +302,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAEAD2F223BC8FC10053EBEA /* TestVisible.swift in Sources */,
+				DA05ACDE23BE1F8D00B888E9 /* TestPosition.swift in Sources */,
+				DAEAD2F223BC8FC10053EBEA /* TestIllumination.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,7 +1,7 @@
 @testable import Moonraker
 import XCTest
 
-final class TestVisible: XCTestCase {
+final class TestIllumination: XCTestCase {
     private var moonraker: Moonraker!
     
     override func setUp() {

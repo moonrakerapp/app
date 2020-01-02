@@ -32,6 +32,19 @@ public final class Moonraker {
         } (days(time))
     }
     
+    func position(_ time: TimeInterval, _ latitude: Double, _ longitude: Double) -> (Double, Double, Double, Double) {
+        let lw = radians * -longitude
+        let phi = radians * latitude
+        let _days = days(time)
+        let coords = moonCoords(_days)
+        let h = siderealTime(_days, lw) - coords.0
+        let _altitude = altitude(h, phi, coords.1)
+        let parallacticeAngle = atan2(sin(h), tan(phi) * cos(coords.1) - sin(coords.1) * cos(h))
+        let corrected = _altitude + astroRefraction(_altitude)
+        let _azimuth = azimuth(h, phi, coords.1)
+        return (_azimuth, corrected, coords.2, parallacticeAngle)
+    }
+    
     func days(_ time: TimeInterval) -> Double {
         (time / (60 * 60 * 24)) - 0.5 + J1970 - J2000
     }
@@ -64,6 +77,23 @@ public final class Moonraker {
     
     func rightAscension(_ latitude: Double, _ longitude: Double) -> Double {
         atan2(sin(longitude) * cos(earthObliquity) - tan(latitude) * sin(earthObliquity), cos(longitude))
+    }
+    
+    func siderealTime(_ days: Double, _ lw: Double) -> Double {
+        radians * (280.16 + 360.9856235 * days) - lw
+    }
+    
+    func altitude(_ h: Double, _ phi: Double, _ declination: Double) -> Double {
+        asin(sin(phi) * sin(declination) + cos(phi) * cos(declination) * cos(h))
+    }
+    
+    func azimuth(_ h: Double, _ phi: Double, _ declination: Double) -> Double {
+        atan2(sin(h), cos(h) * sin(phi) - tan(declination) * cos(phi))
+    }
+    
+    func astroRefraction(_ altitude: Double) -> Double {
+        let altitude = altitude >= 0 ? altitude : 0
+        return 0.0002967 / tan(altitude + 0.00312536 / (altitude + 0.08901179))
     }
     
     private func equationOfCenter(_ anomaly: Double) -> Double {

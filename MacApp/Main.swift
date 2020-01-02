@@ -10,7 +10,7 @@ final class Main: NSWindow {
     override var acceptsFirstResponder: Bool { true }
 
     init() {
-        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 300, y: NSScreen.main!.frame.midY - 200, width: 600, height: 400), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
+        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 200, y: NSScreen.main!.frame.midY - 200, width: 400, height: 400), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
         minSize = .init(width: 100, height: 100)
         appearance = NSAppearance(named: .darkAqua)
         backgroundColor = .clear
@@ -31,15 +31,15 @@ final class Main: NSWindow {
         let horizon = Horizon()
         contentView!.addSubview(horizon)
         
-        moon.topAnchor.constraint(equalTo: contentView!.topAnchor).isActive = true
-        moon.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
-        moon.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
-        moon.bottomAnchor.constraint(equalTo: horizon.topAnchor).isActive = true
+        moon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 40).isActive = true
+        moon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 20).isActive = true
+        moon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -20).isActive = true
+        moon.bottomAnchor.constraint(equalTo: horizon.topAnchor, constant: -10).isActive = true
         
-        horizon.heightAnchor.constraint(equalTo: contentView!.heightAnchor, multiplier: 0.3).isActive = true
-        horizon.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor).isActive = true
-        horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
-        horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
+        horizon.heightAnchor.constraint(equalTo: contentView!.heightAnchor, multiplier: 0.25).isActive = true
+        horizon.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor, constant: -20).isActive = true
+        horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 20).isActive = true
+        horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -20).isActive = true
         
         moonraker.illumination.receive(on: DispatchQueue.main).sink { [weak moon] in
             moon?.phase = $0.0

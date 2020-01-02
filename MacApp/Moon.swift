@@ -31,6 +31,8 @@ final class Moon: NSView {
         .init(x: bounds.width / 2, y: bounds.height / 2)
     }
     
+    override var mouseDownCanMoveWindow: Bool { false }
+    
     required init?(coder: NSCoder) { nil }
     init() {
         super.init(frame: .zero)
@@ -38,14 +40,14 @@ final class Moon: NSView {
         
         let ring = CAShapeLayer()
         ring.fillColor = .clear
-        ring.lineWidth = 2
-        ring.strokeColor = .init(gray: 1, alpha: 0.2)
+        ring.lineWidth = 5
+        ring.strokeColor = .haze()
         layer = ring
         wantsLayer = true
         self.ring = ring
         
         let face = CAShapeLayer()
-        face.fillColor = .white
+        face.fillColor = .haze()
         layer!.addSublayer(face)
         self.face = face
     }
@@ -63,7 +65,7 @@ final class Moon: NSView {
     
     private func resize() {
         let path = {
-            $0.addArc(center: center, radius: radius + 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            $0.addArc(center: center, radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
             return $0
         } (CGMutablePath()) as CGPath
         let animation = CABasicAnimation(keyPath: "path")

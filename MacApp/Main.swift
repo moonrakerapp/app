@@ -9,11 +9,14 @@ final class Main: NSWindow {
     override var acceptsFirstResponder: Bool { true }
 
     init() {
-        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 300, y: NSScreen.main!.frame.midY - 200, width: 600, height: 400), styleMask: [.borderless, .miniaturizable, .resizable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
+        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 300, y: NSScreen.main!.frame.midY - 200, width: 600, height: 400), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
         minSize = .init(width: 100, height: 100)
         appearance = NSAppearance(named: .darkAqua)
         backgroundColor = .clear
         titlebarAppearsTransparent = true
+        titleVisibility = .hidden
+        toolbar = .init()
+        toolbar!.showsBaselineSeparator = false
         isOpaque = false
         collectionBehavior = .fullScreenNone
         isReleasedWhenClosed = false

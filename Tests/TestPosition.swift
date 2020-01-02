@@ -10,18 +10,22 @@ final class TestPosition: XCTestCase {
     
     func testAzimuth() {
         XCTAssertEqual(0.772717472163514, moonraker.position(1577905200, 52.483343, 13.452053).0)
+        XCTAssertEqual(1.8210102890315614, moonraker.position(1577956407, 19.386318, -99.086093).0)
     }
     
     func testAltitude() {
         XCTAssertEqual(0.38324885985831264, moonraker.position(1577905200, 52.483343, 13.452053).1)
+        XCTAssertEqual(-0.7581525833592756, moonraker.position(1577956407, 19.386318, -99.086093).1)
     }
     
     func testDistance() {
         XCTAssertEqual(405899.2827558138, moonraker.position(1577905200, 52.483343, 13.452053).2)
+        XCTAssertEqual(405780.1232711607, moonraker.position(1577956407, 19.386318, -99.086093).2)
     }
     
     func testParallaticAngle() {
         XCTAssertEqual(0.4418920291988399, moonraker.position(1577905200, 52.483343, 13.452053).3)
+        XCTAssertEqual(1.1572216627051768, moonraker.position(1577956407, 19.386318, -99.086093).3)
     }
     
     func testSiderealTime() {

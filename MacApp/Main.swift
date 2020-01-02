@@ -58,7 +58,8 @@ final class Main: NSWindow {
     override func becomeKey() {
         super.becomeKey()
         contentView!.subviews.forEach { $0.alphaValue = 1 }
-        moonraker.update(.init(), latitude: 52.483343, longitude: 13.452053)
+//        moonraker.update(.init(), latitude: -41.136516, longitude: -66.093667)
+        moonraker.update(.init(), latitude: 0, longitude: 0)
     }
     
     override func resignKey() {

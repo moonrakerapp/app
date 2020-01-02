@@ -33,7 +33,17 @@ final class Horizon: NSView {
     
     private var location: CGPath {
         {
-            $0.addArc(center: .init(x: center.x - radius + (CGFloat(altitude) / CGFloat.pi * diameter), y: center.y - (sin(.init(altitude * 3)) * amplitude)), radius: radius / 5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            altitude = .pi * -0.05
+            let y: CGFloat
+            if abs(altitude) <= .pi * 0.5 {
+                y = center.y + (CGFloat(altitude) / (.pi / 2) * amplitude)
+            } else if altitude > 0 {
+                y = center.y + ((.pi / 2) - (CGFloat(altitude) - (.pi / 2))) / (.pi / 2) * amplitude
+            } else {
+                y = center.y - ((.pi / 2) + (CGFloat(altitude) + (.pi / 2))) / (.pi / 2) * amplitude
+            }
+            $0.addArc(center: .init(x: center.x + (.init(altitude) / .pi * (radius * 2 / 3)) - (radius / 3),
+                                    y: y), radius: radius / 5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
     }

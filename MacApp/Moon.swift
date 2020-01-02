@@ -17,6 +17,12 @@ final class Moon: NSView {
                        .lastQuarter : lastQuarter,
                        .waningCrescent : waningCrescent]
     
+    override var frame: NSRect {
+        didSet {
+            resize()
+        }
+    }
+    
     private var radius: CGFloat {
         min(bounds.width, bounds.height) * 0.4
     }
@@ -32,7 +38,7 @@ final class Moon: NSView {
         
         let ring = CAShapeLayer()
         ring.fillColor = .clear
-        ring.lineWidth = 4
+        ring.lineWidth = 2
         ring.strokeColor = .init(gray: 1, alpha: 0.2)
         layer = ring
         wantsLayer = true
@@ -44,14 +50,20 @@ final class Moon: NSView {
         self.face = face
     }
     
-    override func viewDidEndLiveResize() {
-        super.viewDidEndLiveResize()
-        resize()
+    func update() {
+        let path = map[phase]!(self)()
+        let animation = CABasicAnimation(keyPath: "path")
+        animation.duration = duration
+        animation.fromValue = face.path
+        animation.toValue = path
+        animation.timingFunction = .init(name: .easeOut)
+        face.path = path
+        face.add(animation, forKey: "path")
     }
     
-    func resize() {
+    private func resize() {
         let path = {
-            $0.addArc(center: center, radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            $0.addArc(center: center, radius: radius + 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
             return $0
         } (CGMutablePath()) as CGPath
         let animation = CABasicAnimation(keyPath: "path")
@@ -62,17 +74,6 @@ final class Moon: NSView {
         ring.path = path
         ring.add(animation, forKey: "path")
         update()
-    }
-    
-    func update() {
-        let path = map[phase]!(self)()
-        let animation = CABasicAnimation(keyPath: "path")
-        animation.duration = duration
-        animation.fromValue = face.path
-        animation.toValue = path
-        animation.timingFunction = .init(name: .easeOut)
-        face.path = path
-        face.add(animation, forKey: "path")
     }
     
     private func new() -> CGPath {

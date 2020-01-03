@@ -18,31 +18,6 @@ final class Moon: CAShapeLayer {
                        .lastQuarter : lastQuarter,
                        .waningCrescent : waningCrescent]
     
-    func update() {
-        face.path = map[phase]!(self)()
-        let translate = CATransform3DTranslate(CATransform3DIdentity, center.x, center.y, 0)
-        let rotate = CATransform3DRotate(translate, (.pi / 2) - .init(angle), 0, 0, 1)
-        let animation = CABasicAnimation(keyPath: "transform")
-        animation.duration = 1
-        animation.fromValue = transform
-        animation.toValue = rotate
-        animation.timingFunction = .init(name: .easeOut)
-        transform = rotate
-        add(animation, forKey: "transform")
-    }
-    
-    func resize() {
-        path = {
-            $0.addArc(center: .init(), radius: radius + 4, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-            return $0
-        } (CGMutablePath())
-        ring.path = {
-            $0.addArc(center: .init(), radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-            return $0
-        } (CGMutablePath())
-        
-    }
-    
     func configure() {
         fillColor = .black
 
@@ -57,6 +32,30 @@ final class Moon: CAShapeLayer {
         face.fillColor = .haze()
         addSublayer(face)
         self.face = face
+    }
+    
+    func resize() {
+        path = {
+            $0.addArc(center: .init(), radius: radius + 4, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath())
+        ring.path = {
+            $0.addArc(center: .init(), radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath())
+    }
+    
+    func update() {
+        face.path = map[phase]!(self)()
+        let translate = CATransform3DTranslate(CATransform3DIdentity, center.x, center.y, 0)
+        let rotate = CATransform3DRotate(translate, (.pi / 2) - .init(angle), 0, 0, 1)
+        let animation = CABasicAnimation(keyPath: "transform")
+        animation.duration = 1
+        animation.fromValue = transform
+        animation.toValue = rotate
+        animation.timingFunction = .init(name: .easeOut)
+        transform = rotate
+        add(animation, forKey: "transform")
     }
     
     private func new() -> CGPath {

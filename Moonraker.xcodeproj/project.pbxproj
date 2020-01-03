@@ -11,6 +11,7 @@
 		DA00DE9123BF698600B04423 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA00DE9023BF698600B04423 /* Info.swift */; };
 		DA00DE9323BF79D600B04423 /* TestTimes.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA00DE9223BF79D600B04423 /* TestTimes.swift */; };
 		DA00DE9523BF7CBE00B04423 /* Times.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA00DE9423BF7CBE00B04423 /* Times.swift */; };
+		DA00DE9723BF90F900B04423 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA00DE9623BF90F900B04423 /* Stats.swift */; };
 		DA05ACDE23BE1F8D00B888E9 /* TestPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */; };
 		DA077C2623BDF81100682BFE /* Horizon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA077C2523BDF81100682BFE /* Horizon.swift */; };
 		DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5831A123BB8A8C00AD5BBB /* Moon.swift */; };
@@ -48,6 +49,7 @@
 		DA00DE9023BF698600B04423 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
 		DA00DE9223BF79D600B04423 /* TestTimes.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestTimes.swift; sourceTree = "<group>"; };
 		DA00DE9423BF7CBE00B04423 /* Times.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Times.swift; sourceTree = "<group>"; };
+		DA00DE9623BF90F900B04423 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
 		DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPosition.swift; sourceTree = "<group>"; };
 		DA077C2523BDF81100682BFE /* Horizon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horizon.swift; sourceTree = "<group>"; };
 		DA5831A123BB8A8C00AD5BBB /* Moon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moon.swift; sourceTree = "<group>"; };
@@ -156,6 +158,7 @@
 				DA077C2523BDF81100682BFE /* Horizon.swift */,
 				DACB8ED623BB7C3F00ADBCB2 /* Main.swift */,
 				DA5831A123BB8A8C00AD5BBB /* Moon.swift */,
+				DA00DE9623BF90F900B04423 /* Stats.swift */,
 			);
 			path = MacApp;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DACB8EDD23BB7C4000ADBCB2 /* Main.swift in Sources */,
+				DA00DE9723BF90F900B04423 /* Stats.swift in Sources */,
 				DA077C2623BDF81100682BFE /* Horizon.swift in Sources */,
 				DA86B41E23BDE16400F448B2 /* Color.swift in Sources */,
 				DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */,

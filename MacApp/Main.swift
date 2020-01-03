@@ -29,10 +29,17 @@ final class Main: NSWindow {
         contentView!.addSubview(horizon)
 //        self.horizon = horizon
         
-        horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 30).isActive = true
-        horizon.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor, constant: -30).isActive = true
+        let stats = Stats()
+        contentView!.addSubview(stats)
+        
+        horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 40).isActive = true
         horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 30).isActive = true
         horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -30).isActive = true
+        horizon.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -10).isActive = true
+        
+        stats.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor).isActive = true
+        stats.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
+        stats.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
         
         moonraker.info.receive(on: DispatchQueue.main).sink { [weak horizon] in
             horizon?.moon.phase = $0.phase

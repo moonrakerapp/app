@@ -3,6 +3,7 @@ import Combine
 
 public final class Moonraker {
     public let info = CurrentValueSubject<Info, Never>(.init())
+    public let times = CurrentValueSubject<Times, Never>(.down)
     private let queue = DispatchQueue(label: "", qos: .background, target: .global(qos: .background))
     private let J1970 = Double(2440588)
     private let J2000 = Double(2451545)
@@ -18,6 +19,7 @@ public final class Moonraker {
     public func update(_ date: Date, latitude: Double, longitude: Double) {
         queue.async { [weak self] in
             self?.info.send(self?.info(date.timeIntervalSince1970, latitude, longitude) ?? .init())
+            self?.times.send(self?.times(date, latitude, longitude) ?? .down)
         }
     }
     

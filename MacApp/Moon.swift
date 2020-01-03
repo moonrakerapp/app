@@ -19,16 +19,16 @@ final class Moon: CAShapeLayer {
                        .waningCrescent : waningCrescent]
     
     func update() {
-        var tr = CATransform3DTranslate(CATransform3DIdentity, center.x, center.y, 0)
-        tr = CATransform3DRotate(tr, .pi / 2, 0, 0, 1)
+        face.path = map[phase]!(self)()
+        let translate = CATransform3DTranslate(CATransform3DIdentity, center.x, center.y, 0)
+        let rotate = CATransform3DRotate(translate, (.pi / 2) - .init(angle), 0, 0, 1)
         let animation = CABasicAnimation(keyPath: "transform")
         animation.duration = 1
         animation.fromValue = transform
-        animation.toValue = tr
+        animation.toValue = rotate
         animation.timingFunction = .init(name: .easeOut)
-        transform = tr
+        transform = rotate
         add(animation, forKey: "transform")
-        face.path = map[phase]!(self)()
     }
     
     func resize() {

@@ -3,11 +3,11 @@ import AppKit
 final class Horizon: NSView {
     var altitude = Double()
     var azimuth = Double()
-    private let period = CGFloat(540)
+    private(set) weak var moon: Moon!
+    private let period = CGFloat(360)
     private weak var path: CAShapeLayer!
     private weak var border: CAShapeLayer!
     private weak var dash: CAShapeLayer!
-    private weak var moon: CAShapeLayer!
     
     override var frame: NSRect {
         didSet {
@@ -31,20 +31,16 @@ final class Horizon: NSView {
         .init(x: bounds.width / 2, y: bounds.height / 2)
     }
     
-    private var location: CGPath {
-        {
-            let y: CGFloat
-            if abs(altitude) <= .pi * 0.5 {
-                y = center.y + (CGFloat(altitude) / (.pi / 2) * amplitude)
-            } else if altitude > 0 {
-                y = center.y - (CGFloat(altitude) - .pi) / (.pi / 2) * amplitude
-            } else {
-                y = center.y - (CGFloat(altitude) + .pi) / (.pi / 2) * amplitude
-            }
-            $0.addArc(center: .init(x: center.x + (.init(altitude) / .pi * (radius * 2 / 3)) - (radius / 3),
-                                    y: y), radius: radius / 5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            return $0
-        } (CGMutablePath())
+    private var location: CGPoint {
+        let y: CGFloat
+        if abs(altitude) <= .pi * 0.5 {
+            y = center.y + (CGFloat(altitude) / (.pi / 2) * amplitude)
+        } else if altitude > 0 {
+            y = center.y - (CGFloat(altitude) - .pi) / (.pi / 2) * amplitude
+        } else {
+            y = center.y - (CGFloat(altitude) + .pi) / (.pi / 2) * amplitude
+        }
+        return .init(x: center.x + (.init(altitude) / .pi * (radius * 2 / 3)) - (radius / 3), y: y)
     }
     
     override var mouseDownCanMoveWindow: Bool { false }
@@ -57,7 +53,7 @@ final class Horizon: NSView {
         let path = CAShapeLayer()
         path.fillColor = .clear
         path.lineWidth = 2
-        path.strokeColor = .haze()
+        path.strokeColor = .haze(0.5)
         path.lineCap = .round
         layer = path
         wantsLayer = true
@@ -66,35 +62,26 @@ final class Horizon: NSView {
         let border = CAShapeLayer()
         border.fillColor = .clear
         border.lineWidth = 2
-        border.strokeColor = .haze()
+        border.strokeColor = .haze(0.5)
         path.addSublayer(border)
         self.border = border
         
         let dash = CAShapeLayer()
         dash.fillColor = .clear
         dash.lineWidth = 1
-        dash.strokeColor = .haze()
+        dash.strokeColor = .haze(0.5)
         dash.lineDashPattern = [NSNumber(value: 3), NSNumber(value: 3)]
         path.addSublayer(dash)
         self.dash = dash
         
-        let moon = CAShapeLayer()
-        moon.fillColor = .black
-        moon.strokeColor = .haze()
-        moon.lineWidth = 2
+        let moon = Moon()
         path.addSublayer(moon)
         self.moon = moon
     }
     
     func update() {
-        let path = location
-        let animation = CABasicAnimation(keyPath: "path")
-        animation.duration = 1
-        animation.fromValue = moon.path
-        animation.toValue = path
-        animation.timingFunction = .init(name: .easeOut)
-        moon.path = path
-        moon.add(animation, forKey: "path")
+        moon.center = location
+        moon.update()
     }
     
     private func resize() {
@@ -113,11 +100,13 @@ final class Horizon: NSView {
             p.move(to: .init(x: center.x - radius, y: center.y))
             stride(from: 2, through: period, by: 2).forEach {
                 p.addLine(to: CGPoint(x: center.x - radius + ($0 / period * diameter),
-                                      y: center.y - (sin($0 / 180 * .pi) * amplitude)))
+                                      y: center.y - (cos($0 / 180 * .pi) * amplitude)))
             }
             return p
         } (CGMutablePath())
         
-        moon.path = location
+        moon.radius = radius / 6
+        moon.center = location
+        moon.resize()
     }
 }

@@ -25,27 +25,19 @@ final class Main: NSWindow {
         contentView!.wantsLayer = true
         contentView!.layer!.backgroundColor = .black
         
-        let moon = Moon()
-        contentView!.addSubview(moon)
-        
         let horizon = Horizon()
         contentView!.addSubview(horizon)
         
-        moon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 40).isActive = true
-        moon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 20).isActive = true
-        moon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -20).isActive = true
-        moon.bottomAnchor.constraint(equalTo: horizon.topAnchor, constant: -10).isActive = true
+        horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 30).isActive = true
+        horizon.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor, constant: -30).isActive = true
+        horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 30).isActive = true
+        horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -30).isActive = true
         
-        horizon.heightAnchor.constraint(equalTo: contentView!.heightAnchor, multiplier: 0.25).isActive = true
-        horizon.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor, constant: -20).isActive = true
-        horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 20).isActive = true
-        horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -20).isActive = true
-        
-        moonraker.illumination.receive(on: DispatchQueue.main).sink { [weak moon] in
-            moon?.phase = $0.0
-            moon?.fraction = $0.1
-            moon?.angle = $0.2
-            moon?.update()
+        moonraker.illumination.receive(on: DispatchQueue.main).sink { [weak horizon] in
+            horizon?.moon.phase = $0.0
+            horizon?.moon.fraction = $0.1
+            horizon?.moon.angle = $0.2
+            horizon?.moon.update()
         }.store(in: &cancellables)
         
         moonraker.position.receive(on: DispatchQueue.main).sink { [weak horizon] in

@@ -44,7 +44,8 @@ final class Main: NSWindow {
         }.store(in: &cancellables)
         
         moonraker.position.receive(on: DispatchQueue.main).sink { [weak horizon] in
-            print("alt \($0.1)")
+//            print("alt \($0.1)")
+            print("az: \($0.0)")
             horizon?.azimuth = $0.0
             horizon?.altitude = $0.1
             horizon?.update()
@@ -53,10 +54,10 @@ final class Main: NSWindow {
         let slider = NSSlider()
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.target = self
-//        slider.minValue = -(60 * 60 * 48)
-//        slider.maxValue = (60 * 60 * 48)
-        slider.minValue = .pi / -2
-        slider.maxValue = .pi / 2
+        slider.minValue = -(60 * 60 * 1000)
+        slider.maxValue = (60 * 60 * 1000)
+//        slider.minValue = .pi / -2
+//        slider.maxValue = .pi / 2
         slider.action = #selector(selector(_:))
         contentView!.addSubview(slider)
         
@@ -66,10 +67,10 @@ final class Main: NSWindow {
     }
     
     @objc private func selector(_ slider: NSSlider) {
-        print(slider.doubleValue)
-        horizon.altitude = slider.doubleValue
-//        moonraker.update(Date(timeIntervalSinceNow: slider.doubleValue), latitude: -41.136516, longitude: -66.093667)
-        horizon.update()
+//        print(slider.doubleValue)
+//        horizon.altitude = slider.doubleValue
+        moonraker.update(Date(timeIntervalSinceNow: slider.doubleValue), latitude: -41.136516, longitude: -66.093667)
+//        horizon.update()
     }
     
     override func becomeKey() {

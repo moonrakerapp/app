@@ -5,7 +5,6 @@ final class Horizon: NSView {
     var azimuth = Double()
     private(set) weak var moon: Moon!
     private let period = CGFloat(360)
-    private let pi2 = CGFloat.pi / 2
     private weak var path: CAShapeLayer!
     private weak var border: CAShapeLayer!
     private weak var dash: CAShapeLayer!
@@ -37,7 +36,7 @@ final class Horizon: NSView {
     }
     
     private var location: CGPoint {
-        .init(x: center.x + (.init(altitude) - pi2) / .pi * radius, y: center.y + (.init(altitude) / pi2 * amplitude))
+        point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
     }
     
     override var mouseDownCanMoveWindow: Bool { false }
@@ -96,8 +95,7 @@ final class Horizon: NSView {
         path.path = { p in
             p.move(to: .init(x: center.x - radius, y: center.y - amplitude))
             stride(from: 2, through: period, by: 2).forEach {
-                p.addLine(to: CGPoint(x: center.x - radius + ($0 / period * diameter),
-                                      y: center.y - (cos($0 / 180 * .pi) * amplitude)))
+                p.addLine(to: point($0))
             }
             return p
         } (CGMutablePath())
@@ -105,5 +103,9 @@ final class Horizon: NSView {
         moon.radius = radius / 6
         moon.center = location
         moon.resize()
+    }
+    
+    private func point(_ deg: CGFloat) -> CGPoint {
+        .init(x: center.x - radius + (deg / period * diameter), y: center.y - (cos(deg / 180 * .pi) * amplitude))
     }
 }

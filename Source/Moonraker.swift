@@ -42,7 +42,7 @@ public final class Moonraker {
         return info
     }
     
-    func times(_ date: Date, _ latitude: Double, _ longitude: Double) -> Clock {
+    func times(_ date: Date, _ latitude: Double, _ longitude: Double) -> Times {
         let _start = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!.timeIntervalSince1970
         let _hc = 0.133 * radians
         var _h0 = position(_start, latitude, longitude).1 - _hc

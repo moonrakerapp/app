@@ -1,6 +1,6 @@
 import Foundation
 
-public enum Clock {
+public enum Times {
     case
     up,
     down,

@@ -42,6 +42,75 @@ public final class Moonraker {
         return info
     }
     
+    func times(_ date: Date, _ latitude: Double, _ longitude: Double) -> Clock {
+        let _start = Calendar.current.date(bySettingHour: 0, minute: 0, second: 0, of: date)!.timeIntervalSince1970
+        let _hc = 0.133 * radians
+        var _h0 = position(_start, latitude, longitude).1 - _hc
+        var _ye = Double()
+        var _rise: Double?
+        var _set: Double?
+        
+        for i in stride(from: Double(1), through: 24, by: 2) {
+            let _h1 = position(_start + (i * 3600), latitude, longitude).1 - _hc
+            let _h2 = position(_start + ((i + 1) * 3600), latitude, longitude).1 - _hc
+            let _a = (_h0 + _h2) / 2 - _h1
+            let _b = (_h2 - _h0) / 2
+            let _xe = -_b / (2 * _a)
+            let _d = _b * _b - 4 * _a * _h1;
+            var _roots = 0
+            var _dx = Double()
+            var _x1 = Double()
+            var _x2 = Double()
+            _ye = (_a * _xe + _b) * _xe + _h1
+            
+            if _d >= 0 {
+                _dx = sqrt(_d) / (abs(_a) * 2);
+                _x1 = _xe - _dx
+                _x2 = _xe + _dx
+                
+                if abs(_x1) <= 1 {
+                    _roots += 1
+                }
+                
+                if abs(_x2) <= 1 {
+                    _roots += 1
+                }
+                
+                if _x1 < -1 {
+                    _x1 = _x2
+                }
+            }
+
+            if _roots == 1 {
+                if _h0 < 0 {
+                    _rise = i + _x1
+                } else {
+                    _set = i + _x1
+                }
+            } else if _roots == 2 {
+                _rise = i + (_ye < 0 ? _x2 : _x1)
+                _set = i + (_ye < 0 ? _x1 : _x2)
+            }
+            
+            if _rise != nil && _set != nil {
+                break
+            }
+            
+            _h0 = _h2
+        }
+        
+        if let _rise = _rise {
+            if let _set = _set {
+                return .both(rise: .init(timeIntervalSince1970: _start + (_rise * 3600)), set: .init(timeIntervalSince1970: _start + (_set * 3600)))
+            } else {
+                return .rise(time: .init(timeIntervalSince1970: _start + (_rise * 3600)))
+            }
+        } else if let _set = _set {
+            return .set(time: .init(timeIntervalSince1970: _start + (_set * 3600)))
+        }
+        return _ye > 0 ? .up : .down
+    }
+    
     func illumination(_ time: TimeInterval) -> (Phase, Double, Double) {
         {
             {

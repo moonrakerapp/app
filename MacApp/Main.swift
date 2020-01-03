@@ -45,7 +45,7 @@ final class Main: NSWindow {
         
         moonraker.position.receive(on: DispatchQueue.main).sink { [weak horizon] in
 //            print("alt \($0.1)")
-            print("az: \($0.0)")
+//            print("az: \($0.0)")
             horizon?.azimuth = $0.0
             horizon?.altitude = $0.1
             horizon?.update()
@@ -54,8 +54,8 @@ final class Main: NSWindow {
         let slider = NSSlider()
         slider.translatesAutoresizingMaskIntoConstraints = false
         slider.target = self
-        slider.minValue = -(60 * 60 * 1000)
-        slider.maxValue = (60 * 60 * 1000)
+        slider.minValue = -(60 * 60 * 48)
+        slider.maxValue = (60 * 60 * 48)
 //        slider.minValue = .pi / -2
 //        slider.maxValue = .pi / 2
         slider.action = #selector(selector(_:))

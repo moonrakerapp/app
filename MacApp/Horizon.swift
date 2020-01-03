@@ -35,10 +35,6 @@ final class Horizon: NSView {
         .init(x: bounds.width / 2, y: bounds.height / 2)
     }
     
-    private var location: CGPoint {
-        point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
-    }
-    
     override var mouseDownCanMoveWindow: Bool { false }
     
     required init?(coder: NSCoder) { nil }
@@ -71,12 +67,13 @@ final class Horizon: NSView {
         self.dash = dash
         
         let moon = Moon()
+        moon.configure()
         path.addSublayer(moon)
         self.moon = moon
     }
     
     func update() {
-        moon.center = location
+        moon.center = point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
         moon.update()
     }
     
@@ -101,8 +98,8 @@ final class Horizon: NSView {
         } (CGMutablePath())
         
         moon.radius = radius / 6
-        moon.center = location
         moon.resize()
+        update()
     }
     
     private func point(_ deg: CGFloat) -> CGPoint {

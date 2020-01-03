@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DA00DE8F23BF687800B04423 /* TestInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA00DE8E23BF687800B04423 /* TestInfo.swift */; };
+		DA00DE9123BF698600B04423 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA00DE9023BF698600B04423 /* Info.swift */; };
 		DA05ACDE23BE1F8D00B888E9 /* TestPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */; };
 		DA077C2623BDF81100682BFE /* Horizon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA077C2523BDF81100682BFE /* Horizon.swift */; };
 		DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5831A123BB8A8C00AD5BBB /* Moon.swift */; };
@@ -40,6 +42,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DA00DE8E23BF687800B04423 /* TestInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestInfo.swift; sourceTree = "<group>"; };
+		DA00DE9023BF698600B04423 /* Info.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Info.swift; sourceTree = "<group>"; };
 		DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPosition.swift; sourceTree = "<group>"; };
 		DA077C2523BDF81100682BFE /* Horizon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horizon.swift; sourceTree = "<group>"; };
 		DA5831A123BB8A8C00AD5BBB /* Moon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moon.swift; sourceTree = "<group>"; };
@@ -121,6 +125,7 @@
 			children = (
 				DACB8ECC23BB7C1600ADBCB2 /* Info.plist */,
 				DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */,
+				DA00DE8E23BF687800B04423 /* TestInfo.swift */,
 				DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */,
 			);
 			path = Tests;
@@ -129,6 +134,7 @@
 		DACB8ECF23BB7C2B00ADBCB2 /* Source */ = {
 			isa = PBXGroup;
 			children = (
+				DA00DE9023BF698600B04423 /* Info.swift */,
 				DACB8ED023BB7C2B00ADBCB2 /* Moonraker.swift */,
 				DAEAD2F323BCAE470053EBEA /* Phase.swift */,
 			);
@@ -293,6 +299,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DA00DE9123BF698600B04423 /* Info.swift in Sources */,
 				DACB8ED123BB7C2B00ADBCB2 /* Moonraker.swift in Sources */,
 				DAEAD2F423BCAE470053EBEA /* Phase.swift in Sources */,
 			);
@@ -303,6 +310,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA05ACDE23BE1F8D00B888E9 /* TestPosition.swift in Sources */,
+				DA00DE8F23BF687800B04423 /* TestInfo.swift in Sources */,
 				DAEAD2F223BC8FC10053EBEA /* TestIllumination.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

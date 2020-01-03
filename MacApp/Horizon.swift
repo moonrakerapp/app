@@ -5,6 +5,7 @@ final class Horizon: NSView {
     var azimuth = Double()
     private(set) weak var moon: Moon!
     private let period = CGFloat(360)
+    private let pi2 = CGFloat.pi / 2
     private weak var path: CAShapeLayer!
     private weak var border: CAShapeLayer!
     private weak var dash: CAShapeLayer!
@@ -17,6 +18,10 @@ final class Horizon: NSView {
     
     private var radius: CGFloat {
         min(bounds.width, bounds.height) * 0.4
+    }
+    
+    private var bounding: CGFloat {
+        (min(bounds.width, bounds.height) * 0.5) - 2
     }
     
     private var diameter: CGFloat {
@@ -32,15 +37,7 @@ final class Horizon: NSView {
     }
     
     private var location: CGPoint {
-        let y: CGFloat
-        if abs(altitude) <= .pi * 0.5 {
-            y = center.y + (CGFloat(altitude) / (.pi / 2) * amplitude)
-        } else if altitude > 0 {
-            y = center.y - (CGFloat(altitude) - .pi) / (.pi / 2) * amplitude
-        } else {
-            y = center.y - (CGFloat(altitude) + .pi) / (.pi / 2) * amplitude
-        }
-        return .init(x: center.x + (.init(altitude) / .pi * (radius * 2 / 3)) - (radius / 3), y: y)
+        .init(x: center.x + (.init(altitude) - pi2) / .pi * radius, y: center.y + (.init(altitude) / pi2 * amplitude))
     }
     
     override var mouseDownCanMoveWindow: Bool { false }
@@ -70,7 +67,7 @@ final class Horizon: NSView {
         dash.fillColor = .clear
         dash.lineWidth = 1
         dash.strokeColor = .shade()
-        dash.lineDashPattern = [NSNumber(value: 1), NSNumber(value: 2)]
+        dash.lineDashPattern = [NSNumber(value: 1), NSNumber(value: 6)]
         path.addSublayer(dash)
         self.dash = dash
         
@@ -86,7 +83,7 @@ final class Horizon: NSView {
     
     private func resize() {
         border.path = {
-            $0.addArc(center: center, radius: radius + 1, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: center, radius: bounding, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
         
@@ -97,7 +94,7 @@ final class Horizon: NSView {
         } (CGMutablePath())
         
         path.path = { p in
-            p.move(to: .init(x: center.x - radius, y: center.y))
+            p.move(to: .init(x: center.x - radius, y: center.y - amplitude))
             stride(from: 2, through: period, by: 2).forEach {
                 p.addLine(to: CGPoint(x: center.x - radius + ($0 / period * diameter),
                                       y: center.y - (cos($0 / 180 * .pi) * amplitude)))

@@ -53,7 +53,7 @@ final class Horizon: NSView {
         let path = CAShapeLayer()
         path.fillColor = .clear
         path.lineWidth = 2
-        path.strokeColor = .haze(0.5)
+        path.strokeColor = .shade()
         path.lineCap = .round
         layer = path
         wantsLayer = true
@@ -62,15 +62,15 @@ final class Horizon: NSView {
         let border = CAShapeLayer()
         border.fillColor = .clear
         border.lineWidth = 2
-        border.strokeColor = .haze(0.5)
+        border.strokeColor = .shade()
         path.addSublayer(border)
         self.border = border
         
         let dash = CAShapeLayer()
         dash.fillColor = .clear
         dash.lineWidth = 1
-        dash.strokeColor = .haze(0.5)
-        dash.lineDashPattern = [NSNumber(value: 3), NSNumber(value: 3)]
+        dash.strokeColor = .shade()
+        dash.lineDashPattern = [NSNumber(value: 1), NSNumber(value: 2)]
         path.addSublayer(dash)
         self.dash = dash
         

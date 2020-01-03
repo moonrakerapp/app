@@ -8,6 +8,7 @@ final class Moon: CAShapeLayer {
     var center = CGPoint()
     var radius = CGFloat()
     private weak var face: CAShapeLayer!
+    private weak var ring: CAShapeLayer!
     private let time = TimeInterval(1)
     private let map = [Phase.new : new,
                        .waxingCrescent : waxingCrescent,
@@ -20,6 +21,13 @@ final class Moon: CAShapeLayer {
     
     private var location: CGPath {
         {
+            $0.addArc(center: center, radius: radius + 4, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath())
+    }
+    
+    private var border: CGPath {
+        {
             $0.addArc(center: center, radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
             return $0
         } (CGMutablePath())
@@ -29,9 +37,14 @@ final class Moon: CAShapeLayer {
     override init() {
         super.init()
         fillColor = .black
-        lineWidth = 2
-        strokeColor = .haze()
 
+        let ring = CAShapeLayer()
+        ring.fillColor = .clear
+        ring.lineWidth = 2
+        ring.strokeColor = .haze()
+        addSublayer(ring)
+        self.ring = ring
+        
         let face = CAShapeLayer()
         face.fillColor = .haze()
         addSublayer(face)
@@ -41,10 +54,12 @@ final class Moon: CAShapeLayer {
     func update() {
         updateFace()
         updateRing()
+        updateLocation()
     }
     
     func resize() {
         path = location
+        ring.path = border
         face.path = map[phase]!(self)()
     }
     
@@ -60,6 +75,17 @@ final class Moon: CAShapeLayer {
     }
     
     private func updateRing() {
+        let path = border
+        let animation = CABasicAnimation(keyPath: "path")
+        animation.duration = time
+        animation.fromValue = ring.path
+        animation.toValue = path
+        animation.timingFunction = .init(name: .easeOut)
+        ring.path = path
+        ring.add(animation, forKey: "path")
+    }
+    
+    private func updateLocation() {
         let location = self.location
         let animation = CABasicAnimation(keyPath: "path")
         animation.duration = time

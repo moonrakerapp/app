@@ -28,7 +28,7 @@ import AppKit
     }
     
     func applicationDidBecomeActive(_: Notification) {
-        moonraker.update(.init(), latitude: 52.483343, longitude: 13.452053)
+        moonraker.update(.init(), latitude: 0, longitude: 0)
         timer.schedule(deadline: .now() + 0.2, repeating: 0.5)
     }
     

@@ -9,6 +9,7 @@ final class Moon: CAShapeLayer {
     var radius = CGFloat()
     private weak var face: CAShapeLayer!
     private weak var ring: CAShapeLayer!
+    private let time = TimeInterval(1.5)
     private let map = [Phase.new : new,
                        .waxingCrescent : waxingCrescent,
                        .firstQuarter : firstQuarter,
@@ -46,16 +47,31 @@ final class Moon: CAShapeLayer {
     }
     
     func update() {
-        face.path = map[phase]!(self)()
+        transform()
+        animate()
+    }
+    
+    private func transform() {
         let translate = CATransform3DTranslate(CATransform3DIdentity, center.x, center.y, 0)
         let rotate = CATransform3DRotate(translate, (.pi / 2) - .init(angle), 0, 0, 1)
         let animation = CABasicAnimation(keyPath: "transform")
-        animation.duration = 0.4
+        animation.duration = time
         animation.fromValue = transform
         animation.toValue = rotate
         animation.timingFunction = .init(name: .easeOut)
         transform = rotate
         add(animation, forKey: "transform")
+    }
+    
+    private func animate() {
+        let path = map[phase]!(self)()
+        let animation = CABasicAnimation(keyPath: "path")
+        animation.duration = time
+        animation.fromValue = face.path
+        animation.toValue = path
+        animation.timingFunction = .init(name: .easeOut)
+        face.path = path
+        face.add(animation, forKey: "path")
     }
     
     private func new() -> CGPath {

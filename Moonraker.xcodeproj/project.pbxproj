@@ -29,6 +29,7 @@
 		DAF2E81F23C0A1200029EB87 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E81E23C0A1200029EB87 /* String.swift */; };
 		DAF2E82123C0A1A80029EB87 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E82023C0A1A80029EB87 /* Font.swift */; };
 		DAF2E82323C0C4EE0029EB87 /* TestPhases.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E82223C0C4EE0029EB87 /* TestPhases.swift */; };
+		DAF2E82523C0E4430029EB87 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E82423C0E4430029EB87 /* Menu.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		DAF2E81E23C0A1200029EB87 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		DAF2E82023C0A1A80029EB87 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		DAF2E82223C0C4EE0029EB87 /* TestPhases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPhases.swift; sourceTree = "<group>"; };
+		DAF2E82423C0E4430029EB87 /* Menu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 				DACB8ED723BB7C3F00ADBCB2 /* App.swift */,
 				DA077C2523BDF81100682BFE /* Horizon.swift */,
 				DAF2E81C23C09E440029EB87 /* Label.swift */,
+				DAF2E82423C0E4430029EB87 /* Menu.swift */,
 				DA5831A123BB8A8C00AD5BBB /* Moon.swift */,
 				DA00DE9623BF90F900B04423 /* Stats.swift */,
 				DACB8ED623BB7C3F00ADBCB2 /* Window.swift */,
@@ -347,6 +350,7 @@
 				DA00DE9723BF90F900B04423 /* Stats.swift in Sources */,
 				DA077C2623BDF81100682BFE /* Horizon.swift in Sources */,
 				DA86B41E23BDE16400F448B2 /* Color.swift in Sources */,
+				DAF2E82523C0E4430029EB87 /* Menu.swift in Sources */,
 				DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */,
 				DAF2E82123C0A1A80029EB87 /* Font.swift in Sources */,
 				DAF2E81D23C09E440029EB87 /* Label.swift in Sources */,

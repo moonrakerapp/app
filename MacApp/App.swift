@@ -23,6 +23,8 @@ import CoreLocation
     }
     
     func applicationWillFinishLaunching(_: Notification) {
+        mainMenu = Menu()
+        
         let window = Window()
         window.makeKeyAndOrderFront(nil)
         moonraker.info.receive(on: DispatchQueue.main).sink { window.horizon.info = $0 }.store(in: &subs)

@@ -3,7 +3,7 @@ import Combine
 
 public final class Moonraker {
     public let info = PassthroughSubject<Info, Never>()
-    public let times = PassthroughSubject<Times, Never>()
+    public let times = PassthroughSubject<(Times, Date), Never>()
     private let queue = DispatchQueue(label: "", qos: .background, target: .global(qos: .background))
     private let J1970 = Double(2440588)
     private let J2000 = Double(2451545)
@@ -19,7 +19,7 @@ public final class Moonraker {
     public func update(_ date: Date, latitude: Double, longitude: Double) {
         queue.async { [weak self] in
             self?.info.send(self?.info(date.timeIntervalSince1970, latitude, longitude) ?? .init())
-            self?.times.send(self?.times(date, latitude, longitude) ?? .down)
+            self?.times.send((self?.times(date, latitude, longitude) ?? .down, self?.full(date.timeIntervalSince1970) ?? .init()))
         }
     }
     
@@ -36,7 +36,7 @@ public final class Moonraker {
         let _parallacticeAngle = atan2(sin(_h), tan(_phi) * cos(_moonCoords.1) - sin(_moonCoords.1) * cos(_h))
         
         var info = Info()
-        info.phase = phase(_inclination, _angle)
+        info.phase = phase(phase(_inclination, _angle))
         info.fraction = fraction(_inclination)
         info.angle = _angle - _parallacticeAngle
         info.azimuth = azimuth(_h, _phi, _moonCoords.1)
@@ -110,14 +110,26 @@ public final class Moonraker {
         } else if let _set = _set {
             return .set(time: .init(timeIntervalSince1970: _start + (_set * 3600)))
         }
+        
         return _ye > 0 ? .up : .down
+    }
+    
+    func full(_ time: TimeInterval) -> Date {
+        let _days = days(time)
+        let _sunCoords = sunCoords(_days)
+        let _moonCoords = moonCoords(_days)
+        let _inclination = inclination(phi(_sunCoords, _moonCoords), _moonCoords.2)
+        let _angle = angle(_sunCoords, _moonCoords)
+        let _phase = 0.5 - phase(_inclination, _angle)
+        let _seconds = (_phase < 0 ? 1 + _phase : _phase) * (60 * 60 * 24 * 29.53)
+        return .init(timeIntervalSince1970: _seconds + time)
     }
     
     func illumination(_ time: TimeInterval) -> (Phase, Double, Double) {
         {
             {
                 {
-                    (phase($0, $1), fraction($0), $1)
+                    (phase(phase($0, $1)), fraction($0), $1)
                 } (inclination(phi($0, $1), $1.2), angle($0, $1))
             } (sunCoords($0), moonCoords($0))
         } (days(time))
@@ -231,8 +243,12 @@ public final class Moonraker {
         atan2(sunDistanceKm * sin(phi), moonDistanceKm - sunDistanceKm * cos(phi))
     }
     
-    private func phase(_ inclination: Double, _ angle: Double) -> Phase {
-        switch 0.5 + ((0.5 * inclination) * (angle < 0 ? -1 : 1) / .pi) {
+    private func phase(_ inclination: Double, _ angle: Double) -> Double {
+        0.5 + ((0.5 * inclination) * (angle < 0 ? -1 : 1) / .pi)
+    }
+    
+    private func phase(_ phase: Double) -> Phase {
+        switch phase {
         case 0: return .new
         case let phase where phase < 0.25: return .waxingCrescent
         case 0.25: return .firstQuarter

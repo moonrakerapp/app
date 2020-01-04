@@ -2,9 +2,9 @@ import Moonraker
 import AppKit
 
 final class Stats: NSView {
-    var times: Times! {
+    var times: (Times, Date)! {
         didSet {
-            switch times {
+            switch times.0 {
             case .down:
                 riseTime.stringValue = "-"
                 setTime.stringValue = .key("Stats.down")
@@ -12,18 +12,19 @@ final class Stats: NSView {
                 riseTime.stringValue = .key("Stats.up")
                 setTime.stringValue = "-"
             case .rise(let time):
-                riseTime.stringValue = formatter.string(from: time)
+                riseTime.stringValue = timer.string(from: time)
                 setTime.stringValue = "-"
             case .set(let time):
                 riseTime.stringValue = "-"
-                setTime.stringValue = formatter.string(from: time)
+                setTime.stringValue = timer.string(from: time)
             case .both(let rise, let set):
-                riseTime.stringValue = formatter.string(from: rise)
-                setTime.stringValue = formatter.string(from: set)
-            case .none: break
+                riseTime.stringValue = timer.string(from: rise)
+                setTime.stringValue = timer.string(from: set)
             }
+            fullTime.stringValue = dater.string(from: times.1)
             riseCounter.stringValue = ""
             setCounter.stringValue = ""
+            fullCounter.stringValue = ""
         }
     }
     
@@ -33,7 +34,8 @@ final class Stats: NSView {
     private weak var setCounter: Label!
     private weak var fullTime: Label!
     private weak var fullCounter: Label!
-    private let formatter = DateFormatter()
+    private let timer = DateFormatter()
+    private let dater = DateFormatter()
     private let relative = DateComponentsFormatter()
     
     override var mouseDownCanMoveWindow: Bool { false }
@@ -42,8 +44,10 @@ final class Stats: NSView {
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        formatter.dateStyle = .none
-        formatter.timeStyle = .medium
+        timer.dateStyle = .none
+        timer.timeStyle = .medium
+        dater.dateStyle = .medium
+        dater.timeStyle = .none
         
         let rise = item(.key("Stats.rise"))
         riseTime = rise.1
@@ -67,7 +71,7 @@ final class Stats: NSView {
     func tick() {
         guard let times = self.times else { return }
         let now = Date()
-        switch times {
+        switch times.0 {
         case .rise(let time):
             riseCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: time) ?? "")
         case .set(let time):
@@ -77,6 +81,7 @@ final class Stats: NSView {
             setCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: set) ?? "")
         default: break
         }
+        fullCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: times.1) ?? "")
     }
     
     private func item(_ title: String) -> (Label, Label, Label, NSView) {
@@ -84,7 +89,7 @@ final class Stats: NSView {
         title.maximumNumberOfLines = 1
         addSubview(title)
         
-        let time = Label("", .regular(14), .rain())
+        let time = Label("", .light(14), .rain())
         time.maximumNumberOfLines = 1
         addSubview(time)
         
@@ -101,7 +106,7 @@ final class Stats: NSView {
         title.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
         title.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
         
-        time.leftAnchor.constraint(equalTo: title.rightAnchor, constant: 6).isActive = true
+        time.leftAnchor.constraint(equalTo: title.rightAnchor, constant: 10).isActive = true
         time.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
         time.bottomAnchor.constraint(equalTo: title.bottomAnchor).isActive = true
         

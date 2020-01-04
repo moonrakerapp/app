@@ -22,6 +22,8 @@
 	<string>1</string>
 	<key>LSMinimumSystemVersion</key>
 	<string>$(MACOSX_DEPLOYMENT_TARGET)</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Moonraker can display moon information based on your current location.</string>
 	<key>NSPrincipalClass</key>
 	<string>MoonrakerMac.App</string>
 	<key>NSSupportsAutomaticTermination</key>

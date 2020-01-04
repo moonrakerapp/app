@@ -7,24 +7,25 @@ final class Stats: NSView {
             switch times.0 {
             case .down:
                 riseTime.stringValue = "-"
+                riseCounter.stringValue = ""
                 setTime.stringValue = .key("Stats.down")
             case .up:
                 riseTime.stringValue = .key("Stats.up")
                 setTime.stringValue = "-"
+                setCounter.stringValue = ""
             case .rise(let time):
                 riseTime.stringValue = timer.string(from: time)
                 setTime.stringValue = "-"
+                setCounter.stringValue = ""
             case .set(let time):
                 riseTime.stringValue = "-"
+                riseCounter.stringValue = ""
                 setTime.stringValue = timer.string(from: time)
             case .both(let rise, let set):
                 riseTime.stringValue = timer.string(from: rise)
                 setTime.stringValue = timer.string(from: set)
             }
             fullTime.stringValue = dater.string(from: times.1)
-            riseCounter.stringValue = ""
-            setCounter.stringValue = ""
-            fullCounter.stringValue = ""
         }
     }
     

@@ -51,7 +51,7 @@ final class Window: NSWindow {
     
     override func resignKey() {
         super.resignKey()
-        contentView!.subviews.forEach { $0.alphaValue = 0.4 }
+        contentView!.subviews.forEach { $0.alphaValue = 0.3 }
     }
     
     override func close() {

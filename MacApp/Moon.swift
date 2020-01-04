@@ -23,7 +23,7 @@ final class Moon: CAShapeLayer {
 
         let ring = CAShapeLayer()
         ring.fillColor = .clear
-        ring.lineWidth = 2
+        ring.lineWidth = 1
         ring.strokeColor = .haze()
         addSublayer(ring)
         self.ring = ring
@@ -36,7 +36,7 @@ final class Moon: CAShapeLayer {
     
     func resize() {
         path = {
-            $0.addArc(center: .init(), radius: radius + 4, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            $0.addArc(center: .init(), radius: radius + 1, startAngle: 0, endAngle: .pi * 2, clockwise: true)
             return $0
         } (CGMutablePath())
         ring.path = {
@@ -50,7 +50,7 @@ final class Moon: CAShapeLayer {
         let translate = CATransform3DTranslate(CATransform3DIdentity, center.x, center.y, 0)
         let rotate = CATransform3DRotate(translate, (.pi / 2) - .init(angle), 0, 0, 1)
         let animation = CABasicAnimation(keyPath: "transform")
-        animation.duration = 1
+        animation.duration = 0.4
         animation.fromValue = transform
         animation.toValue = rotate
         animation.timingFunction = .init(name: .easeOut)

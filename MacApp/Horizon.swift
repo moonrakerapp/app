@@ -1,9 +1,21 @@
+import Moonraker
 import AppKit
 
 final class Horizon: NSView {
-    var altitude = Double()
-    var azimuth = Double()
+    var info: Info! {
+        didSet {
+            moon.phase = info.phase
+            moon.fraction = info.fraction
+            moon.angle = info.angle
+            azimuth = info.azimuth
+            altitude = info.altitude
+            update()
+        }
+    }
+    
     private(set) weak var moon: Moon!
+    private var altitude = Double()
+    private var azimuth = Double()
     private let period = CGFloat(360)
     private weak var path: CAShapeLayer!
     private weak var border: CAShapeLayer!
@@ -35,7 +47,7 @@ final class Horizon: NSView {
         .init(x: bounds.width / 2, y: bounds.height / 2)
     }
     
-    override var mouseDownCanMoveWindow: Bool { false }
+    override var mouseDownCanMoveWindow: Bool { true }
     
     required init?(coder: NSCoder) { nil }
     init() {
@@ -44,7 +56,7 @@ final class Horizon: NSView {
         
         let path = CAShapeLayer()
         path.fillColor = .clear
-        path.lineWidth = 2
+        path.lineWidth = 1
         path.strokeColor = .shade()
         path.lineCap = .round
         layer = path
@@ -53,7 +65,7 @@ final class Horizon: NSView {
         
         let border = CAShapeLayer()
         border.fillColor = .clear
-        border.lineWidth = 2
+        border.lineWidth = 1
         border.strokeColor = .shade()
         path.addSublayer(border)
         self.border = border
@@ -72,7 +84,7 @@ final class Horizon: NSView {
         self.moon = moon
     }
     
-    func update() {
+    private func update() {
         moon.center = point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
         moon.update()
     }
@@ -84,8 +96,8 @@ final class Horizon: NSView {
         } (CGMutablePath())
         
         dash.path = {
-            $0.move(to: .init(x: center.x + radius, y: center.y))
-            $0.addLine(to: .init(x: center.x - radius, y: center.y))
+            $0.move(to: .init(x: center.x + amplitude, y: center.y))
+            $0.addLine(to: .init(x: center.x - amplitude, y: center.y))
             return $0
         } (CGMutablePath())
         
@@ -97,7 +109,7 @@ final class Horizon: NSView {
             return p
         } (CGMutablePath())
         
-        moon.radius = radius / 6
+        moon.radius = radius / 4
         moon.resize()
         update()
     }

@@ -1,2 +1,4 @@
-
-
+Stats.rise="Rise";
+Stats.set="Set";
+Stats.down="Always below the horizon";
+Stats.up="Always above the horizon";

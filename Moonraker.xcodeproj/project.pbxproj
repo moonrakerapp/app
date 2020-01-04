@@ -18,13 +18,16 @@
 		DA86B41B23BDE11700F448B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA86B41A23BDE11700F448B2 /* Assets.xcassets */; };
 		DA86B41E23BDE16400F448B2 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA86B41D23BDE16400F448B2 /* Color.swift */; };
 		DACB8ED123BB7C2B00ADBCB2 /* Moonraker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED023BB7C2B00ADBCB2 /* Moonraker.swift */; };
-		DACB8EDD23BB7C4000ADBCB2 /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED623BB7C3F00ADBCB2 /* Main.swift */; };
+		DACB8EDD23BB7C4000ADBCB2 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED623BB7C3F00ADBCB2 /* Window.swift */; };
 		DACB8EDE23BB7C4000ADBCB2 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED723BB7C3F00ADBCB2 /* App.swift */; };
 		DACB8EE023BB7C4000ADBCB2 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = DACB8EDA23BB7C4000ADBCB2 /* Localizable.strings */; };
 		DACB8EE723BB843500ADBCB2 /* libMoonraker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */; };
 		DACB8EEA23BB843F00ADBCB2 /* libMoonraker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */; };
 		DAEAD2F223BC8FC10053EBEA /* TestIllumination.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */; };
 		DAEAD2F423BCAE470053EBEA /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F323BCAE470053EBEA /* Phase.swift */; };
+		DAF2E81D23C09E440029EB87 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E81C23C09E440029EB87 /* Label.swift */; };
+		DAF2E81F23C0A1200029EB87 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E81E23C0A1200029EB87 /* String.swift */; };
+		DAF2E82123C0A1A80029EB87 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E82023C0A1A80029EB87 /* Font.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,7 +62,7 @@
 		DACB8ED023BB7C2B00ADBCB2 /* Moonraker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Moonraker.swift; sourceTree = "<group>"; };
 		DACB8ED223BB7C2B00ADBCB2 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DACB8ED523BB7C3F00ADBCB2 /* MacApp.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = MacApp.entitlements; sourceTree = "<group>"; };
-		DACB8ED623BB7C3F00ADBCB2 /* Main.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		DACB8ED623BB7C3F00ADBCB2 /* Window.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Window.swift; sourceTree = "<group>"; };
 		DACB8ED723BB7C3F00ADBCB2 /* App.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		DACB8ED823BB7C3F00ADBCB2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DACB8EDB23BB7C4000ADBCB2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Localizable.strings; sourceTree = "<group>"; };
@@ -70,6 +73,9 @@
 		DACB8EE523BB7E2D00ADBCB2 /* Moonraker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moonraker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIllumination.swift; sourceTree = "<group>"; };
 		DAEAD2F323BCAE470053EBEA /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
+		DAF2E81C23C09E440029EB87 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
+		DAF2E81E23C0A1200029EB87 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		DAF2E82023C0A1A80029EB87 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -103,6 +109,8 @@
 			isa = PBXGroup;
 			children = (
 				DA86B41D23BDE16400F448B2 /* Color.swift */,
+				DAF2E82023C0A1A80029EB87 /* Font.swift */,
+				DAF2E81E23C0A1200029EB87 /* String.swift */,
 				DA86B41A23BDE11700F448B2 /* Assets.xcassets */,
 			);
 			path = Shared;
@@ -156,9 +164,10 @@
 				DACB8ED823BB7C3F00ADBCB2 /* Info.plist */,
 				DACB8ED723BB7C3F00ADBCB2 /* App.swift */,
 				DA077C2523BDF81100682BFE /* Horizon.swift */,
-				DACB8ED623BB7C3F00ADBCB2 /* Main.swift */,
+				DAF2E81C23C09E440029EB87 /* Label.swift */,
 				DA5831A123BB8A8C00AD5BBB /* Moon.swift */,
 				DA00DE9623BF90F900B04423 /* Stats.swift */,
+				DACB8ED623BB7C3F00ADBCB2 /* Window.swift */,
 			);
 			path = MacApp;
 			sourceTree = "<group>";
@@ -330,11 +339,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DACB8EDD23BB7C4000ADBCB2 /* Main.swift in Sources */,
+				DACB8EDD23BB7C4000ADBCB2 /* Window.swift in Sources */,
 				DA00DE9723BF90F900B04423 /* Stats.swift in Sources */,
 				DA077C2623BDF81100682BFE /* Horizon.swift in Sources */,
 				DA86B41E23BDE16400F448B2 /* Color.swift in Sources */,
 				DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */,
+				DAF2E82123C0A1A80029EB87 /* Font.swift in Sources */,
+				DAF2E81D23C09E440029EB87 /* Label.swift in Sources */,
+				DAF2E81F23C0A1200029EB87 /* String.swift in Sources */,
 				DACB8EDE23BB7C4000ADBCB2 /* App.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

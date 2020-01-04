@@ -1,10 +1,8 @@
-import Moonraker
-import Combine
 import AppKit
 
-final class Main: NSWindow {
-    private var cancellables = Set<AnyCancellable>()
-    private let moonraker = Moonraker()
+final class Window: NSWindow {
+    private(set) weak var horizon: Horizon!
+    private(set) weak var stats: Stats!
     
     override var canBecomeKey: Bool { true }
     override var acceptsFirstResponder: Bool { true }
@@ -27,56 +25,25 @@ final class Main: NSWindow {
         
         let horizon = Horizon()
         contentView!.addSubview(horizon)
-//        self.horizon = horizon
+        self.horizon = horizon
         
         let stats = Stats()
         contentView!.addSubview(stats)
+        self.stats = stats
         
         horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 40).isActive = true
         horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 30).isActive = true
         horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -30).isActive = true
-        horizon.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -10).isActive = true
+        horizon.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -20).isActive = true
         
         stats.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor).isActive = true
         stats.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
         stats.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
-        
-        moonraker.info.receive(on: DispatchQueue.main).sink { [weak horizon] in
-            horizon?.moon.phase = $0.phase
-            horizon?.moon.fraction = $0.fraction
-            horizon?.moon.angle = $0.angle
-            horizon?.azimuth = $0.azimuth
-            horizon?.altitude = $0.altitude
-            horizon?.update()
-        }.store(in: &cancellables)
-        
-        let slider = NSSlider()
-        slider.translatesAutoresizingMaskIntoConstraints = false
-        slider.target = self
-        slider.minValue = -(60 * 60 * 24)
-        slider.maxValue = (60 * 60 * 24)
-//        slider.minValue = .pi / -2
-//        slider.maxValue = .pi / 2
-        slider.action = #selector(selector(_:))
-        contentView!.addSubview(slider)
-        
-        slider.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor, constant: -20).isActive = true
-        slider.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 20).isActive = true
-        slider.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -20).isActive = true
     }
-    
-    @objc private func selector(_ slider: NSSlider) {
-//        print(slider.doubleValue)
-//        horizon.altitude = slider.doubleValue
-        moonraker.update(Date(timeIntervalSinceNow: slider.doubleValue), latitude: -41.136516, longitude: -66.093667)
-//        horizon.update()
-    }
-    
+
     override func becomeKey() {
         super.becomeKey()
         contentView!.subviews.forEach { $0.alphaValue = 1 }
-        moonraker.update(.init(), latitude: -41.136516, longitude: -66.093667)
-//        moonraker.update(.init(), latitude: 0, longitude: 0)
     }
     
     override func resignKey() {

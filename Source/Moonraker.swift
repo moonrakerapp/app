@@ -2,8 +2,8 @@ import Foundation
 import Combine
 
 public final class Moonraker {
-    public let info = CurrentValueSubject<Info, Never>(.init())
-    public let times = CurrentValueSubject<Times, Never>(.down)
+    public let info = PassthroughSubject<Info, Never>()
+    public let times = PassthroughSubject<Times, Never>()
     private let queue = DispatchQueue(label: "", qos: .background, target: .global(qos: .background))
     private let J1970 = Double(2440588)
     private let J2000 = Double(2451545)

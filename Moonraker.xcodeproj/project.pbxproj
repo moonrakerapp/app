@@ -17,6 +17,7 @@
 		DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5831A123BB8A8C00AD5BBB /* Moon.swift */; };
 		DA86B41B23BDE11700F448B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA86B41A23BDE11700F448B2 /* Assets.xcassets */; };
 		DA86B41E23BDE16400F448B2 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA86B41D23BDE16400F448B2 /* Color.swift */; };
+		DABA74F823C0F7FC00DCD08C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABA74F723C0F7FC00DCD08C /* Images.xcassets */; };
 		DACB8ED123BB7C2B00ADBCB2 /* Moonraker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED023BB7C2B00ADBCB2 /* Moonraker.swift */; };
 		DACB8EDD23BB7C4000ADBCB2 /* Window.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED623BB7C3F00ADBCB2 /* Window.swift */; };
 		DACB8EDE23BB7C4000ADBCB2 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = DACB8ED723BB7C3F00ADBCB2 /* App.swift */; };
@@ -60,6 +61,7 @@
 		DA5831A123BB8A8C00AD5BBB /* Moon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moon.swift; sourceTree = "<group>"; };
 		DA86B41A23BDE11700F448B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DA86B41D23BDE16400F448B2 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		DABA74F723C0F7FC00DCD08C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DACB8ECC23BB7C1600ADBCB2 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DACB8ED023BB7C2B00ADBCB2 /* Moonraker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Moonraker.swift; sourceTree = "<group>"; };
 		DACB8ED223BB7C2B00ADBCB2 /* Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -174,6 +176,7 @@
 				DA5831A123BB8A8C00AD5BBB /* Moon.swift */,
 				DA00DE9623BF90F900B04423 /* Stats.swift */,
 				DACB8ED623BB7C3F00ADBCB2 /* Window.swift */,
+				DABA74F723C0F7FC00DCD08C /* Images.xcassets */,
 			);
 			path = MacApp;
 			sourceTree = "<group>";
@@ -311,6 +314,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DABA74F823C0F7FC00DCD08C /* Images.xcassets in Resources */,
 				DA86B41B23BDE11700F448B2 /* Assets.xcassets in Resources */,
 				DACB8EE023BB7C4000ADBCB2 /* Localizable.strings in Resources */,
 			);
@@ -653,6 +657,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -720,6 +725,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

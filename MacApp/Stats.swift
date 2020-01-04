@@ -90,11 +90,11 @@ final class Stats: NSView {
         title.maximumNumberOfLines = 1
         addSubview(title)
         
-        let time = Label("", .light(14), .rain())
+        let time = Label("", .light(14), .shade())
         time.maximumNumberOfLines = 1
         addSubview(time)
         
-        let counter = Label("", .light(14), .shade())
+        let counter = Label("", .light(14), .rain())
         counter.maximumNumberOfLines = 1
         addSubview(counter)
         

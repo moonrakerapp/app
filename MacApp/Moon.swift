@@ -53,7 +53,7 @@ final class Moon: CAShapeLayer {
     
     private func transform() {
         let translate = CATransform3DTranslate(CATransform3DIdentity, center.x, center.y, 0)
-        let rotate = CATransform3DRotate(translate, (.pi / 2) - .init(angle), 0, 0, 1)
+        let rotate = CATransform3DRotate(translate, (.pi / 2) + .init(angle), 0, 0, 1)
         let animation = CABasicAnimation(keyPath: "transform")
         animation.duration = time
         animation.fromValue = transform

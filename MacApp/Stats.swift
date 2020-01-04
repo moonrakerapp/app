@@ -7,31 +7,23 @@ final class Stats: NSView {
             switch times {
             case .down:
                 riseTime.stringValue = "-"
-                riseCounter.stringValue = ""
                 setTime.stringValue = .key("Stats.down")
-                setCounter.stringValue = ""
             case .up:
                 riseTime.stringValue = .key("Stats.up")
-                riseCounter.stringValue = ""
                 setTime.stringValue = "-"
-                setCounter.stringValue = ""
             case .rise(let time):
                 riseTime.stringValue = formatter.string(from: time)
-                riseCounter.stringValue = ""
                 setTime.stringValue = "-"
-                setCounter.stringValue = ""
             case .set(let time):
                 riseTime.stringValue = "-"
-                riseCounter.stringValue = ""
                 setTime.stringValue = formatter.string(from: time)
-                setCounter.stringValue = ""
             case .both(let rise, let set):
                 riseTime.stringValue = formatter.string(from: rise)
-                riseCounter.stringValue = relative.localizedString(for: rise, relativeTo: .init())
                 setTime.stringValue = formatter.string(from: set)
-                setCounter.stringValue = relative.localizedString(for: set, relativeTo: .init())
             case .none: break
             }
+            riseCounter.stringValue = ""
+            setCounter.stringValue = ""
         }
     }
     
@@ -39,8 +31,10 @@ final class Stats: NSView {
     private weak var riseCounter: Label!
     private weak var setTime: Label!
     private weak var setCounter: Label!
+    private weak var fullTime: Label!
+    private weak var fullCounter: Label!
     private let formatter = DateFormatter()
-    private let relative = RelativeDateTimeFormatter()
+    private let relative = DateComponentsFormatter()
     
     override var mouseDownCanMoveWindow: Bool { false }
     
@@ -59,10 +53,30 @@ final class Stats: NSView {
         setTime = set.1
         setCounter = set.2
         
-        heightAnchor.constraint(equalToConstant: 100).isActive = true
+        let full = item(.key("Stats.full"))
+        fullTime = full.1
+        fullCounter = full.2
         
-        rise.0.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
-        set.0.topAnchor.constraint(equalTo: rise.3.bottomAnchor, constant: 10).isActive = true
+        heightAnchor.constraint(equalToConstant: 160).isActive = true
+        
+        rise.0.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        set.0.topAnchor.constraint(equalTo: rise.3.bottomAnchor, constant: 15).isActive = true
+        full.0.topAnchor.constraint(equalTo: set.3.bottomAnchor, constant: 15).isActive = true
+    }
+    
+    func tick() {
+        guard let times = self.times else { return }
+        let now = Date()
+        switch times {
+        case .rise(let time):
+            riseCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: time) ?? "")
+        case .set(let time):
+            setCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: time) ?? "")
+        case .both(let rise, let set):
+            riseCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: rise) ?? "")
+            setCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: set) ?? "")
+        default: break
+        }
     }
     
     private func item(_ title: String) -> (Label, Label, Label, NSView) {
@@ -74,7 +88,7 @@ final class Stats: NSView {
         time.maximumNumberOfLines = 1
         addSubview(time)
         
-        let counter = Label("", .regular(14), .white)
+        let counter = Label("", .light(14), .shade())
         counter.maximumNumberOfLines = 1
         addSubview(counter)
         
@@ -84,20 +98,20 @@ final class Stats: NSView {
         border.layer!.backgroundColor = .shade(0.3)
         addSubview(border)
         
-        title.leftAnchor.constraint(equalTo: leftAnchor, constant: 30).isActive = true
-        title.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -30).isActive = true
+        title.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
+        title.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
         
-        time.leftAnchor.constraint(equalTo: title.rightAnchor, constant: 5).isActive = true
-        time.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -30).isActive = true
+        time.leftAnchor.constraint(equalTo: title.rightAnchor, constant: 6).isActive = true
+        time.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
         time.bottomAnchor.constraint(equalTo: title.bottomAnchor).isActive = true
         
-        counter.leftAnchor.constraint(equalTo: time.rightAnchor, constant: 5).isActive = true
-        counter.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -30).isActive = true
+        counter.leftAnchor.constraint(equalTo: time.rightAnchor).isActive = true
+        counter.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
         counter.bottomAnchor.constraint(equalTo: title.bottomAnchor).isActive = true
         
-        border.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 5).isActive = true
-        border.leftAnchor.constraint(equalTo: leftAnchor, constant: 30).isActive = true
-        border.rightAnchor.constraint(equalTo: rightAnchor, constant: -30).isActive = true
+        border.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 10).isActive = true
+        border.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
+        border.rightAnchor.constraint(equalTo: rightAnchor, constant: -40).isActive = true
         border.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
         return (title, time, counter, border)

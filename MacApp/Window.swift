@@ -8,8 +8,8 @@ final class Window: NSWindow {
     override var acceptsFirstResponder: Bool { true }
 
     init() {
-        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 200, y: NSScreen.main!.frame.midY - 200, width: 400, height: 400), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
-        minSize = .init(width: 100, height: 100)
+        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 250, y: NSScreen.main!.frame.midY - 250, width: 500, height: 500), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
+        minSize = .init(width: 150, height: 150)
         appearance = NSAppearance(named: .darkAqua)
         backgroundColor = .clear
         titlebarAppearsTransparent = true
@@ -31,14 +31,17 @@ final class Window: NSWindow {
         contentView!.addSubview(stats)
         self.stats = stats
         
-        horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 40).isActive = true
+        horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 50).isActive = true
         horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 30).isActive = true
         horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -30).isActive = true
-        horizon.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -20).isActive = true
+        horizon.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -30).isActive = true
         
-        stats.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor).isActive = true
         stats.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
         stats.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
+        stats.topAnchor.constraint(greaterThanOrEqualTo: contentView!.topAnchor, constant: 160).isActive = true
+        let bottom = stats.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor)
+        bottom.priority = .defaultLow
+        bottom.isActive = true
     }
 
     override func becomeKey() {
@@ -48,7 +51,7 @@ final class Window: NSWindow {
     
     override func resignKey() {
         super.resignKey()
-        contentView!.subviews.forEach { $0.alphaValue = 0.6 }
+        contentView!.subviews.forEach { $0.alphaValue = 0.4 }
     }
     
     override func close() {

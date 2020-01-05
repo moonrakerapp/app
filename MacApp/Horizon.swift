@@ -109,7 +109,7 @@ final class Horizon: NSView {
             return p
         } (CGMutablePath())
         
-        moon.radius = radius / 4
+        moon.radius = radius / 8
         moon.resize()
         update()
     }

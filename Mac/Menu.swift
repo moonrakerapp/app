@@ -11,10 +11,14 @@ final class Menu: NSMenu {
         {
             $0.submenu = .init(title: .key("Menu.title"))
             $0.submenu!.items = [
-                .init(title: .key("Menu.about"), action: #selector(NSApplication.orderFrontStandardAboutPanel(_:)), keyEquivalent: ","),
+                {
+                    $0.target = self
+                    return $0
+                } (NSMenuItem(title: .key("Menu.about"), action: #selector(about), keyEquivalent: ",")),
                 .separator(),
                 .init(title: .key("Menu.hide"), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h"),
-                { $0.keyEquivalentModifierMask = [.option, .command]
+                {
+                    $0.keyEquivalentModifierMask = [.option, .command]
                     return $0
                 } (NSMenuItem(title: .key("Menu.hideOthers"), action: #selector(NSApplication.hideOtherApplications(_:)), keyEquivalent: "h")),
                 .init(title: .key("Menu.showAll"), action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: ""),
@@ -43,5 +47,9 @@ final class Menu: NSMenu {
             $0.submenu = .init(title: .key("Menu.help"))
             return $0
         } (NSMenuItem(title: "", action: nil, keyEquivalent: ""))
+    }
+    
+    @objc private func about() {
+        (NSApp.windows.first { $0 is About } ?? About()).makeKeyAndOrderFront(nil)
     }
 }

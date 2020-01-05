@@ -3,9 +3,6 @@ import AppKit
 final class Window: NSWindow {
     private(set) weak var horizon: Horizon!
     private(set) weak var stats: Stats!
-    
-    override var canBecomeKey: Bool { true }
-    override var acceptsFirstResponder: Bool { true }
 
     init() {
         super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 250, y: NSScreen.main!.frame.midY - 250, width: 500, height: 500), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)

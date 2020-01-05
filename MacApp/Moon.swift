@@ -8,7 +8,6 @@ final class Moon: CAShapeLayer {
     var center = CGPoint()
     var radius = CGFloat()
     private weak var face: CAShapeLayer!
-    private weak var ring: CAShapeLayer!
     private let time = TimeInterval(1.5)
     private let map = [Phase.new : new,
                        .waxingCrescent : waxingCrescent,
@@ -20,14 +19,12 @@ final class Moon: CAShapeLayer {
                        .waningCrescent : waningCrescent]
     
     func configure() {
-        fillColor = .dark()
-
-        let ring = CAShapeLayer()
-        ring.fillColor = .clear
-        ring.lineWidth = 1
-        ring.strokeColor = .black
-        addSublayer(ring)
-        self.ring = ring
+        fillColor = .black
+        lineWidth = 1
+        strokeColor = .dark()
+        shadowColor = .haze()
+        shadowOpacity = 1
+        shadowOffset = .zero
         
         let face = CAShapeLayer()
         face.fillColor = .haze()
@@ -37,13 +34,10 @@ final class Moon: CAShapeLayer {
     
     func resize() {
         path = {
-            $0.addArc(center: .init(), radius: radius + 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            $0.addArc(center: .init(), radius: radius + 1, startAngle: 0, endAngle: .pi * 2, clockwise: true)
             return $0
         } (CGMutablePath())
-        ring.path = {
-            $0.addArc(center: .init(), radius: radius + 2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-            return $0
-        } (CGMutablePath())
+        shadowRadius = radius
     }
     
     func update() {

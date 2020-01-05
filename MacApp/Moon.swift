@@ -83,8 +83,8 @@ final class Moon: CAShapeLayer {
             $0.addArc(center: .init(), radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
             $0.addLine(to: .init(x: 0, y: -radius))
             $0.addCurve(to: .init(x: 0, y: radius),
-                        control1: .init(x: (radius * 1.25) - (2 * radius * .init(fraction)), y: radius * -0.75),
-                        control2: .init(x: (radius * 1.25) - (2 * radius * .init(fraction)), y: radius * 0.75))
+                        control1: .init(x: .init((fraction - 0.5) / -0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius),
+                        control2: .init(x: .init((fraction - 0.5) / -0.5) * (radius * 1.35), y: .init((fraction - 0.5) / -0.5) * radius))
             return $0
         } (CGMutablePath())
     }
@@ -119,8 +119,8 @@ final class Moon: CAShapeLayer {
             $0.addArc(center: .init(), radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
             $0.addLine(to: .init(x: 0, y: radius))
             $0.addCurve(to: .init(x: 0, y: -radius),
-                        control1: .init(x: (radius * 1.25) * .init(fraction), y: radius * 0.75),
-                        control2: .init(x: (radius * 1.25) * .init(fraction), y: radius * -0.75))
+                        control1: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius),
+                        control2: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / -0.5) * radius))
             return $0
         } (CGMutablePath())
     }
@@ -137,8 +137,8 @@ final class Moon: CAShapeLayer {
             $0.addArc(center: .init(), radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
             $0.addLine(to: .init(x: 0, y: radius))
             $0.addCurve(to: .init(x: 0, y: -radius),
-                        control1: .init(x: (radius * -1.25) + (2 * radius * .init(fraction)), y: radius * 0.75),
-                        control2: .init(x: (radius * -1.25) + (2 * radius * .init(fraction)), y: radius * -0.75))
+                        control1: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / -0.5) * radius),
+                        control2: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius))
             return $0
         } (CGMutablePath())
     }

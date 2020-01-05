@@ -6,19 +6,19 @@ final class Stats: NSView {
         didSet {
             switch times.0 {
             case .down:
-                rise.stringValue = "-"
+                rise.stringValue = .key("Stats.rise") + " -"
                 riseCounter.stringValue = ""
                 set.stringValue = .key("Stats.down")
             case .up:
                 rise.stringValue = .key("Stats.up")
-                set.stringValue = "-"
+                set.stringValue = .key("Stats.set") + " -"
                 setCounter.stringValue = ""
             case .rise(let time):
                 rise.stringValue = .key("Stats.rise") + " " + timer.string(from: time)
-                set.stringValue = "-"
+                set.stringValue = .key("Stats.set") + " -"
                 setCounter.stringValue = ""
             case .set(let time):
-                rise.stringValue = "-"
+                rise.stringValue = .key("Stats.rise") + " -"
                 riseCounter.stringValue = ""
                 set.stringValue = .key("Stats.set") + " " + timer.string(from: time)
             case .both(let _rise, let _set):

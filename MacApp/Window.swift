@@ -31,14 +31,14 @@ final class Window: NSWindow {
         contentView!.addSubview(stats)
         self.stats = stats
         
-        horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 50).isActive = true
-        horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 30).isActive = true
-        horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -30).isActive = true
-        horizon.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -30).isActive = true
+        horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 30).isActive = true
+        horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 40).isActive = true
+        horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -40).isActive = true
+        horizon.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -20).isActive = true
         
         stats.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
         stats.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
-        stats.topAnchor.constraint(greaterThanOrEqualTo: contentView!.topAnchor, constant: 160).isActive = true
+        stats.topAnchor.constraint(greaterThanOrEqualTo: contentView!.topAnchor, constant: 180).isActive = true
         let bottom = stats.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor)
         bottom.priority = .defaultLow
         bottom.isActive = true
@@ -51,7 +51,7 @@ final class Window: NSWindow {
     
     override func resignKey() {
         super.resignKey()
-        contentView!.subviews.forEach { $0.alphaValue = 0.3 }
+        contentView!.subviews.forEach { $0.alphaValue = 0.5 }
     }
     
     override func close() {

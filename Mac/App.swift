@@ -28,6 +28,7 @@ import CoreLocation
         let window = Window()
         window.makeKeyAndOrderFront(nil)
         moonraker.info.receive(on: DispatchQueue.main).sink { window.horizon.info = $0 }.store(in: &subs)
+        moonraker.info.receive(on: DispatchQueue.main).sink { window.stats.info = $0 }.store(in: &subs)
         moonraker.times.receive(on: DispatchQueue.main).sink { window.stats.times = $0 }.store(in: &subs)
         
         timer.activate()
@@ -62,6 +63,7 @@ import CoreLocation
     }
     
     func locationManager(_: CLLocationManager, didFailWithError: Error) {
+        location?.stopUpdatingLocation()
         location = nil
     }
     

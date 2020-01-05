@@ -6,35 +6,50 @@ final class Stats: NSView {
         didSet {
             switch times.0 {
             case .down:
-                riseTime.stringValue = "-"
+                rise.stringValue = "-"
                 riseCounter.stringValue = ""
-                setTime.stringValue = .key("Stats.down")
+                set.stringValue = .key("Stats.down")
             case .up:
-                riseTime.stringValue = .key("Stats.up")
-                setTime.stringValue = "-"
+                rise.stringValue = .key("Stats.up")
+                set.stringValue = "-"
                 setCounter.stringValue = ""
             case .rise(let time):
-                riseTime.stringValue = timer.string(from: time)
-                setTime.stringValue = "-"
+                rise.stringValue = .key("Stats.rise") + " " + timer.string(from: time)
+                set.stringValue = "-"
                 setCounter.stringValue = ""
             case .set(let time):
-                riseTime.stringValue = "-"
+                rise.stringValue = "-"
                 riseCounter.stringValue = ""
-                setTime.stringValue = timer.string(from: time)
-            case .both(let rise, let set):
-                riseTime.stringValue = timer.string(from: rise)
-                setTime.stringValue = timer.string(from: set)
+                set.stringValue = .key("Stats.set") + " " + timer.string(from: time)
+            case .both(let _rise, let _set):
+                rise.stringValue = .key("Stats.rise") + " " + timer.string(from: _rise)
+                set.stringValue = .key("Stats.set") + " " + timer.string(from: _set)
             }
-            fullTime.stringValue = dater.string(from: times.1)
+            full.stringValue = dater.string(from: times.1)
         }
     }
     
-    private weak var riseTime: Label!
+    var info: Info! {
+        didSet {
+            switch info.phase {
+            case .new: phase.stringValue = .key("Phase.new")
+            case .waxingCrescent: phase.stringValue = .key("Phase.waxingCrescent")
+            case .firstQuarter: phase.stringValue = .key("Phase.firstQuarter")
+            case .waxingGibbous: phase.stringValue = .key("Phase.waxingGibbous")
+            case .full: phase.stringValue = .key("Phase.full")
+            case .waningGibbous: phase.stringValue = .key("Phase.waningGibbous")
+            case .lastQuarter: phase.stringValue = .key("Phase.lastQuarter")
+            case .waningCrescent: phase.stringValue = .key("Phase.waningCrescent")
+            }
+        }
+    }
+    
+    private weak var phase: Label!
+    private weak var rise: Label!
     private weak var riseCounter: Label!
-    private weak var setTime: Label!
+    private weak var set: Label!
     private weak var setCounter: Label!
-    private weak var fullTime: Label!
-    private weak var fullCounter: Label!
+    private weak var full: Label!
     private let timer = DateFormatter()
     private let dater = DateFormatter()
     private let relative = DateComponentsFormatter()
@@ -47,26 +62,30 @@ final class Stats: NSView {
         translatesAutoresizingMaskIntoConstraints = false
         timer.dateStyle = .none
         timer.timeStyle = .medium
-        dater.dateStyle = .medium
-        dater.timeStyle = .none
+        dater.dateFormat = "EEEE, MMMM d"
         
-        let rise = item(.key("Stats.rise"))
-        riseTime = rise.1
-        riseCounter = rise.2
+        let phase = item()
+        phase.0.stringValue = .key("Stats.phase")
+        self.phase = phase.1
         
-        let set = item(.key("Stats.set"))
-        setTime = set.1
-        setCounter = set.2
+        let rise = item()
+        self.rise = rise.0
+        riseCounter = rise.1
         
-        let full = item(.key("Stats.full"))
-        fullTime = full.1
-        fullCounter = full.2
+        let set = item()
+        self.set = set.0
+        setCounter = set.1
         
-        heightAnchor.constraint(equalToConstant: 200).isActive = true
+        let full = item()
+        full.0.stringValue = .key("Stats.full")
+        self.full = full.1
         
-        rise.0.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        set.0.topAnchor.constraint(equalTo: rise.3.bottomAnchor, constant: 15).isActive = true
-        full.0.topAnchor.constraint(equalTo: set.3.bottomAnchor, constant: 15).isActive = true
+        heightAnchor.constraint(equalToConstant: 220).isActive = true
+        
+        phase.0.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        full.0.topAnchor.constraint(equalTo: phase.2.bottomAnchor, constant: 15).isActive = true
+        rise.0.topAnchor.constraint(equalTo: full.2.bottomAnchor, constant: 15).isActive = true
+        set.0.topAnchor.constraint(equalTo: rise.2.bottomAnchor, constant: 15).isActive = true
     }
     
     func tick() {
@@ -82,17 +101,12 @@ final class Stats: NSView {
             setCounter.stringValue = relative.string(from: now, to: set) ?? ""
         default: break
         }
-        fullCounter.stringValue = relative.string(from: now, to: times.1) ?? ""
     }
     
-    private func item(_ title: String) -> (Label, Label, Label, NSView) {
-        let title = Label(title, .medium(12), .shade())
+    private func item() -> (Label, Label, NSView) {
+        let title = Label("", .medium(14), .shade())
         title.maximumNumberOfLines = 1
         addSubview(title)
-        
-        let time = Label("", .medium(14), .shade())
-        time.maximumNumberOfLines = 1
-        addSubview(time)
         
         let counter = Label("", .medium(14), .rain())
         counter.maximumNumberOfLines = 1
@@ -107,11 +121,7 @@ final class Stats: NSView {
         title.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
         title.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
         
-        time.leftAnchor.constraint(equalTo: title.rightAnchor, constant: 10).isActive = true
-        time.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
-        time.bottomAnchor.constraint(equalTo: title.bottomAnchor).isActive = true
-        
-        counter.leftAnchor.constraint(equalTo: time.rightAnchor).isActive = true
+        counter.leftAnchor.constraint(equalTo: title.rightAnchor).isActive = true
         counter.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
         counter.bottomAnchor.constraint(equalTo: title.bottomAnchor).isActive = true
         
@@ -120,6 +130,6 @@ final class Stats: NSView {
         border.rightAnchor.constraint(equalTo: rightAnchor, constant: -40).isActive = true
         border.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
-        return (title, time, counter, border)
+        return (title, counter, border)
     }
 }

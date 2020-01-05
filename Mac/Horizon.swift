@@ -27,7 +27,7 @@ final class Horizon: NSView {
     }
     
     private var radius: CGFloat {
-        (min(bounds.width, bounds.height) * 0.5) - 5
+        (min(bounds.width, bounds.height) * 0.5) - 2
     }
     
     private var diameter: CGFloat {
@@ -93,7 +93,7 @@ final class Horizon: NSView {
             return p
         } (CGMutablePath())
         
-        path.lineWidth = radius * 3 / 100
+        path.lineWidth = radius < 50 ? 1 : radius < 100 ? 2 : radius < 200 ? 3 : 4
         moon.radius = radius / 8
         moon.resize()
         update()

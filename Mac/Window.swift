@@ -5,7 +5,7 @@ final class Window: NSWindow {
     private(set) weak var stats: Stats!
 
     init() {
-        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 250, y: NSScreen.main!.frame.midY - 250, width: 500, height: 500), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
+        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 300, y: NSScreen.main!.frame.midY - 300, width: 600, height: 600), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
         minSize = .init(width: 150, height: 150)
         appearance = NSAppearance(named: .darkAqua)
         backgroundColor = .clear

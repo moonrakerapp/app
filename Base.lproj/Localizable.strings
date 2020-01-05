@@ -3,7 +3,6 @@ Stats.set="Set";
 Stats.full="Full moon";
 Stats.down="Always below the horizon";
 Stats.up="Always above the horizon";
-Stats.in="in ";
 Menu.title="Moonraker";
 Menu.about="About";
 Menu.hide="Hide";

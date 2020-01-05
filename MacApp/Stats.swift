@@ -74,27 +74,27 @@ final class Stats: NSView {
         let now = Date()
         switch times.0 {
         case .rise(let time):
-            riseCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: time) ?? "")
+            riseCounter.stringValue = relative.string(from: now, to: time) ?? ""
         case .set(let time):
-            setCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: time) ?? "")
+            setCounter.stringValue = relative.string(from: now, to: time) ?? ""
         case .both(let rise, let set):
-            riseCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: rise) ?? "")
-            setCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: set) ?? "")
+            riseCounter.stringValue = relative.string(from: now, to: rise) ?? ""
+            setCounter.stringValue = relative.string(from: now, to: set) ?? ""
         default: break
         }
-        fullCounter.stringValue = .key("Stats.in") + (relative.string(from: now, to: times.1) ?? "")
+        fullCounter.stringValue = relative.string(from: now, to: times.1) ?? ""
     }
     
     private func item(_ title: String) -> (Label, Label, Label, NSView) {
-        let title = Label(title, .medium(14), .shade())
+        let title = Label(title, .medium(12), .shade())
         title.maximumNumberOfLines = 1
         addSubview(title)
         
-        let time = Label("", .light(14), .shade())
+        let time = Label("", .medium(14), .shade())
         time.maximumNumberOfLines = 1
         addSubview(time)
         
-        let counter = Label("", .light(14), .rain())
+        let counter = Label("", .medium(14), .rain())
         counter.maximumNumberOfLines = 1
         addSubview(counter)
         

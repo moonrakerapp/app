@@ -4,12 +4,21 @@ import AppKit
 final class Pop: NSPopover {
     var info: Info! {
         didSet {
-            percent.attributed([("\(Float(Int(info.fraction * 100000)) / 1000)", .medium(16), .init(white: 1, alpha: 0.4)),
-                                ("%", .medium(14), .init(white: 1, alpha: 0.4))])
+            phase.stringValue = .key("Phase.\(info.phase)")
+            percent.attributed([("\(Float(Int(info.fraction * 100000)) / 1000)", .medium(16), .textColor),
+                                ("%", .medium(14), .textColor)])
+            
+            let animation = CABasicAnimation(keyPath: "strokeEnd")
+            animation.duration = 2
+            animation.fromValue = illumination.strokeEnd
+            animation.toValue = .init(info.fraction)
+            animation.timingFunction = .init(name: .easeOut)
             illumination.strokeEnd = .init(info.fraction)
+            illumination.add(animation, forKey: "strokeEnd")
         }
     }
     
+    private weak var phase: Label!
     private weak var percent: Label!
     private weak var illumination: CAShapeLayer!
     
@@ -20,12 +29,16 @@ final class Pop: NSPopover {
         contentViewController = .init()
         contentViewController!.view = .init()
         behavior = .transient
-        appearance = NSAppearance(named: .darkAqua)
         
-        let _illumination = Label("Illumination", .medium(16), .white)
+        let phase = Label("", .bold(20), .textColor)
+        contentViewController!.view.addSubview(phase)
+        self.phase = phase
+        
+        let _illumination = Label(.key("Pop.illumination"), .medium(16), .textColor)
         contentViewController!.view.addSubview(_illumination)
         
         let percent = Label([])
+        percent.alphaValue = 0.4
         contentViewController!.view.addSubview(percent)
         self.percent = percent
         
@@ -34,31 +47,54 @@ final class Pop: NSPopover {
         container.wantsLayer = true
         container.layer!.cornerRadius = 5
         container.layer!.borderWidth = 1
-        container.layer!.borderColor = .white
+        container.layer!.borderColor = NSColor.textColor.cgColor
         contentViewController!.view.addSubview(container)
         
         let illumination = CAShapeLayer()
         illumination.fillColor = .clear
-        illumination.strokeColor = .white
+        illumination.strokeColor = NSColor.textColor.cgColor
         illumination.lineWidth = 10
         illumination.path = {
             $0.move(to: .init(x: 0, y: 5))
             $0.addLine(to: .init(x: 200, y: 5))
             return $0
         } (CGMutablePath())
+        illumination.strokeEnd = 0
         container.layer!.addSublayer(illumination)
         self.illumination = illumination
         
-        _illumination.topAnchor.constraint(equalTo: contentViewController!.view.topAnchor, constant: 20).isActive = true
-        _illumination.leftAnchor.constraint(equalTo: contentViewController!.view.leftAnchor, constant: 20).isActive = true
+        let refresh = Control(.key("Pop.refresh"), self, #selector(update), NSColor.textColor.cgColor, .textBackgroundColor)
+        contentViewController!.view.addSubview(refresh)
+        
+        phase.topAnchor.constraint(equalTo: contentViewController!.view.topAnchor, constant: 20).isActive = true
+        phase.leftAnchor.constraint(equalTo: contentViewController!.view.leftAnchor, constant: 20).isActive = true
+        
+        _illumination.topAnchor.constraint(equalTo: phase.bottomAnchor, constant: 20).isActive = true
+        _illumination.leftAnchor.constraint(equalTo: phase.leftAnchor).isActive = true
         
         percent.topAnchor.constraint(equalTo: _illumination.topAnchor).isActive = true
         percent.rightAnchor.constraint(equalTo: contentViewController!.view.rightAnchor, constant: -20).isActive = true
         
+        container.leftAnchor.constraint(equalTo: phase.leftAnchor).isActive = true
         container.topAnchor.constraint(equalTo: _illumination.bottomAnchor, constant: 6).isActive = true
         container.heightAnchor.constraint(equalToConstant: 10).isActive = true
         container.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        container.leftAnchor.constraint(equalTo: contentViewController!.view.leftAnchor, constant: 20).isActive = true
+        
+        refresh.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        refresh.centerXAnchor.constraint(equalTo: contentViewController!.view.centerXAnchor).isActive = true
+        refresh.bottomAnchor.constraint(equalTo: contentViewController!.view.bottomAnchor, constant: -30).isActive = true
     }
     
+    @objc private func update() {
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.duration = 0.3
+        animation.fromValue = illumination.strokeEnd
+        animation.toValue = 0
+        illumination.strokeEnd = 0
+        illumination.add(animation, forKey: "strokeEnd")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            (NSApp as! App).update()
+        }
+    }
 }

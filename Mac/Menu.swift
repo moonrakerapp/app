@@ -64,6 +64,7 @@ final class Menu: NSMenu {
             pop.performClose(nil)
         } else {
             pop.show(relativeTo: status.button!.bounds, of: status.button!, preferredEdge: .minY)
+            pop.contentViewController!.view.window!.makeKey()
         }
     }
 }

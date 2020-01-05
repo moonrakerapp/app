@@ -31,16 +31,7 @@ final class Stats: NSView {
     
     var info: Info! {
         didSet {
-            switch info.phase {
-            case .new: phase.stringValue = .key("Phase.new")
-            case .waxingCrescent: phase.stringValue = .key("Phase.waxingCrescent")
-            case .firstQuarter: phase.stringValue = .key("Phase.firstQuarter")
-            case .waxingGibbous: phase.stringValue = .key("Phase.waxingGibbous")
-            case .full: phase.stringValue = .key("Phase.full")
-            case .waningGibbous: phase.stringValue = .key("Phase.waningGibbous")
-            case .lastQuarter: phase.stringValue = .key("Phase.lastQuarter")
-            case .waningCrescent: phase.stringValue = .key("Phase.waningCrescent")
-            }
+            phase.stringValue = .key("Phase.\(info.phase)")
         }
     }
     

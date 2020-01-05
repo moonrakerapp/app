@@ -70,7 +70,7 @@ import CoreLocation
         location = nil
     }
     
-    private func update() {
+    func update() {
         moonraker.update(.init(), latitude: coords.latitude, longitude: coords.longitude)
     }
 }

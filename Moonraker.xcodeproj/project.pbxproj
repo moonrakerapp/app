@@ -19,6 +19,7 @@
 		DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5831A123BB8A8C00AD5BBB /* Moon.swift */; };
 		DA86B41B23BDE11700F448B2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA86B41A23BDE11700F448B2 /* Assets.xcassets */; };
 		DA86B41E23BDE16400F448B2 /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA86B41D23BDE16400F448B2 /* Color.swift */; };
+		DA8E683B23C23A2F00BE172B /* Pop.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA8E683A23C23A2F00BE172B /* Pop.swift */; };
 		DABA74F823C0F7FC00DCD08C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DABA74F723C0F7FC00DCD08C /* Images.xcassets */; };
 		DACAE12523C1F46E00DD97EC /* din1451alt G.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DACAE12323C1F46E00DD97EC /* din1451alt G.ttf */; };
 		DACAE12623C1F46E00DD97EC /* din1451alt.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DACAE12423C1F46E00DD97EC /* din1451alt.ttf */; };
@@ -68,6 +69,7 @@
 		DA5831A123BB8A8C00AD5BBB /* Moon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moon.swift; sourceTree = "<group>"; };
 		DA86B41A23BDE11700F448B2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DA86B41D23BDE16400F448B2 /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
+		DA8E683A23C23A2F00BE172B /* Pop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pop.swift; sourceTree = "<group>"; };
 		DABA74F723C0F7FC00DCD08C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DACAE12323C1F46E00DD97EC /* din1451alt G.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "din1451alt G.ttf"; sourceTree = "<group>"; };
 		DACAE12423C1F46E00DD97EC /* din1451alt.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = din1451alt.ttf; sourceTree = "<group>"; };
@@ -197,6 +199,7 @@
 				DAF2E81C23C09E440029EB87 /* Label.swift */,
 				DAF2E82423C0E4430029EB87 /* Menu.swift */,
 				DA5831A123BB8A8C00AD5BBB /* Moon.swift */,
+				DA8E683A23C23A2F00BE172B /* Pop.swift */,
 				DA00DE9623BF90F900B04423 /* Stats.swift */,
 				DACB8ED623BB7C3F00ADBCB2 /* Window.swift */,
 				DABA74F723C0F7FC00DCD08C /* Images.xcassets */,
@@ -388,6 +391,7 @@
 				DAF2E81D23C09E440029EB87 /* Label.swift in Sources */,
 				DAF2E81F23C0A1200029EB87 /* String.swift in Sources */,
 				DACB8EDE23BB7C4000ADBCB2 /* App.swift in Sources */,
+				DA8E683B23C23A2F00BE172B /* Pop.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

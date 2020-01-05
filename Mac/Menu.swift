@@ -1,10 +1,16 @@
 import AppKit
 
 final class Menu: NSMenu {
+    let pop = Pop()
+    private let status = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+    
     required init(coder: NSCoder) { fatalError() }
     init() {
         super.init(title: "")
         items = [moonraker, window, help]
+        status.button!.image = NSImage(named: "status")
+        status.button!.target = self
+        status.button!.action = #selector(show)
     }
 
     private var moonraker: NSMenuItem {
@@ -51,5 +57,13 @@ final class Menu: NSMenu {
     
     @objc private func about() {
         (NSApp.windows.first { $0 is About } ?? About()).makeKeyAndOrderFront(nil)
+    }
+    
+    @objc private func show() {
+        if pop.isShown {
+            pop.performClose(nil)
+        } else {
+            pop.show(relativeTo: status.button!.bounds, of: status.button!, preferredEdge: .minY)
+        }
     }
 }

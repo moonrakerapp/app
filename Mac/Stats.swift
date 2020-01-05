@@ -119,15 +119,15 @@ final class Stats: NSView {
         addSubview(border)
         
         title.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
-        title.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
+        title.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -10).isActive = true
         
         counter.leftAnchor.constraint(equalTo: title.rightAnchor).isActive = true
-        counter.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -40).isActive = true
+        counter.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -10).isActive = true
         counter.bottomAnchor.constraint(equalTo: title.bottomAnchor).isActive = true
         
         border.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 10).isActive = true
         border.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
-        border.rightAnchor.constraint(equalTo: rightAnchor, constant: -40).isActive = true
+        border.rightAnchor.constraint(equalTo: counter.rightAnchor).isActive = true
         border.heightAnchor.constraint(equalToConstant: 1).isActive = true
         
         return (title, counter, border)

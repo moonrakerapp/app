@@ -30,6 +30,7 @@
 		DACB8EEA23BB843F00ADBCB2 /* libMoonraker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */; };
 		DAEAD2F223BC8FC10053EBEA /* TestIllumination.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */; };
 		DAEAD2F423BCAE470053EBEA /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F323BCAE470053EBEA /* Phase.swift */; };
+		DAF0BF7823C214BE0035F416 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF0BF7723C214BE0035F416 /* Graph.swift */; };
 		DAF2E81D23C09E440029EB87 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E81C23C09E440029EB87 /* Label.swift */; };
 		DAF2E81F23C0A1200029EB87 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E81E23C0A1200029EB87 /* String.swift */; };
 		DAF2E82123C0A1A80029EB87 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E82023C0A1A80029EB87 /* Font.swift */; };
@@ -85,6 +86,7 @@
 		DACB8EE523BB7E2D00ADBCB2 /* Moonraker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moonraker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIllumination.swift; sourceTree = "<group>"; };
 		DAEAD2F323BCAE470053EBEA /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
+		DAF0BF7723C214BE0035F416 /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
 		DAF2E81C23C09E440029EB87 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		DAF2E81E23C0A1200029EB87 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		DAF2E82023C0A1A80029EB87 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
@@ -189,6 +191,7 @@
 				DACB8ED823BB7C3F00ADBCB2 /* Info.plist */,
 				DA10C57223C2009B005FD07E /* About.swift */,
 				DACB8ED723BB7C3F00ADBCB2 /* App.swift */,
+				DAF0BF7723C214BE0035F416 /* Graph.swift */,
 				DA077C2523BDF81100682BFE /* Horizon.swift */,
 				DA10C57423C203EC005FD07E /* Image.swift */,
 				DAF2E81C23C09E440029EB87 /* Label.swift */,
@@ -373,6 +376,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DACB8EDD23BB7C4000ADBCB2 /* Window.swift in Sources */,
+				DAF0BF7823C214BE0035F416 /* Graph.swift in Sources */,
 				DA10C57523C203EC005FD07E /* Image.swift in Sources */,
 				DA00DE9723BF90F900B04423 /* Stats.swift in Sources */,
 				DA10C57323C2009B005FD07E /* About.swift in Sources */,

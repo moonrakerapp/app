@@ -5,6 +5,7 @@ Stats.set="Set";
 Stats.full="Full Moon";
 Stats.down="Always below the horizon";
 Stats.up="Always above the horizon";
+Graph.illumination="Illumination";
 Menu.title="Moonraker";
 Menu.about="About";
 Menu.hide="Hide";

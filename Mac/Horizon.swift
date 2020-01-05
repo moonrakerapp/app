@@ -13,10 +13,10 @@ final class Horizon: NSView {
         }
     }
     
-    private(set) weak var moon: Moon!
     private var altitude = Double.pi / 2
     private var azimuth = Double()
     private let period = CGFloat(360)
+    private weak var moon: Moon!
     private weak var path: CAShapeLayer!
     private weak var dash: CAShapeLayer!
     

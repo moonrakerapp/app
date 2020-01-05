@@ -62,7 +62,7 @@ final class Stats: NSView {
         fullTime = full.1
         fullCounter = full.2
         
-        heightAnchor.constraint(equalToConstant: 160).isActive = true
+        heightAnchor.constraint(equalToConstant: 200).isActive = true
         
         rise.0.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
         set.0.topAnchor.constraint(equalTo: rise.3.bottomAnchor, constant: 15).isActive = true

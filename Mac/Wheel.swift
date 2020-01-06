@@ -6,6 +6,7 @@ final class Wheel: NSView {
     private weak var ring: CAShapeLayer!
     private weak var outer: CAShapeLayer!
     private weak var inner: CAShapeLayer!
+    private weak var future: Image!
     private weak var now: Image!
     private weak var forward: Image!
     private weak var backward: Image!
@@ -75,6 +76,7 @@ final class Wheel: NSView {
         addSubview(modifier)
         self.modifier = modifier
         
+        future = control("future")
         now = control("now")
         forward = control("forward")
         backward = control("backward")
@@ -84,6 +86,9 @@ final class Wheel: NSView {
         
         modifier.centerYAnchor.constraint(equalTo: offset.centerYAnchor).isActive = true
         modifier.rightAnchor.constraint(equalTo: offset.leftAnchor).isActive = true
+        
+        future.centerYAnchor.constraint(equalTo: topAnchor, constant: 82).isActive = true
+        future.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         now.centerYAnchor.constraint(equalTo: bottomAnchor, constant: -32).isActive = true
         now.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -154,6 +159,11 @@ final class Wheel: NSView {
                 moonraker.offset = 0
                 update()
                 flashed = true
+            } else if future.frame.contains(point) {
+                flash(future)
+                moonraker.offset += 86_400 * 29.53
+                update()
+                flashed = true
             }
         default: break
         }
@@ -208,27 +218,30 @@ final class Wheel: NSView {
                 ring.strokeColor = .shade(0.3)
                 outer.strokeColor = .shade(0.4)
                 inner.fillColor = .shade(0.4)
-                forward.alphaValue = 1
-                backward.alphaValue = 1
-                now.alphaValue = 1
+                forward.alphaValue = 0.6
+                backward.alphaValue = 0.6
+                now.alphaValue = 0.6
+                future.alphaValue = 0.6
                 offset.alphaValue = 0.4
                 modifier.alphaValue = 0.4
             case .drag:
-                ring.strokeColor = .shade(1)
+                ring.strokeColor = .shade()
                 outer.strokeColor = .shade(0.2)
-                inner.fillColor = .shade(1)
+                inner.fillColor = .shade()
                 forward.alphaValue = 0.3
                 backward.alphaValue = 0.3
                 now.alphaValue = 0.3
+                future.alphaValue = 0.3
                 offset.alphaValue = 1
                 modifier.alphaValue = 1
             default:
-                ring.strokeColor = .shade(1)
+                ring.strokeColor = .shade()
                 outer.strokeColor = .shade(0.2)
-                inner.fillColor = .shade(1)
-                forward.alphaValue = 0.4
-                backward.alphaValue = 0.4
-                now.alphaValue = 0.4
+                inner.fillColor = .shade()
+                forward.alphaValue = 1
+                backward.alphaValue = 1
+                now.alphaValue = 1
+                future.alphaValue = 1
             }
         }
     }

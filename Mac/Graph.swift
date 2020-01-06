@@ -27,19 +27,12 @@ final class Graph: NSView {
         addSubview(percent)
         self.percent = percent
         
-        let illumination = Label(.key("Graph.illumination"), .regular(14), .shade())
-        addSubview(illumination)
-        
         phase.bottomAnchor.constraint(equalTo: percent.topAnchor).isActive = true
         phase.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 10).isActive = true
         phase.rightAnchor.constraint(equalTo: rightAnchor, constant: -40).isActive = true
         
-        percent.bottomAnchor.constraint(equalTo: illumination.topAnchor).isActive = true
         percent.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 10).isActive = true
         percent.rightAnchor.constraint(equalTo: rightAnchor, constant: -40).isActive = true
-        
-        illumination.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 10).isActive = true
-        illumination.rightAnchor.constraint(equalTo: rightAnchor, constant: -40).isActive = true
-        illumination.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
+        percent.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
     }
 }

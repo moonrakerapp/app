@@ -97,15 +97,15 @@ final class Pop: NSPopover {
     }
     
     @objc private func update() {
-        let animation = CABasicAnimation(keyPath: "strokeEnd")
-        animation.duration = 0.3
-        animation.fromValue = illumination.strokeEnd
-        animation.toValue = 0
-        illumination.strokeEnd = 0
-        illumination.add(animation, forKey: "strokeEnd")
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            (NSApp as! App).update()
-        }
+//        let animation = CABasicAnimation(keyPath: "strokeEnd")
+//        animation.duration = 0.3
+//        animation.fromValue = illumination.strokeEnd
+//        animation.toValue = 0
+//        illumination.strokeEnd = 0
+//        illumination.add(animation, forKey: "strokeEnd")
+//        
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+//            (NSApp as! App).update()
+//        }
     }
 }

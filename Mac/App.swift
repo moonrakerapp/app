@@ -4,13 +4,7 @@ import AppKit
 import CoreLocation
 
 @NSApplicationMain final class App: NSApplication, NSApplicationDelegate, CLLocationManagerDelegate {
-    private var coords = CLLocationCoordinate2D() {
-        didSet {
-            update()
-        }
-    }
-    
-    private var location: CLLocationManager?
+    let location = CLLocationManager()
     private var subs = Set<AnyCancellable>()
     private let moonraker = Moonraker()
     private let timer = DispatchSource.makeTimerSource(queue: .main)
@@ -39,14 +33,13 @@ import CoreLocation
             window.stats.tick()
         }
         
-        location = CLLocationManager()
-        location!.desiredAccuracy = kCLLocationAccuracyThreeKilometers
-        location!.delegate = self
-        location!.requestLocation()
+        location.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+        location.delegate = self
+        location.requestLocation()
     }
     
     func applicationDidBecomeActive(_: Notification) {
-        update()
+        moonraker.date = .init()
         timer.schedule(deadline: .now(), repeating: 1)
     }
     
@@ -59,17 +52,12 @@ import CoreLocation
     }
     
     func locationManager(_: CLLocationManager, didUpdateLocations: [CLLocation]) {
-        didUpdateLocations.first.map { coords = $0.coordinate }
-        location?.stopUpdatingLocation()
-        location = nil
+        didUpdateLocations.first.map {
+            moonraker.coords = ($0.coordinate.latitude, $0.coordinate.longitude)
+        }
     }
     
     func locationManager(_: CLLocationManager, didFailWithError: Error) {
-        location?.stopUpdatingLocation()
-        location = nil
-    }
-    
-    func update() {
-        moonraker.update(.init(), latitude: coords.latitude, longitude: coords.longitude)
+
     }
 }

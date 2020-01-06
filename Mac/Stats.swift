@@ -2,9 +2,9 @@ import Moonraker
 import AppKit
 
 final class Stats: NSView {
-    var times: (Times, Date)! {
+    var times: Times! {
         didSet {
-            switch times.0 {
+            switch times! {
             case .down:
                 rise.stringValue = .key("Stats.rise") + " -"
                 riseCounter.stringValue = ""
@@ -25,18 +25,14 @@ final class Stats: NSView {
                 rise.stringValue = .key("Stats.rise") + " " + timer.string(from: _rise)
                 set.stringValue = .key("Stats.set") + " " + timer.string(from: _set)
             }
-            full.stringValue = dater.string(from: times.1)
         }
     }
     
-    private weak var phase: Label!
     private weak var rise: Label!
     private weak var riseCounter: Label!
     private weak var set: Label!
     private weak var setCounter: Label!
-    private weak var full: Label!
     private let timer = DateFormatter()
-    private let dater = DateFormatter()
     private let relative = DateComponentsFormatter()
     
     override var mouseDownCanMoveWindow: Bool { false }
@@ -47,7 +43,6 @@ final class Stats: NSView {
         translatesAutoresizingMaskIntoConstraints = false
         timer.dateStyle = .none
         timer.timeStyle = .medium
-        dater.dateFormat = "EEEE, MMMM d"
         
         let rise = item()
         self.rise = rise.0
@@ -57,43 +52,28 @@ final class Stats: NSView {
         self.set = set.0
         setCounter = set.1
         
-        let full = item()
-        full.0.stringValue = .key("Stats.full")
-        self.full = full.1
+        let border = NSView()
+        border.translatesAutoresizingMaskIntoConstraints = false
+        border.wantsLayer = true
+        border.layer!.backgroundColor = .shade(0.4)
+        addSubview(border)
         
-        let top = NSView()
-        top.translatesAutoresizingMaskIntoConstraints = false
-        top.wantsLayer = true
-        top.layer!.backgroundColor = .shade(0.4)
-        addSubview(top)
+        heightAnchor.constraint(equalToConstant: 100).isActive = true
         
-        let bottom = NSView()
-        bottom.translatesAutoresizingMaskIntoConstraints = false
-        bottom.wantsLayer = true
-        bottom.layer!.backgroundColor = .shade(0.4)
-        addSubview(bottom)
+        rise.0.bottomAnchor.constraint(equalTo: border.topAnchor, constant: -5).isActive = true
+        set.0.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
         
-        heightAnchor.constraint(equalToConstant: 130).isActive = true
-        
-        full.0.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
-        rise.0.bottomAnchor.constraint(equalTo: top.topAnchor, constant: -5).isActive = true
-        set.0.bottomAnchor.constraint(equalTo: bottom.topAnchor, constant: -5).isActive = true
-        
-        top.bottomAnchor.constraint(equalTo: set.0.topAnchor, constant: -5).isActive = true
-        top.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
-        top.rightAnchor.constraint(equalTo: rise.1.rightAnchor).isActive = true
-        top.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        
-        bottom.bottomAnchor.constraint(equalTo: full.0.topAnchor, constant: -5).isActive = true
-        bottom.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
-        bottom.rightAnchor.constraint(equalTo: set.1.rightAnchor).isActive = true
-        bottom.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        border.bottomAnchor.constraint(equalTo: set.0.topAnchor, constant: -5).isActive = true
+        border.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
+        border.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        border.rightAnchor.constraint(greaterThanOrEqualTo: rise.1.rightAnchor).isActive = true
+        border.rightAnchor.constraint(greaterThanOrEqualTo: set.1.rightAnchor).isActive = true
     }
     
     func tick() {
         guard let times = self.times else { return }
         let now = Date()
-        switch times.0 {
+        switch times {
         case .rise(let time):
             riseCounter.stringValue = relative.string(from: now, to: time) ?? ""
         case .set(let time):

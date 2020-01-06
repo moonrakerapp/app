@@ -2,8 +2,28 @@ import Foundation
 import Combine
 
 public final class Moonraker {
-    public let info = PassthroughSubject<Info, Never>()
-    public let times = PassthroughSubject<(Times, Date), Never>()
+    public var coords = (Double(), Double()) {
+        didSet {
+            makeInfo()
+            makeTimes()
+        }
+    }
+    
+    public var date = Date() {
+        didSet {
+            makeInfo()
+            makeTimes()
+        }
+    }
+    
+    public var offset = TimeInterval() {
+        didSet {
+            makeInfo()
+        }
+    }
+    
+    public let info = CurrentValueSubject<Info, Never>(.init())
+    public let times = CurrentValueSubject<Times, Never>(.down)
     private let queue = DispatchQueue(label: "", qos: .background, target: .global(qos: .background))
     private let J1970 = Double(2440588)
     private let J2000 = Double(2451545)
@@ -14,13 +34,6 @@ public final class Moonraker {
     
     public init() {
         
-    }
-    
-    public func update(_ date: Date, latitude: Double, longitude: Double) {
-        queue.async { [weak self] in
-            self?.info.send(self?.info(date.timeIntervalSince1970, latitude, longitude) ?? .init())
-            self?.times.send((self?.times(date, latitude, longitude) ?? .down, self?.full(date.timeIntervalSince1970) ?? .init()))
-        }
     }
     
     func info(_ time: TimeInterval, _ latitude: Double, _ longitude: Double) -> Info {
@@ -196,6 +209,18 @@ public final class Moonraker {
     func astroRefraction(_ altitude: Double) -> Double {
         let altitude = altitude >= 0 ? altitude : 0
         return 0.0002967 / tan(altitude + 0.00312536 / (altitude + 0.08901179))
+    }
+    
+    private func makeInfo() {
+        queue.async {
+            self.info.value = self.info(self.date.timeIntervalSince1970 + self.offset, self.coords.0, self.coords.1)
+        }
+    }
+    
+    private func makeTimes() {
+        queue.async {
+            self.times.value = self.times(self.date, self.coords.0, self.coords.1)
+        }
     }
     
     private func equationOfCenter(_ anomaly: Double) -> Double {

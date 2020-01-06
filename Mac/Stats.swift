@@ -29,12 +29,6 @@ final class Stats: NSView {
         }
     }
     
-    var info: Info! {
-        didSet {
-            phase.stringValue = .key("Phase.\(info.phase)")
-        }
-    }
-    
     private weak var phase: Label!
     private weak var rise: Label!
     private weak var riseCounter: Label!
@@ -55,10 +49,6 @@ final class Stats: NSView {
         timer.timeStyle = .medium
         dater.dateFormat = "EEEE, MMMM d"
         
-        let phase = item()
-        phase.0.stringValue = .key("Stats.phase")
-        self.phase = phase.1
-        
         let rise = item()
         self.rise = rise.0
         riseCounter = rise.1
@@ -71,12 +61,33 @@ final class Stats: NSView {
         full.0.stringValue = .key("Stats.full")
         self.full = full.1
         
-        heightAnchor.constraint(equalToConstant: 220).isActive = true
+        let top = NSView()
+        top.translatesAutoresizingMaskIntoConstraints = false
+        top.wantsLayer = true
+        top.layer!.backgroundColor = .shade(0.4)
+        addSubview(top)
         
-        phase.0.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        full.0.topAnchor.constraint(equalTo: phase.2.bottomAnchor, constant: 15).isActive = true
-        rise.0.topAnchor.constraint(equalTo: full.2.bottomAnchor, constant: 15).isActive = true
-        set.0.topAnchor.constraint(equalTo: rise.2.bottomAnchor, constant: 15).isActive = true
+        let bottom = NSView()
+        bottom.translatesAutoresizingMaskIntoConstraints = false
+        bottom.wantsLayer = true
+        bottom.layer!.backgroundColor = .shade(0.4)
+        addSubview(bottom)
+        
+        heightAnchor.constraint(equalToConstant: 130).isActive = true
+        
+        full.0.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
+        rise.0.bottomAnchor.constraint(equalTo: top.topAnchor, constant: -5).isActive = true
+        set.0.bottomAnchor.constraint(equalTo: bottom.topAnchor, constant: -5).isActive = true
+        
+        top.bottomAnchor.constraint(equalTo: set.0.topAnchor, constant: -5).isActive = true
+        top.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
+        top.rightAnchor.constraint(equalTo: rise.1.rightAnchor).isActive = true
+        top.heightAnchor.constraint(equalToConstant: 1).isActive = true
+        
+        bottom.bottomAnchor.constraint(equalTo: full.0.topAnchor, constant: -5).isActive = true
+        bottom.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
+        bottom.rightAnchor.constraint(equalTo: set.1.rightAnchor).isActive = true
+        bottom.heightAnchor.constraint(equalToConstant: 1).isActive = true
     }
     
     func tick() {
@@ -94,20 +105,12 @@ final class Stats: NSView {
         }
     }
     
-    private func item() -> (Label, Label, NSView) {
+    private func item() -> (Label, Label) {
         let title = Label("", .bold(14), .shade())
-        title.maximumNumberOfLines = 1
         addSubview(title)
         
         let counter = Label("", .regular(14), .rain())
-        counter.maximumNumberOfLines = 1
         addSubview(counter)
-        
-        let border = NSView()
-        border.translatesAutoresizingMaskIntoConstraints = false
-        border.wantsLayer = true
-        border.layer!.backgroundColor = .shade(0.3)
-        addSubview(border)
         
         title.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
         title.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -10).isActive = true
@@ -116,11 +119,6 @@ final class Stats: NSView {
         counter.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -10).isActive = true
         counter.bottomAnchor.constraint(equalTo: title.bottomAnchor).isActive = true
         
-        border.topAnchor.constraint(equalTo: title.bottomAnchor, constant: 10).isActive = true
-        border.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
-        border.rightAnchor.constraint(equalTo: counter.rightAnchor).isActive = true
-        border.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        
-        return (title, counter, border)
+        return (title, counter)
     }
 }

@@ -33,6 +33,8 @@ final class Label: NSTextField {
     }
     
     private func configure() {
+        lineBreakMode = .byTruncatingTail
+        maximumNumberOfLines = 1
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
         isBezeled = false

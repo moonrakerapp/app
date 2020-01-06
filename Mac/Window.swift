@@ -33,14 +33,20 @@ final class Window: NSWindow {
         contentView!.addSubview(graph)
         self.graph = graph
         
+        let wheel = Wheel()
+        contentView!.addSubview(wheel)
+        
         horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 30).isActive = true
         horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 40).isActive = true
         horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -40).isActive = true
-        horizon.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -20).isActive = true
+        horizon.bottomAnchor.constraint(equalTo: wheel.topAnchor, constant: -40).isActive = true
+        
+        wheel.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
+        wheel.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -40).isActive = true
+        wheel.topAnchor.constraint(greaterThanOrEqualTo: contentView!.topAnchor, constant: 200).isActive = true
         
         stats.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
         stats.rightAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
-        stats.topAnchor.constraint(greaterThanOrEqualTo: contentView!.topAnchor, constant: 180).isActive = true
         let bottom = stats.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor)
         bottom.priority = .defaultLow
         bottom.isActive = true

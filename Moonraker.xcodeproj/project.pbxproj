@@ -30,6 +30,7 @@
 		DAE156A823C32F1A0050CB02 /* Lato-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAE156A523C32F1A0050CB02 /* Lato-Light.ttf */; };
 		DAE156A923C32F1A0050CB02 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAE156A623C32F1A0050CB02 /* Lato-Regular.ttf */; };
 		DAE156AA23C32F1A0050CB02 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAE156A723C32F1A0050CB02 /* Lato-Bold.ttf */; };
+		DAE156AC23C33BD90050CB02 /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE156AB23C33BD90050CB02 /* Wheel.swift */; };
 		DAEAD2F223BC8FC10053EBEA /* TestIllumination.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */; };
 		DAEAD2F423BCAE470053EBEA /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F323BCAE470053EBEA /* Phase.swift */; };
 		DAF0BF7823C214BE0035F416 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF0BF7723C214BE0035F416 /* Graph.swift */; };
@@ -88,6 +89,7 @@
 		DAE156A523C32F1A0050CB02 /* Lato-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Light.ttf"; sourceTree = "<group>"; };
 		DAE156A623C32F1A0050CB02 /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
 		DAE156A723C32F1A0050CB02 /* Lato-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Bold.ttf"; sourceTree = "<group>"; };
+		DAE156AB23C33BD90050CB02 /* Wheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wheel.swift; sourceTree = "<group>"; };
 		DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIllumination.swift; sourceTree = "<group>"; };
 		DAEAD2F323BCAE470053EBEA /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
 		DAF0BF7723C214BE0035F416 /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 				DA5831A123BB8A8C00AD5BBB /* Moon.swift */,
 				DA8E683A23C23A2F00BE172B /* Pop.swift */,
 				DA00DE9623BF90F900B04423 /* Stats.swift */,
+				DAE156AB23C33BD90050CB02 /* Wheel.swift */,
 				DACB8ED623BB7C3F00ADBCB2 /* Window.swift */,
 				DABA74F723C0F7FC00DCD08C /* Images.xcassets */,
 			);
@@ -385,6 +388,7 @@
 				DACB8EDD23BB7C4000ADBCB2 /* Window.swift in Sources */,
 				DAF0BF7823C214BE0035F416 /* Graph.swift in Sources */,
 				DA10C57523C203EC005FD07E /* Image.swift in Sources */,
+				DAE156AC23C33BD90050CB02 /* Wheel.swift in Sources */,
 				DA00DE9723BF90F900B04423 /* Stats.swift in Sources */,
 				DA10C57323C2009B005FD07E /* About.swift in Sources */,
 				DA077C2623BDF81100682BFE /* Horizon.swift in Sources */,

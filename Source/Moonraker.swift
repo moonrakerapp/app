@@ -65,7 +65,7 @@ public final class Moonraker {
         var _rise: Double?
         var _set: Double?
         
-        for i in stride(from: Double(1), through: 24, by: 2) {
+        for i in stride(from: Double(1), through: 48, by: 2) {
             let _h1 = position(_start + (i * 3600), latitude, longitude).1 - _hc
             let _h2 = position(_start + ((i + 1) * 3600), latitude, longitude).1 - _hc
             let _a = (_h0 + _h2) / 2 - _h1

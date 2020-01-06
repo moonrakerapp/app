@@ -13,7 +13,7 @@ final class Stats: NSView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         
-        let relative = DateComponentsFormatter()
+        let formatter = DateComponentsFormatter()
         let rise = item()
         let set = item()
         
@@ -53,12 +53,12 @@ final class Stats: NSView {
             let now = Date()
             switch moonraker.times.value {
             case .rise(let time):
-                rise.1.stringValue = relative.string(from: now, to: time) ?? ""
+                rise.1.stringValue = formatter.string(from: now, to: time) ?? ""
             case .set(let time):
-                set.1.stringValue = relative.string(from: now, to: time) ?? ""
+                set.1.stringValue = formatter.string(from: now, to: time) ?? ""
             case .both(let _rise, let _set):
-                rise.1.stringValue = relative.string(from: now, to: _rise) ?? ""
-                set.1.stringValue = relative.string(from: now, to: _set) ?? ""
+                rise.1.stringValue = formatter.string(from: now, to: _rise) ?? ""
+                set.1.stringValue = formatter.string(from: now, to: _set) ?? ""
             default: break
             }
         }

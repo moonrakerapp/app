@@ -6,6 +6,7 @@ final class Wheel: NSView {
     private weak var ring: CAShapeLayer!
     private weak var outer: CAShapeLayer!
     private weak var inner: CAShapeLayer!
+    private weak var now: Image!
     private weak var forward: Image!
     private weak var backward: Image!
     private let formatter = DateComponentsFormatter()
@@ -74,13 +75,9 @@ final class Wheel: NSView {
         addSubview(modifier)
         self.modifier = modifier
         
-        let forward = Image("forward")
-        addSubview(forward)
-        self.forward = forward
-        
-        let backward = Image("backward")
-        addSubview(backward)
-        self.backward = backward
+        now = control("now")
+        forward = control("forward")
+        backward = control("backward")
         
         offset.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
         offset.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -88,15 +85,14 @@ final class Wheel: NSView {
         modifier.centerYAnchor.constraint(equalTo: offset.centerYAnchor).isActive = true
         modifier.rightAnchor.constraint(equalTo: offset.leftAnchor).isActive = true
         
+        now.centerYAnchor.constraint(equalTo: bottomAnchor, constant: -32).isActive = true
+        now.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        
         forward.centerYAnchor.constraint(equalTo: topAnchor, constant: 150).isActive = true
         forward.centerXAnchor.constraint(equalTo: rightAnchor, constant: -32).isActive = true
-        forward.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        forward.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         backward.centerYAnchor.constraint(equalTo: topAnchor, constant: 150).isActive = true
         backward.centerXAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
-        backward.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        backward.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         highlight()
         update()
@@ -139,19 +135,31 @@ final class Wheel: NSView {
     }
     
     override func mouseUp(with: NSEvent) {
+        var flashed = false
         switch drag {
         case .start(_, _):
             let point = convert(with.locationInWindow, from: nil)
             if forward.frame.contains(point) {
+                flash(forward)
                 moonraker.offset += 86_400
                 update()
+                flashed = true
             } else if backward.frame.contains(point) {
+                flash(backward)
                 moonraker.offset -= 86_400
                 update()
+                flashed = true
+            } else if now.frame.contains(point) {
+                flash(now)
+                moonraker.offset = 0
+                update()
+                flashed = true
             }
         default: break
         }
-        drag = .no
+        if !flashed {
+            drag = .no
+        }
     }
     
     override func mouseDown(with: NSEvent) {
@@ -202,22 +210,25 @@ final class Wheel: NSView {
                 inner.fillColor = .shade(0.4)
                 forward.alphaValue = 1
                 backward.alphaValue = 1
-                offset.alphaValue = 0.6
-                modifier.alphaValue = 0.6
+                now.alphaValue = 1
+                offset.alphaValue = 0.4
+                modifier.alphaValue = 0.4
             case .drag:
                 ring.strokeColor = .shade(1)
                 outer.strokeColor = .shade(0.2)
                 inner.fillColor = .shade(1)
                 forward.alphaValue = 0.3
                 backward.alphaValue = 0.3
+                now.alphaValue = 0.3
                 offset.alphaValue = 1
                 modifier.alphaValue = 1
             default:
                 ring.strokeColor = .shade(1)
                 outer.strokeColor = .shade(0.2)
                 inner.fillColor = .shade(1)
-                forward.alphaValue = 0.6
-                backward.alphaValue = 0.6
+                forward.alphaValue = 0.4
+                backward.alphaValue = 0.4
+                now.alphaValue = 0.4
             }
         }
     }
@@ -226,9 +237,39 @@ final class Wheel: NSView {
         let distance = pow(point.x - 100, 2) + pow(point.y - 100, 2)
         return distance > 400 && distance < 12_100
     }
+    
+    private func flash(_ image: Image) {
+        image.alphaValue = 1
+        image.layer!.backgroundColor = .shade(0.5)
+        offset.alphaValue = 1
+        modifier.alphaValue = 1
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            NSAnimationContext.runAnimationGroup ({
+                $0.duration = 0.3
+                $0.allowsImplicitAnimation = true
+                image.layer!.backgroundColor = .clear
+            }) {
+                self.drag = .no
+            }
+        }
+    }
+    
+    private func control(_ image: String) -> Image {
+        let control = Image(image)
+        control.wantsLayer = true
+        control.layer!.borderColor = .clear
+        control.layer!.cornerRadius = 15
+        addSubview(control)
+        
+        control.widthAnchor.constraint(equalToConstant: 30).isActive = true
+        control.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        
+        return control
+    }
 }
 
-enum Drag {
+private enum Drag {
     case
     no,
     start(x: CGFloat, y: CGFloat),

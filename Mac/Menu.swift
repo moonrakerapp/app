@@ -1,7 +1,6 @@
 import AppKit
 
 final class Menu: NSMenu {
-    let pop = Pop()
     private let status = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
     
     required init(coder: NSCoder) { fatalError() }
@@ -60,11 +59,8 @@ final class Menu: NSMenu {
     }
     
     @objc private func show() {
-        if pop.isShown {
-            pop.performClose(nil)
-        } else {
-            pop.show(relativeTo: status.button!.bounds, of: status.button!, preferredEdge: .minY)
-            pop.contentViewController!.view.window!.makeKey()
-        }
+        let pop = Pop()
+        pop.show(relativeTo: status.button!.bounds, of: status.button!, preferredEdge: .minY)
+        pop.contentViewController!.view.window!.makeKey()
     }
 }

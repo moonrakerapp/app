@@ -1,10 +1,6 @@
 import AppKit
 
 final class Window: NSWindow {
-    private(set) weak var horizon: Horizon!
-    private(set) weak var stats: Stats!
-    private(set) weak var graph: Graph!
-    
     init() {
         super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 400, y: NSScreen.main!.frame.midY - 400, width: 800, height: 800), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
         minSize = .init(width: 150, height: 150)
@@ -23,15 +19,12 @@ final class Window: NSWindow {
         
         let horizon = Horizon()
         contentView!.addSubview(horizon)
-        self.horizon = horizon
         
         let stats = Stats()
         contentView!.addSubview(stats)
-        self.stats = stats
         
         let graph = Graph()
         contentView!.addSubview(graph)
-        self.graph = graph
         
         let wheel = Wheel()
         contentView!.addSubview(wheel)

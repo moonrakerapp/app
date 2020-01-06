@@ -1,13 +1,10 @@
 import Moonraker
-import Combine
 import AppKit
 import CoreLocation
 
+let moonraker = Moonraker()
 @NSApplicationMain final class App: NSApplication, NSApplicationDelegate, CLLocationManagerDelegate {
-    let location = CLLocationManager()
-    private var subs = Set<AnyCancellable>()
-    private let moonraker = Moonraker()
-    private let timer = DispatchSource.makeTimerSource(queue: .main)
+    private let location = CLLocationManager()
 
     required init?(coder: NSCoder) { nil }
     override init() {
@@ -17,21 +14,8 @@ import CoreLocation
     }
     
     func applicationWillFinishLaunching(_: Notification) {
-        let menu = Menu()
-        mainMenu = menu
-        
-        let window = Window()
-        window.makeKeyAndOrderFront(nil)
-        moonraker.info.receive(on: DispatchQueue.main).sink { window.horizon.info = $0 }.store(in: &subs)
-        moonraker.info.receive(on: DispatchQueue.main).sink { window.graph.info = $0 }.store(in: &subs)
-        moonraker.info.receive(on: DispatchQueue.main).sink { menu.pop.info = $0 }.store(in: &subs)
-        moonraker.times.receive(on: DispatchQueue.main).sink { window.stats.times = $0 }.store(in: &subs)
-        
-        timer.activate()
-        timer.schedule(deadline: .distantFuture)
-        timer.setEventHandler {
-            window.stats.tick()
-        }
+        mainMenu = Menu()
+        Window().makeKeyAndOrderFront(nil)
         
         location.desiredAccuracy = kCLLocationAccuracyThreeKilometers
         location.delegate = self
@@ -40,11 +24,6 @@ import CoreLocation
     
     func applicationDidBecomeActive(_: Notification) {
         moonraker.date = .init()
-        timer.schedule(deadline: .now(), repeating: 1)
-    }
-    
-    func applicationDidResignActive(_: Notification) {
-        timer.schedule(deadline: .distantFuture)
     }
     
     func applicationShouldTerminateAfterLastWindowClosed(_: NSApplication) -> Bool {

@@ -1,16 +1,9 @@
 import Moonraker
 import AppKit
+import Combine
 
 final class Graph: NSView {
-    var info: Info! {
-        didSet {
-            phase.stringValue = .key("Phase.\(info.phase)")
-            percent.attributed([("\(Int(info.fraction * 100))", .bold(20), .haze()), ("%", .regular(14), .shade())])
-        }
-    }
-    
-    private weak var phase: Label!
-    private weak var percent: Label!
+    private var sub: AnyCancellable!
     
     override var mouseDownCanMoveWindow: Bool { false }
     
@@ -19,13 +12,16 @@ final class Graph: NSView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         
-        let phase = Label("", .bold(20), .haze())
+        let phase = Label("", .bold(18), .haze())
         addSubview(phase)
-        self.phase = phase
         
-        let percent = Label("", .bold(30), .rain())
+        let percent = Label([])
         addSubview(percent)
-        self.percent = percent
+        
+        sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+            phase.stringValue = .key("Phase.\($0.phase)")
+            percent.attributed([("\(Int($0.fraction * 100))", .bold(18), .haze()), ("%", .regular(14), .shade())])
+        }
         
         phase.bottomAnchor.constraint(equalTo: percent.topAnchor).isActive = true
         phase.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 10).isActive = true

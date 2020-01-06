@@ -1,20 +1,11 @@
 import Moonraker
 import AppKit
+import Combine
 
 final class Horizon: NSView {
-    var info: Info! {
-        didSet {
-            moon.phase = info.phase
-            moon.fraction = info.fraction
-            moon.angle = info.angle
-            azimuth = info.azimuth
-            altitude = info.altitude
-            update()
-        }
-    }
-    
     private var altitude = Double.pi / 2
     private var azimuth = Double()
+    private var sub: AnyCancellable!
     private let period = CGFloat(360)
     private weak var moon: Moon!
     private weak var path: CAShapeLayer!
@@ -68,14 +59,17 @@ final class Horizon: NSView {
         self.dash = dash
         
         let moon = Moon()
-        moon.configure()
         path.addSublayer(moon)
         self.moon = moon
-    }
-    
-    private func update() {
-        moon.center = point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
-        moon.update()
+        
+        sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+            moon.phase = $0.phase
+            moon.fraction = $0.fraction
+            moon.angle = $0.angle
+            self.azimuth = $0.azimuth
+            self.altitude = $0.altitude
+            self.update()
+        }
     }
     
     private func resize() {
@@ -97,6 +91,11 @@ final class Horizon: NSView {
         moon.radius = radius / 8
         moon.resize()
         update()
+    }
+    
+    private func update() {
+        moon.center = point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
+        moon.update()
     }
     
     private func point(_ deg: CGFloat) -> CGPoint {

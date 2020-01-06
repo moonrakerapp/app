@@ -1,39 +1,10 @@
 import Moonraker
 import AppKit
+import Combine
 
 final class Stats: NSView {
-    var times: Times! {
-        didSet {
-            switch times! {
-            case .down:
-                rise.stringValue = .key("Stats.rise") + " -"
-                riseCounter.stringValue = ""
-                set.stringValue = .key("Stats.down")
-            case .up:
-                rise.stringValue = .key("Stats.up")
-                set.stringValue = .key("Stats.set") + " -"
-                setCounter.stringValue = ""
-            case .rise(let time):
-                rise.stringValue = .key("Stats.rise") + " " + timer.string(from: time)
-                set.stringValue = .key("Stats.set") + " -"
-                setCounter.stringValue = ""
-            case .set(let time):
-                rise.stringValue = .key("Stats.rise") + " -"
-                riseCounter.stringValue = ""
-                set.stringValue = .key("Stats.set") + " " + timer.string(from: time)
-            case .both(let _rise, let _set):
-                rise.stringValue = .key("Stats.rise") + " " + timer.string(from: _rise)
-                set.stringValue = .key("Stats.set") + " " + timer.string(from: _set)
-            }
-        }
-    }
-    
-    private weak var rise: Label!
-    private weak var riseCounter: Label!
-    private weak var set: Label!
-    private weak var setCounter: Label!
-    private let timer = DateFormatter()
-    private let relative = DateComponentsFormatter()
+    private var sub: AnyCancellable!
+    private let timer = DispatchSource.makeTimerSource(queue: .main)
     
     override var mouseDownCanMoveWindow: Bool { false }
     
@@ -41,22 +12,56 @@ final class Stats: NSView {
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        timer.dateStyle = .none
-        timer.timeStyle = .medium
         
+        let relative = DateComponentsFormatter()
         let rise = item()
-        self.rise = rise.0
-        riseCounter = rise.1
-        
         let set = item()
-        self.set = set.0
-        setCounter = set.1
         
         let border = NSView()
         border.translatesAutoresizingMaskIntoConstraints = false
         border.wantsLayer = true
         border.layer!.backgroundColor = .shade(0.4)
         addSubview(border)
+        
+        sub = moonraker.times.receive(on: DispatchQueue.main).sink {
+            switch $0 {
+            case .down:
+                rise.0.stringValue = .key("Stats.rise") + " -"
+                rise.1.stringValue = ""
+                set.0.stringValue = .key("Stats.down")
+            case .up:
+                rise.0.stringValue = .key("Stats.up")
+                set.0.stringValue = .key("Stats.set") + " -"
+                set.1.stringValue = ""
+            case .rise(_):
+                rise.0.stringValue = .key("Stats.rise")
+                set.0.stringValue = .key("Stats.set") + " -"
+                set.1.stringValue = ""
+            case .set(_):
+                rise.0.stringValue = .key("Stats.rise") + " -"
+                rise.1.stringValue = ""
+                set.0.stringValue = .key("Stats.set")
+            case .both( _, _):
+                rise.0.stringValue = .key("Stats.rise")
+                set.0.stringValue = .key("Stats.set")
+            }
+        }
+        
+        timer.activate()
+        timer.schedule(deadline: .now(), repeating: 1)
+        timer.setEventHandler {
+            let now = Date()
+            switch moonraker.times.value {
+            case .rise(let time):
+                rise.1.stringValue = relative.string(from: now, to: time) ?? ""
+            case .set(let time):
+                set.1.stringValue = relative.string(from: now, to: time) ?? ""
+            case .both(let _rise, let _set):
+                rise.1.stringValue = relative.string(from: now, to: _rise) ?? ""
+                set.1.stringValue = relative.string(from: now, to: _set) ?? ""
+            default: break
+            }
+        }
         
         heightAnchor.constraint(equalToConstant: 100).isActive = true
         
@@ -68,21 +73,6 @@ final class Stats: NSView {
         border.heightAnchor.constraint(equalToConstant: 1).isActive = true
         border.rightAnchor.constraint(greaterThanOrEqualTo: rise.1.rightAnchor).isActive = true
         border.rightAnchor.constraint(greaterThanOrEqualTo: set.1.rightAnchor).isActive = true
-    }
-    
-    func tick() {
-        guard let times = self.times else { return }
-        let now = Date()
-        switch times {
-        case .rise(let time):
-            riseCounter.stringValue = relative.string(from: now, to: time) ?? ""
-        case .set(let time):
-            setCounter.stringValue = relative.string(from: now, to: time) ?? ""
-        case .both(let rise, let set):
-            riseCounter.stringValue = relative.string(from: now, to: rise) ?? ""
-            setCounter.stringValue = relative.string(from: now, to: set) ?? ""
-        default: break
-        }
     }
     
     private func item() -> (Label, Label) {

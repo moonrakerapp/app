@@ -18,7 +18,13 @@ final class Moon: CAShapeLayer {
                        .lastQuarter : lastQuarter,
                        .waningCrescent : waningCrescent]
     
-    func configure() {
+    required init?(coder: NSCoder) { nil }
+    override init(layer: Any) {
+        super.init(layer: layer)
+    }
+    
+    override init() {
+        super.init()
         fillColor = .black
         lineWidth = 1
         strokeColor = .dark()

@@ -69,7 +69,6 @@ final class Pop: NSPopover {
         contentViewController!.view.addSubview(base)
         
         let moon = Moon()
-        moon.configure()
         moon.radius = 5
         moon.center = .init(x: 50, y: 50)
         moon.resize()

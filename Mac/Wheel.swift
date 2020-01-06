@@ -15,9 +15,9 @@ final class Wheel: NSView {
         let ring = CAShapeLayer()
         ring.fillColor = .clear
         ring.strokeColor = .shade(0.3)
-        ring.lineWidth = 1
+        ring.lineWidth = 2
         ring.path = {
-            $0.addArc(center: .init(x: 100, y: 100), radius: 93, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 100, y: 100), radius: 92.5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
         layer!.addSublayer(ring)
@@ -34,8 +34,10 @@ final class Wheel: NSView {
         
         let inner = CAShapeLayer()
         inner.fillColor = .shade()
+        inner.strokeColor = .shade(0.3)
+        inner.lineWidth = 3
         inner.path = {
-            $0.addArc(center: .init(x: 100, y: 100), radius: 35, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 100, y: 100), radius: 32, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
         layer!.addSublayer(inner)

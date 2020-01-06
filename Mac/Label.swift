@@ -3,7 +3,7 @@ import AppKit
 final class Label: NSTextField {
     override var acceptsFirstResponder: Bool { false }
     override var canBecomeKeyView: Bool { false }
-    override var mouseDownCanMoveWindow: Bool { true }
+    override var mouseDownCanMoveWindow: Bool { false }
     override func acceptsFirstMouse(for: NSEvent?) -> Bool { false }
     
     required init?(coder: NSCoder) { nil }

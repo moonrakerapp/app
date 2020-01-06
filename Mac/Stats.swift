@@ -95,11 +95,11 @@ final class Stats: NSView {
     }
     
     private func item() -> (Label, Label, NSView) {
-        let title = Label("", .medium(14), .shade())
+        let title = Label("", .bold(14), .shade())
         title.maximumNumberOfLines = 1
         addSubview(title)
         
-        let counter = Label("", .medium(14), .rain())
+        let counter = Label("", .regular(14), .rain())
         counter.maximumNumberOfLines = 1
         addSubview(counter)
         

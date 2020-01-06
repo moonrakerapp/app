@@ -4,7 +4,7 @@ import AppKit
 final class Graph: NSView {
     var info: Info! {
         didSet {
-            percent.attributed([("\(Int(info.fraction * 100))", .bold(30), .rain()), ("%", .medium(16), .shade())])
+            percent.attributed([("\(Int(info.fraction * 100))", .bold(30), .rain()), ("%", .bold(16), .shade())])
         }
     }
     
@@ -22,7 +22,7 @@ final class Graph: NSView {
         addSubview(percent)
         self.percent = percent
         
-        let illumination = Label(.key("Graph.illumination"), .medium(14), .shade())
+        let illumination = Label(.key("Graph.illumination"), .regular(14), .shade())
         illumination.maximumNumberOfLines = 1
         addSubview(illumination)
         

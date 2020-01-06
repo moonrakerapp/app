@@ -7,7 +7,6 @@ Stats.down="Always below the horizon";
 Stats.up="Always above the horizon";
 Graph.illumination="Illumination";
 Pop.illumination="Illumination";
-Pop.refresh="Refresh";
 Menu.title="Moonraker";
 Menu.about="About";
 Menu.hide="Hide";

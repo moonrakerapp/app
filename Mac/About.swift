@@ -24,7 +24,7 @@ final class About: NSWindow {
         contentView!.addSubview(icon)
         
         let title = Label([(.key("About.title") + "\n", .bold(20), .haze()),
-                           (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String, .medium(14), .rain())])
+                           (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String, .regular(14), .rain())])
         contentView!.addSubview(title)
         
         icon.centerYAnchor.constraint(equalTo: contentView!.centerYAnchor, constant: 10).isActive = true

@@ -5,8 +5,8 @@ final class Pop: NSPopover {
     var info: Info! {
         didSet {
             phase.stringValue = .key("Phase.\(info.phase)")
-            percent.attributed([("\(Float(Int(info.fraction * 100000)) / 1000)", .medium(16), .textColor),
-                                ("%", .medium(14), .textColor)])
+            percent.attributed([("\(Float(Int(info.fraction * 100000)) / 1000)", .bold(16), .textColor),
+                                ("%", .regular(14), .textColor)])
             
             let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.duration = 2
@@ -25,7 +25,7 @@ final class Pop: NSPopover {
     required init?(coder: NSCoder) { nil }
     override init() {
         super.init()
-        contentSize = .init(width: 240, height: 200)
+        contentSize = .init(width: 240, height: 300)
         contentViewController = .init()
         contentViewController!.view = .init()
         behavior = .transient
@@ -34,7 +34,7 @@ final class Pop: NSPopover {
         contentViewController!.view.addSubview(phase)
         self.phase = phase
         
-        let _illumination = Label(.key("Pop.illumination"), .medium(16), .textColor)
+        let _illumination = Label(.key("Pop.illumination"), .regular(16), .textColor)
         contentViewController!.view.addSubview(_illumination)
         
         let percent = Label([])
@@ -63,10 +63,25 @@ final class Pop: NSPopover {
         container.layer!.addSublayer(illumination)
         self.illumination = illumination
         
-        let refresh = Control(.key("Pop.refresh"), self, #selector(update), NSColor.textColor.cgColor, .textBackgroundColor)
-        contentViewController!.view.addSubview(refresh)
+        let base = NSView()
+        base.translatesAutoresizingMaskIntoConstraints = false
+        base.wantsLayer = true
+        contentViewController!.view.addSubview(base)
         
-        phase.topAnchor.constraint(equalTo: contentViewController!.view.topAnchor, constant: 20).isActive = true
+        let moon = Moon()
+        moon.configure()
+        moon.radius = 5
+        moon.center = .init(x: 50, y: 50)
+        moon.resize()
+        moon.update()
+        base.layer!.addSublayer(moon)
+        
+        base.topAnchor.constraint(equalTo: contentViewController!.view.topAnchor, constant: 20).isActive = true
+        base.leftAnchor.constraint(equalTo: contentViewController!.view.leftAnchor, constant: 20).isActive = true
+        base.widthAnchor.constraint(equalToConstant: 200).isActive = true
+        base.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        phase.topAnchor.constraint(equalTo: contentViewController!.view.topAnchor, constant: 100).isActive = true
         phase.leftAnchor.constraint(equalTo: contentViewController!.view.leftAnchor, constant: 20).isActive = true
         
         _illumination.topAnchor.constraint(equalTo: phase.bottomAnchor, constant: 20).isActive = true
@@ -79,10 +94,6 @@ final class Pop: NSPopover {
         container.topAnchor.constraint(equalTo: _illumination.bottomAnchor, constant: 6).isActive = true
         container.heightAnchor.constraint(equalToConstant: 10).isActive = true
         container.widthAnchor.constraint(equalToConstant: 200).isActive = true
-        
-        refresh.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        refresh.centerXAnchor.constraint(equalTo: contentViewController!.view.centerXAnchor).isActive = true
-        refresh.bottomAnchor.constraint(equalTo: contentViewController!.view.bottomAnchor, constant: -30).isActive = true
     }
     
     @objc private func update() {

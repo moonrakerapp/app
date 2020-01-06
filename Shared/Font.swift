@@ -2,12 +2,16 @@
 import AppKit
 
 extension NSFont {
-    class func medium(_ size: CGFloat) -> NSFont {
-        NSFont(name: "AlteDIN1451Mittelschrift", size: size)!
+    class func light(_ size: CGFloat) -> NSFont {
+        NSFont(name: "Lato-Light", size: size)!
+    }
+    
+    class func regular(_ size: CGFloat) -> NSFont {
+        NSFont(name: "Lato-Regular", size: size)!
     }
     
     class func bold(_ size: CGFloat) -> NSFont {
-        NSFont(name: "AlteDIN1451Mittelschriftgepraegt", size: size)!
+        NSFont(name: "Lato-Bold", size: size)!
     }
 }
 #endif

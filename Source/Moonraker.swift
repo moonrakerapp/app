@@ -279,7 +279,7 @@ public final class Moonraker {
         case 0.25: return .firstQuarter
         case let phase where phase > 0.25 && phase < 0.5: return .waxingGibbous
         case 0.5: return .full
-        case let phase where phase > 5 && phase < 0.75: return .waningGibbous
+        case let phase where phase > 0.5 && phase < 0.75: return .waningGibbous
         case 0.75: return .lastQuarter
         default: return .waningCrescent
         }

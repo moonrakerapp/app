@@ -15,4 +15,12 @@ final class TestPhases: XCTestCase {
     func testNew() {
         XCTAssertEqual(1579920686, Int(moonraker.phases(1577905200).0.timeIntervalSince1970))
     }
+    
+    func testRoundFull() {
+        XCTAssertEqual(.full, moonraker.phase(0.491))
+    }
+    
+    func testRoundNew() {
+        XCTAssertEqual(.new, moonraker.phase(0.009))
+    }
 }

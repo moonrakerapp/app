@@ -217,6 +217,25 @@ public final class Moonraker {
         return (.init(timeIntervalSince1970: _new + time), .init(timeIntervalSince1970: _full + time))
     }
     
+    func phase(_ phase: Double) -> Phase {
+        if phase < 0.01 {
+            return .new
+        } else if phase < 0.241 {
+            return .waxingCrescent
+        } else if phase < 0.26 {
+            return .firstQuarter
+        } else if phase < 0.491 {
+            return .waxingGibbous
+        } else if phase < 0.51 {
+            return .full
+        } else if phase < 0.741 {
+            return .waningGibbous
+        } else if phase < 0.76 {
+            return .lastQuarter
+        }
+        return .waningCrescent
+    }
+    
     private func makeInfo() {
         queue.async {
             self.info.value = self.info(self.date.timeIntervalSince1970 + self.offset, self.coords.0, self.coords.1)
@@ -282,18 +301,5 @@ public final class Moonraker {
     
     private func phase(_ inclination: Double, _ angle: Double) -> Double {
         0.5 + ((0.5 * inclination) * (angle < 0 ? -1 : 1) / .pi)
-    }
-    
-    private func phase(_ phase: Double) -> Phase {
-        switch phase {
-        case 0: return .new
-        case let phase where phase < 0.25: return .waxingCrescent
-        case 0.25: return .firstQuarter
-        case let phase where phase > 0.25 && phase < 0.5: return .waxingGibbous
-        case 0.5: return .full
-        case let phase where phase > 0.5 && phase < 0.75: return .waningGibbous
-        case 0.75: return .lastQuarter
-        default: return .waningCrescent
-        }
     }
 }

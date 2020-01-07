@@ -5,7 +5,11 @@ import Combine
 final class Horizon: NSView {
     var zoom = false {
         didSet {
-            resize()
+            animate(dash)
+            animate(path)
+            moon.radius = moonradius
+            moon.center = mooncenter
+            moon.animate()
         }
     }
     
@@ -35,6 +39,14 @@ final class Horizon: NSView {
         radius / 3
     }
     
+    private var moonradius: CGFloat {
+        zoom ? radius / 3 : radius / 8
+    }
+    
+    private var mooncenter: CGPoint {
+        zoom ? center : point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
+    }
+    
     private var center: CGPoint {
         .init(x: bounds.width / 2, y: bounds.height / 2)
     }
@@ -50,16 +62,18 @@ final class Horizon: NSView {
         path.fillColor = .clear
         path.strokeColor = .shade()
         path.lineCap = .round
-        path.masksToBounds = false
+        path.strokeEnd = 1
         layer = path
         wantsLayer = true
         self.path = path
         
         let dash = CAShapeLayer()
+        dash.lineWidth = 1
         dash.fillColor = .clear
         dash.strokeColor = .shade()
         dash.lineCap = .round
         dash.lineDashPattern = [NSNumber(value: 1), NSNumber(value: 5)]
+        dash.strokeEnd = 1
         path.addSublayer(dash)
         self.dash = dash
         
@@ -73,7 +87,8 @@ final class Horizon: NSView {
             moon.angle = $0.angle
             self.azimuth = $0.azimuth
             self.altitude = $0.altitude
-            self.update()
+            self.moon.center = self.mooncenter
+            self.moon.update()
         }
     }
     
@@ -92,19 +107,24 @@ final class Horizon: NSView {
             return p
         } (CGMutablePath())
         
-        dash.lineWidth = zoom ? 0 : 1
-        path.lineWidth = zoom ? 0 : radius < 50 ? 1 : radius < 100 ? 2 : radius < 200 ? 3 : 4
-        moon.radius = zoom ? radius / 3 : radius / 8
+        path.lineWidth = radius < 50 ? 1 : radius < 100 ? 2 : radius < 200 ? 3 : 4
+        moon.radius = moonradius
+        moon.center = mooncenter
         moon.resize()
-        update()
-    }
-    
-    private func update() {
-        moon.center = zoom ? center : point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
         moon.update()
     }
     
     private func point(_ deg: CGFloat) -> CGPoint {
         .init(x: center.x - radius + (deg / period * diameter), y: center.y - (cos(deg / 180 * .pi) * amplitude))
+    }
+    
+    private func animate(_ layer: CAShapeLayer) {
+        let animation = CABasicAnimation(keyPath: "strokeEnd")
+        animation.duration = 1
+        animation.fromValue = layer.strokeEnd
+        animation.toValue = zoom ? 0 : 1
+        animation.timingFunction = .init(name: .easeOut)
+        layer.strokeEnd = zoom ? 0 : 1
+        layer.add(animation, forKey: "strokeEnd")
     }
 }

@@ -17,6 +17,13 @@ final class Moon: CAShapeLayer {
                        .lastQuarter : lastQuarter,
                        .waningCrescent : waningCrescent]
     
+    private var refresh: CGPath {
+        {
+            $0.addArc(center: .init(), radius: radius + 1, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath())
+    }
+    
     required init?(coder: NSCoder) { nil }
     override init(layer: Any) {
         super.init(layer: layer)
@@ -38,16 +45,43 @@ final class Moon: CAShapeLayer {
     }
     
     func resize() {
-        path = {
-            $0.addArc(center: .init(), radius: radius + 1, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-            return $0
-        } (CGMutablePath())
+        path = refresh
         shadowRadius = radius
+    }
+    
+    func animate() {
+        animate(self, refresh)
+        animate(face, map[phase]!(self)())
+        animateRadius()
+        animateCenter()
     }
     
     func update() {
         face.path = map[phase]!(self)()
-        
+        animateCenter()
+    }
+    
+    private func animate(_ layer: CAShapeLayer, _ path: CGPath) {
+        let animation = CABasicAnimation(keyPath: "path")
+        animation.duration = 1
+        animation.fromValue = layer.path
+        animation.toValue = path
+        animation.timingFunction = .init(name: .easeOut)
+        layer.path = path
+        layer.add(animation, forKey: "path")
+    }
+    
+    private func animateRadius() {
+        let animation = CABasicAnimation(keyPath: "shadowRadius")
+        animation.duration = 2
+        animation.fromValue = shadowRadius
+        animation.toValue = radius
+        animation.timingFunction = .init(name: .easeOut)
+        shadowRadius = radius
+        add(animation, forKey: "shadowRadius")
+    }
+    
+    private func animateCenter() {
         let translate = CATransform3DTranslate(CATransform3DIdentity, center.x, center.y, 0)
         let rotate = CATransform3DRotate(translate, (.pi / 2) + .init(angle), 0, 0, 1)
         let animation = CABasicAnimation(keyPath: "transform")

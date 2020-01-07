@@ -218,22 +218,24 @@ public final class Moonraker {
     }
     
     func phase(_ phase: Double) -> Phase {
-        if phase < 0.01 {
-            return .new
-        } else if phase < 0.241 {
-            return .waxingCrescent
-        } else if phase < 0.26 {
-            return .firstQuarter
-        } else if phase < 0.491 {
-            return .waxingGibbous
-        } else if phase < 0.51 {
-            return .full
-        } else if phase < 0.741 {
-            return .waningGibbous
-        } else if phase < 0.76 {
-            return .lastQuarter
+        if phase > 0.02 {
+            if phase < 0.249 {
+                return .waxingCrescent
+            } else if phase < 0.253 {
+                return .firstQuarter
+            } else if phase < 0.481 {
+                return .waxingGibbous
+            } else if phase < 0.52 {
+                return .full
+            } else if phase < 0.749 {
+                return .waningGibbous
+            } else if phase < 0.753 {
+                return .lastQuarter
+            } else if phase < 0.981 {
+                return .waningCrescent
+            }
         }
-        return .waningCrescent
+        return .new
     }
     
     private func makeInfo() {

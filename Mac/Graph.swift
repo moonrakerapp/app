@@ -20,7 +20,7 @@ final class Graph: NSView {
         
         sub = moonraker.info.receive(on: DispatchQueue.main).sink {
             phase.stringValue = .key("Phase.\($0.phase)")
-            percent.attributed([("\(Int(round($0.fraction * 100)))", .bold(16), .haze()), ("%", .regular(12), .shade())])
+            percent.attributed([("\(Int(round($0.fraction * 1000) / 10))", .bold(16), .haze()), ("%", .regular(12), .shade())])
         }
         
         widthAnchor.constraint(equalToConstant: 220).isActive = true

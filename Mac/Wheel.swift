@@ -68,11 +68,11 @@ final class Wheel: NSView {
         gradient.frame = .init(x: 70, y: 70, width: 60, height: 60)
         inner.addSublayer(gradient)
         
-        let offset = Label("", .bold(14), .haze())
+        let offset = Label("", .regular(12), .haze())
         addSubview(offset)
         self.offset = offset
         
-        let modifier = Label("", .bold(18), .rain())
+        let modifier = Label("", .medium(14), .rain())
         addSubview(modifier)
         self.modifier = modifier
         
@@ -225,8 +225,8 @@ final class Wheel: NSView {
                 offset.alphaValue = 0.4
                 modifier.alphaValue = 0.4
             case .drag:
-                ring.strokeColor = .shade()
-                outer.strokeColor = .shade(0.2)
+                ring.strokeColor = .dark()
+                outer.strokeColor = .shade()
                 inner.fillColor = .shade()
                 forward.alphaValue = 0.3
                 backward.alphaValue = 0.3
@@ -235,8 +235,8 @@ final class Wheel: NSView {
                 offset.alphaValue = 1
                 modifier.alphaValue = 1
             default:
-                ring.strokeColor = .shade()
-                outer.strokeColor = .shade(0.2)
+                ring.strokeColor = .dark()
+                outer.strokeColor = .shade()
                 inner.fillColor = .shade()
                 forward.alphaValue = 1
                 backward.alphaValue = 1

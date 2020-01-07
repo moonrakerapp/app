@@ -12,7 +12,7 @@ final class Graph: NSView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         
-        let phase = Label("", .bold(18), .haze())
+        let phase = Label("", .medium(16), .haze())
         addSubview(phase)
         
         let percent = Label([])
@@ -20,15 +20,16 @@ final class Graph: NSView {
         
         sub = moonraker.info.receive(on: DispatchQueue.main).sink {
             phase.stringValue = .key("Phase.\($0.phase)")
-            percent.attributed([("\(Int($0.fraction * 100))", .bold(18), .haze()), ("%", .regular(14), .shade())])
+            percent.attributed([("\(Int(round($0.fraction * 100)))", .bold(16), .haze()), ("%", .regular(12), .shade())])
         }
         
-        phase.bottomAnchor.constraint(equalTo: percent.topAnchor).isActive = true
-        phase.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 10).isActive = true
-        phase.rightAnchor.constraint(equalTo: rightAnchor, constant: -40).isActive = true
+        widthAnchor.constraint(equalToConstant: 220).isActive = true
+        heightAnchor.constraint(equalToConstant: 70).isActive = true
         
-        percent.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 10).isActive = true
-        percent.rightAnchor.constraint(equalTo: rightAnchor, constant: -40).isActive = true
-        percent.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
+        phase.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
+        phase.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        
+        percent.topAnchor.constraint(equalTo: phase.bottomAnchor, constant: 5).isActive = true
+        percent.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 2).isActive = true
     }
 }

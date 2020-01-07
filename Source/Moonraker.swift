@@ -6,6 +6,7 @@ public final class Moonraker {
         didSet {
             makeInfo()
             makeTimes()
+            makePhases()
         }
     }
     
@@ -13,6 +14,7 @@ public final class Moonraker {
         didSet {
             makeInfo()
             makeTimes()
+            makePhases()
         }
     }
     
@@ -24,9 +26,11 @@ public final class Moonraker {
     
     public let info = CurrentValueSubject<Info, Never>(.init())
     public let times = CurrentValueSubject<Times, Never>(.down)
+    public let phases = CurrentValueSubject<(Date, Date), Never>((.init(), .init()))
     private let queue = DispatchQueue(label: "", qos: .background, target: .global(qos: .background))
     private let J1970 = Double(2440588)
     private let J2000 = Double(2451545)
+    private let cycle = TimeInterval(60 * 60 * 24 * 29.53)
     private let radians = Double.pi / 180
     private let earthPerihelion = Double.pi / 180 * 102.9372
     private let earthObliquity = Double.pi / 180 * 23.4397
@@ -127,17 +131,6 @@ public final class Moonraker {
         return _ye > 0 ? .up : .down
     }
     
-    func full(_ time: TimeInterval) -> Date {
-        let _days = days(time)
-        let _sunCoords = sunCoords(_days)
-        let _moonCoords = moonCoords(_days)
-        let _inclination = inclination(phi(_sunCoords, _moonCoords), _moonCoords.2)
-        let _angle = angle(_sunCoords, _moonCoords)
-        let _phase = 0.5 - phase(_inclination, _angle)
-        let _seconds = (_phase < 0 ? 1 + _phase : _phase) * (60 * 60 * 24 * 29.53)
-        return .init(timeIntervalSince1970: _seconds + time)
-    }
-    
     func illumination(_ time: TimeInterval) -> (Phase, Double, Double) {
         {
             {
@@ -211,6 +204,19 @@ public final class Moonraker {
         return 0.0002967 / tan(altitude + 0.00312536 / (altitude + 0.08901179))
     }
     
+    func phases(_ time: TimeInterval) -> (Date, Date) {
+        let _days = days(time)
+        let _sunCoords = sunCoords(_days)
+        let _moonCoords = moonCoords(_days)
+        let _inclination = inclination(phi(_sunCoords, _moonCoords), _moonCoords.2)
+        let _angle = angle(_sunCoords, _moonCoords)
+        let _phase = phase(_inclination, _angle)
+        let _middle = 0.5 - _phase
+        let _new = (1 - _phase) * cycle
+        let _full = (_middle < 0 ? 1 + _middle : _middle) * cycle
+        return (.init(timeIntervalSince1970: _new + time), .init(timeIntervalSince1970: _full + time))
+    }
+    
     private func makeInfo() {
         queue.async {
             self.info.value = self.info(self.date.timeIntervalSince1970 + self.offset, self.coords.0, self.coords.1)
@@ -220,6 +226,12 @@ public final class Moonraker {
     private func makeTimes() {
         queue.async {
             self.times.value = self.times(self.date, self.coords.0, self.coords.1)
+        }
+    }
+    
+    private func makePhases() {
+        queue.async {
+            self.phases.value = self.phases(self.date.timeIntervalSince1970)
         }
     }
     

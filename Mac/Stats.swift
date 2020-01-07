@@ -3,7 +3,8 @@ import AppKit
 import Combine
 
 final class Stats: NSView {
-    private var sub: AnyCancellable!
+    private var times: AnyCancellable!
+    private var phases: AnyCancellable!
     private let timer = DispatchSource.makeTimerSource(queue: .main)
     
     override var mouseDownCanMoveWindow: Bool { false }
@@ -13,9 +14,16 @@ final class Stats: NSView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         let counter = DateComponentsFormatter()
+        let remains = DateComponentsFormatter()
+        remains.allowedUnits = [.month, .weekOfMonth, .day]
+        
         let date = DateFormatter()
-        date.dateStyle = .none
-        date.timeStyle = .medium
+        date.dateStyle = .short
+        date.timeStyle = .none
+        
+        let time = DateFormatter()
+        time.dateStyle = .none
+        time.timeStyle = .medium
         
         let rise = Stat("rise")
         rise.setAccessibilityLabel(.key("Stats.rise"))
@@ -33,7 +41,7 @@ final class Stats: NSView {
         full.setAccessibilityLabel(.key("Stats.full"))
         addSubview(full)
         
-        sub = moonraker.times.receive(on: DispatchQueue.main).sink {
+        times = moonraker.times.receive(on: DispatchQueue.main).sink {
             switch $0 {
             case .down:
                 rise.date.stringValue = "-"
@@ -44,17 +52,25 @@ final class Stats: NSView {
                 set.date.stringValue = "-"
                 set.counter.stringValue = ""
             case .rise(let _rise):
-                rise.date.stringValue = date.string(from: _rise)
+                rise.date.stringValue = time.string(from: _rise)
                 set.date.stringValue = "-"
                 set.counter.stringValue = ""
             case .set(let _set):
                 rise.date.stringValue = .key("Stats.rise") + " -"
                 rise.counter.stringValue = ""
-                set.date.stringValue = date.string(from: _set)
+                set.date.stringValue = time.string(from: _set)
             case .both(let _rise, let _set):
-                rise.date.stringValue = date.string(from: _rise)
-                set.date.stringValue = date.string(from: _set)
+                rise.date.stringValue = time.string(from: _rise)
+                set.date.stringValue = time.string(from: _set)
             }
+        }
+        
+        phases = moonraker.phases.receive(on: DispatchQueue.main).sink {
+            let now = Date()
+            new.date.stringValue = date.string(from: $0.0)
+            new.counter.stringValue = remains.string(from: now, to: $0.0) ?? ""
+            full.date.stringValue = date.string(from: $0.1)
+            full.counter.stringValue = remains.string(from: now, to: $0.1) ?? ""
         }
         
         timer.activate()

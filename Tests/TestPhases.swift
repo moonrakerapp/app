@@ -8,7 +8,11 @@ final class TestPhases: XCTestCase {
         moonraker = .init()
     }
     
-    func testRise() {
-        XCTAssertEqual(1578644990, Int(moonraker.full(1577905200).timeIntervalSince1970))
+    func testFull() {
+        XCTAssertEqual(1578644990, Int(moonraker.phases(1577905200).1.timeIntervalSince1970))
+    }
+    
+    func testNew() {
+        XCTAssertEqual(1579920686, Int(moonraker.phases(1577905200).0.timeIntervalSince1970))
     }
 }

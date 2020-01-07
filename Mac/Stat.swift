@@ -14,17 +14,17 @@ final class Stat: NSView {
         let image = Image(image)
         addSubview(image)
         
-        let date = Label("", .regular(14), .shade())
+        let date = Label("", .regular(12), .shade())
         date.maximumNumberOfLines = 1
         addSubview(date)
         self.date = date
         
-        let counter = Label("", .regular(14), .rain())
+        let counter = Label("", .regular(12), .rain())
         counter.maximumNumberOfLines = 1
         addSubview(counter)
         self.counter = counter
         
-        widthAnchor.constraint(equalToConstant: 140).isActive = true
+        widthAnchor.constraint(equalToConstant: 80).isActive = true
         bottomAnchor.constraint(equalTo: counter.bottomAnchor, constant: 5).isActive = true
         
         image.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -34,12 +34,8 @@ final class Stat: NSView {
         
         date.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         date.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 10).isActive = true
-        date.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 5).isActive = true
-        date.rightAnchor.constraint(greaterThanOrEqualTo: rightAnchor, constant: -5).isActive = true
         
         counter.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         counter.topAnchor.constraint(equalTo: date.bottomAnchor).isActive = true
-        counter.leftAnchor.constraint(greaterThanOrEqualTo: leftAnchor, constant: 5).isActive = true
-        counter.rightAnchor.constraint(greaterThanOrEqualTo: rightAnchor, constant: -5).isActive = true
     }
 }

@@ -14,15 +14,24 @@ final class Stats: NSView {
         translatesAutoresizingMaskIntoConstraints = false
         let counter = DateComponentsFormatter()
         let date = DateFormatter()
-        date.dateFormat = "EEEE, MMMM d"
+        date.dateStyle = .none
+        date.timeStyle = .medium
         
         let rise = Stat("rise")
         rise.setAccessibilityLabel(.key("Stats.rise"))
         addSubview(rise)
         
-        let set = Stat("rise")
+        let set = Stat("set")
         set.setAccessibilityLabel(.key("Stats.set"))
         addSubview(set)
+        
+        let new = Stat("new")
+        new.setAccessibilityLabel(.key("Stats.new"))
+        addSubview(new)
+        
+        let full = Stat("full")
+        full.setAccessibilityLabel(.key("Stats.full"))
+        addSubview(full)
         
         sub = moonraker.times.receive(on: DispatchQueue.main).sink {
             switch $0 {
@@ -67,9 +76,21 @@ final class Stats: NSView {
         heightAnchor.constraint(equalToConstant: 140).isActive = true
         
         rise.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        rise.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
+        let left = rise.leftAnchor.constraint(equalTo: leftAnchor, constant: 40)
+        left.priority = .defaultLow
+        left.isActive = true
         
         set.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        set.leftAnchor.constraint(equalTo: rise.rightAnchor, constant: 20).isActive = true
+        set.leftAnchor.constraint(equalTo: rise.rightAnchor).isActive = true
+        set.rightAnchor.constraint(lessThanOrEqualTo: centerXAnchor).isActive = true
+        
+        new.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        new.rightAnchor.constraint(equalTo: full.leftAnchor).isActive = true
+        new.leftAnchor.constraint(greaterThanOrEqualTo: centerXAnchor).isActive = true
+        
+        full.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        let right = full.rightAnchor.constraint(equalTo: rightAnchor, constant: -40)
+        right.priority = .defaultLow
+        right.isActive = true
     }
 }

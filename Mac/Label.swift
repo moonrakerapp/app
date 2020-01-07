@@ -33,15 +33,11 @@ final class Label: NSTextField {
     }
     
     private func configure() {
-        lineBreakMode = .byTruncatingTail
-        maximumNumberOfLines = 1
         translatesAutoresizingMaskIntoConstraints = false
         backgroundColor = .clear
         isBezeled = false
         isEditable = false
         isSelectable = false
-        setAccessibilityElement(true)
         setAccessibilityRole(.staticText)
-        setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
     }
 }

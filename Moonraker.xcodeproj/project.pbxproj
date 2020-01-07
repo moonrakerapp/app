@@ -31,6 +31,8 @@
 		DAE156A923C32F1A0050CB02 /* Lato-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAE156A623C32F1A0050CB02 /* Lato-Regular.ttf */; };
 		DAE156AA23C32F1A0050CB02 /* Lato-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAE156A723C32F1A0050CB02 /* Lato-Bold.ttf */; };
 		DAE156AC23C33BD90050CB02 /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE156AB23C33BD90050CB02 /* Wheel.swift */; };
+		DAE70A8E23C4760A0045FC2F /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE70A8D23C4760A0045FC2F /* Stat.swift */; };
+		DAE70A9023C4772F0045FC2F /* Lato-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DAE70A8F23C4772F0045FC2F /* Lato-Black.ttf */; };
 		DAEAD2F223BC8FC10053EBEA /* TestIllumination.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */; };
 		DAEAD2F423BCAE470053EBEA /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F323BCAE470053EBEA /* Phase.swift */; };
 		DAF0BF7823C214BE0035F416 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF0BF7723C214BE0035F416 /* Graph.swift */; };
@@ -90,6 +92,8 @@
 		DAE156A623C32F1A0050CB02 /* Lato-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Regular.ttf"; sourceTree = "<group>"; };
 		DAE156A723C32F1A0050CB02 /* Lato-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Bold.ttf"; sourceTree = "<group>"; };
 		DAE156AB23C33BD90050CB02 /* Wheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wheel.swift; sourceTree = "<group>"; };
+		DAE70A8D23C4760A0045FC2F /* Stat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stat.swift; sourceTree = "<group>"; };
+		DAE70A8F23C4772F0045FC2F /* Lato-Black.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Lato-Black.ttf"; sourceTree = "<group>"; };
 		DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIllumination.swift; sourceTree = "<group>"; };
 		DAEAD2F323BCAE470053EBEA /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
 		DAF0BF7723C214BE0035F416 /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
@@ -141,6 +145,7 @@
 		DACAE11A23C1E6BA00DD97EC /* Font */ = {
 			isa = PBXGroup;
 			children = (
+				DAE70A8F23C4772F0045FC2F /* Lato-Black.ttf */,
 				DAE156A723C32F1A0050CB02 /* Lato-Bold.ttf */,
 				DAE156A523C32F1A0050CB02 /* Lato-Light.ttf */,
 				DAE156A623C32F1A0050CB02 /* Lato-Regular.ttf */,
@@ -205,6 +210,7 @@
 				DAF2E82423C0E4430029EB87 /* Menu.swift */,
 				DA5831A123BB8A8C00AD5BBB /* Moon.swift */,
 				DA8E683A23C23A2F00BE172B /* Pop.swift */,
+				DAE70A8D23C4760A0045FC2F /* Stat.swift */,
 				DA00DE9623BF90F900B04423 /* Stats.swift */,
 				DAE156AB23C33BD90050CB02 /* Wheel.swift */,
 				DACB8ED623BB7C3F00ADBCB2 /* Window.swift */,
@@ -346,6 +352,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAE70A9023C4772F0045FC2F /* Lato-Black.ttf in Resources */,
 				DABA74F823C0F7FC00DCD08C /* Images.xcassets in Resources */,
 				DAE156A823C32F1A0050CB02 /* Lato-Light.ttf in Resources */,
 				DAE156A923C32F1A0050CB02 /* Lato-Regular.ttf in Resources */,
@@ -386,6 +393,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DACB8EDD23BB7C4000ADBCB2 /* Window.swift in Sources */,
+				DAE70A8E23C4760A0045FC2F /* Stat.swift in Sources */,
 				DAF0BF7823C214BE0035F416 /* Graph.swift in Sources */,
 				DA10C57523C203EC005FD07E /* Image.swift in Sources */,
 				DAE156AC23C33BD90050CB02 /* Wheel.swift in Sources */,

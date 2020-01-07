@@ -10,8 +10,12 @@ extension NSFont {
         NSFont(name: "Lato-Regular", size: size)!
     }
     
-    class func bold(_ size: CGFloat) -> NSFont {
+    class func medium(_ size: CGFloat) -> NSFont {
         NSFont(name: "Lato-Bold", size: size)!
+    }
+    
+    class func bold(_ size: CGFloat) -> NSFont {
+        NSFont(name: "Lato-Black", size: size)!
     }
 }
 #endif

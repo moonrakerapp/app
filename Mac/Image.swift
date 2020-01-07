@@ -15,5 +15,6 @@ final class Image: NSImageView {
             image = NSImage(named: name)
         }
         imageScaling = .scaleNone
+        setAccessibilityRole(.image)
     }
 }

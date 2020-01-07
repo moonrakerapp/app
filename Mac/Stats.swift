@@ -12,38 +12,39 @@ final class Stats: NSView {
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
+        let counter = DateComponentsFormatter()
+        let date = DateFormatter()
+        date.dateFormat = "EEEE, MMMM d"
         
-        let formatter = DateComponentsFormatter()
-        let rise = item()
-        let set = item()
+        let rise = Stat("rise")
+        rise.setAccessibilityLabel(.key("Stats.rise"))
+        addSubview(rise)
         
-        let border = NSView()
-        border.translatesAutoresizingMaskIntoConstraints = false
-        border.wantsLayer = true
-        border.layer!.backgroundColor = .shade(0.4)
-        addSubview(border)
+        let set = Stat("rise")
+        set.setAccessibilityLabel(.key("Stats.set"))
+        addSubview(set)
         
         sub = moonraker.times.receive(on: DispatchQueue.main).sink {
             switch $0 {
             case .down:
-                rise.0.stringValue = .key("Stats.rise") + " -"
-                rise.1.stringValue = ""
-                set.0.stringValue = .key("Stats.down")
+                rise.date.stringValue = "-"
+                rise.counter.stringValue = ""
+                set.date.stringValue = .key("Stats.down")
             case .up:
-                rise.0.stringValue = .key("Stats.up")
-                set.0.stringValue = .key("Stats.set") + " -"
-                set.1.stringValue = ""
-            case .rise(_):
-                rise.0.stringValue = .key("Stats.rise")
-                set.0.stringValue = .key("Stats.set") + " -"
-                set.1.stringValue = ""
-            case .set(_):
-                rise.0.stringValue = .key("Stats.rise") + " -"
-                rise.1.stringValue = ""
-                set.0.stringValue = .key("Stats.set")
-            case .both( _, _):
-                rise.0.stringValue = .key("Stats.rise")
-                set.0.stringValue = .key("Stats.set")
+                rise.date.stringValue = .key("Stats.up")
+                set.date.stringValue = "-"
+                set.counter.stringValue = ""
+            case .rise(let _rise):
+                rise.date.stringValue = date.string(from: _rise)
+                set.date.stringValue = "-"
+                set.counter.stringValue = ""
+            case .set(let _set):
+                rise.date.stringValue = .key("Stats.rise") + " -"
+                rise.counter.stringValue = ""
+                set.date.stringValue = date.string(from: _set)
+            case .both(let _rise, let _set):
+                rise.date.stringValue = date.string(from: _rise)
+                set.date.stringValue = date.string(from: _set)
             }
         }
         
@@ -53,42 +54,22 @@ final class Stats: NSView {
             let now = Date()
             switch moonraker.times.value {
             case .rise(let time):
-                rise.1.stringValue = formatter.string(from: now, to: time) ?? ""
+                rise.counter.stringValue = counter.string(from: now, to: time) ?? ""
             case .set(let time):
-                set.1.stringValue = formatter.string(from: now, to: time) ?? ""
+                set.counter.stringValue = counter.string(from: now, to: time) ?? ""
             case .both(let _rise, let _set):
-                rise.1.stringValue = formatter.string(from: now, to: _rise) ?? ""
-                set.1.stringValue = formatter.string(from: now, to: _set) ?? ""
+                rise.counter.stringValue = counter.string(from: now, to: _rise) ?? ""
+                set.counter.stringValue = counter.string(from: now, to: _set) ?? ""
             default: break
             }
         }
         
-        heightAnchor.constraint(equalToConstant: 100).isActive = true
+        heightAnchor.constraint(equalToConstant: 140).isActive = true
         
-        rise.0.bottomAnchor.constraint(equalTo: border.topAnchor, constant: -5).isActive = true
-        set.0.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -40).isActive = true
+        rise.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        rise.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
         
-        border.bottomAnchor.constraint(equalTo: set.0.topAnchor, constant: -5).isActive = true
-        border.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
-        border.heightAnchor.constraint(equalToConstant: 1).isActive = true
-        border.rightAnchor.constraint(greaterThanOrEqualTo: rise.1.rightAnchor).isActive = true
-        border.rightAnchor.constraint(greaterThanOrEqualTo: set.1.rightAnchor).isActive = true
-    }
-    
-    private func item() -> (Label, Label) {
-        let title = Label("", .bold(14), .shade())
-        addSubview(title)
-        
-        let counter = Label("", .regular(14), .rain())
-        addSubview(counter)
-        
-        title.leftAnchor.constraint(equalTo: leftAnchor, constant: 40).isActive = true
-        title.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -10).isActive = true
-        
-        counter.leftAnchor.constraint(equalTo: title.rightAnchor).isActive = true
-        counter.rightAnchor.constraint(lessThanOrEqualTo: rightAnchor, constant: -10).isActive = true
-        counter.bottomAnchor.constraint(equalTo: title.bottomAnchor).isActive = true
-        
-        return (title, counter)
+        set.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        set.leftAnchor.constraint(equalTo: rise.rightAnchor, constant: 20).isActive = true
     }
 }

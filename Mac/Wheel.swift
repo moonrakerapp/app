@@ -1,13 +1,14 @@
 import AppKit
 
 final class Wheel: NSView {
+    weak var horizon: Horizon!
     private weak var date: Label!
     private weak var offset: Label!
     private weak var modifier: Label!
     private weak var ring: CAShapeLayer!
     private weak var outer: CAShapeLayer!
     private weak var inner: CAShapeLayer!
-    private weak var future: Image!
+    private weak var zoom: Image!
     private weak var now: Image!
     private weak var forward: Image!
     private weak var backward: Image!
@@ -84,7 +85,7 @@ final class Wheel: NSView {
         addSubview(date)
         self.date = date
         
-        future = control("future")
+        zoom = control("zoom")
         now = control("now")
         forward = control("forward")
         backward = control("backward")
@@ -98,8 +99,8 @@ final class Wheel: NSView {
         date.topAnchor.constraint(equalTo: offset.bottomAnchor).isActive = true
         date.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        future.centerYAnchor.constraint(equalTo: topAnchor, constant: 82).isActive = true
-        future.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        zoom.centerYAnchor.constraint(equalTo: topAnchor, constant: 82).isActive = true
+        zoom.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         now.centerYAnchor.constraint(equalTo: bottomAnchor, constant: -32).isActive = true
         now.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -170,10 +171,9 @@ final class Wheel: NSView {
                 moonraker.offset = 0
                 update()
                 flashed = true
-            } else if future.frame.contains(point) {
-                flash(future)
-                moonraker.offset += 86_400 * 29.53
-                update()
+            } else if zoom.frame.contains(point) {
+                flash(zoom)
+                horizon.zoom.toggle()
                 flashed = true
             }
         default: break
@@ -237,7 +237,7 @@ final class Wheel: NSView {
                 forward.alphaValue = 0.6
                 backward.alphaValue = 0.6
                 now.alphaValue = 0.6
-                future.alphaValue = 0.6
+                zoom.alphaValue = 0.6
                 offset.alphaValue = 0.4
                 modifier.alphaValue = 0.4
                 date.alphaValue = 0.4
@@ -248,7 +248,7 @@ final class Wheel: NSView {
                 forward.alphaValue = 0.3
                 backward.alphaValue = 0.3
                 now.alphaValue = 0.3
-                future.alphaValue = 0.3
+                zoom.alphaValue = 0.3
                 offset.alphaValue = 1
                 modifier.alphaValue = 1
                 date.alphaValue = 1
@@ -259,7 +259,7 @@ final class Wheel: NSView {
                 forward.alphaValue = 1
                 backward.alphaValue = 1
                 now.alphaValue = 1
-                future.alphaValue = 1
+                zoom.alphaValue = 1
             }
         }
     }

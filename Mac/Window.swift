@@ -27,6 +27,7 @@ final class Window: NSWindow {
         contentView!.addSubview(graph)
         
         let wheel = Wheel()
+        wheel.horizon = horizon
         contentView!.addSubview(wheel)
         
         horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 20).isActive = true

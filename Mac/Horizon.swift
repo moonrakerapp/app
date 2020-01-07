@@ -3,6 +3,12 @@ import AppKit
 import Combine
 
 final class Horizon: NSView {
+    var zoom = false {
+        didSet {
+            resize()
+        }
+    }
+    
     private var altitude = Double.pi / 2
     private var azimuth = Double()
     private var sub: AnyCancellable!
@@ -51,7 +57,6 @@ final class Horizon: NSView {
         
         let dash = CAShapeLayer()
         dash.fillColor = .clear
-        dash.lineWidth = 1
         dash.strokeColor = .shade()
         dash.lineCap = .round
         dash.lineDashPattern = [NSNumber(value: 1), NSNumber(value: 5)]
@@ -87,14 +92,15 @@ final class Horizon: NSView {
             return p
         } (CGMutablePath())
         
-        path.lineWidth = radius < 50 ? 1 : radius < 100 ? 2 : radius < 200 ? 3 : 4
-        moon.radius = radius / 8
+        dash.lineWidth = zoom ? 0 : 1
+        path.lineWidth = zoom ? 0 : radius < 50 ? 1 : radius < 100 ? 2 : radius < 200 ? 3 : 4
+        moon.radius = zoom ? radius / 3 : radius / 8
         moon.resize()
         update()
     }
     
     private func update() {
-        moon.center = point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
+        moon.center = zoom ? center : point(.init(azimuth >= 0 ? (.pi * 1.5) - altitude : altitude + (.pi / 2)) * 180 / .pi)
         moon.update()
     }
     

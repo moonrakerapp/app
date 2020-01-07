@@ -1,6 +1,7 @@
 import AppKit
 
 final class Wheel: NSView {
+    private weak var date: Label!
     private weak var offset: Label!
     private weak var modifier: Label!
     private weak var ring: CAShapeLayer!
@@ -10,7 +11,8 @@ final class Wheel: NSView {
     private weak var now: Image!
     private weak var forward: Image!
     private weak var backward: Image!
-    private let formatter = DateComponentsFormatter()
+    private let components = DateComponentsFormatter()
+    private let formatter = DateFormatter()
     private let ratio = CGFloat(120)
     
     private var drag = Drag.no {
@@ -26,7 +28,9 @@ final class Wheel: NSView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         wantsLayer = true
-        formatter.allowedUnits = [.year, .month, .weekOfMonth, .day, .hour, .minute]
+        components.allowedUnits = [.year, .month, .weekOfMonth, .day, .hour, .minute]
+        components.unitsStyle = .abbreviated
+        formatter.timeStyle = .short
         
         widthAnchor.constraint(equalToConstant: 200).isActive = true
         heightAnchor.constraint(equalToConstant: 250).isActive = true
@@ -76,16 +80,23 @@ final class Wheel: NSView {
         addSubview(modifier)
         self.modifier = modifier
         
+        let date = Label("", .regular(12), .haze())
+        addSubview(date)
+        self.date = date
+        
         future = control("future")
         now = control("now")
         forward = control("forward")
         backward = control("backward")
         
-        offset.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
+        offset.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
         offset.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         modifier.centerYAnchor.constraint(equalTo: offset.centerYAnchor).isActive = true
         modifier.rightAnchor.constraint(equalTo: offset.leftAnchor).isActive = true
+        
+        date.topAnchor.constraint(equalTo: offset.bottomAnchor).isActive = true
+        date.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         future.centerYAnchor.constraint(equalTo: topAnchor, constant: 82).isActive = true
         future.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -146,12 +157,12 @@ final class Wheel: NSView {
             let point = convert(with.locationInWindow, from: nil)
             if forward.frame.contains(point) {
                 flash(forward)
-                moonraker.offset += 86_400
+                moonraker.offset += 43_200
                 update()
                 flashed = true
             } else if backward.frame.contains(point) {
                 flash(backward)
-                moonraker.offset -= 86_400
+                moonraker.offset -= 43_200
                 update()
                 flashed = true
             } else if now.frame.contains(point) {
@@ -203,9 +214,14 @@ final class Wheel: NSView {
         if moonraker.offset == 0 {
             offset.stringValue = .key("Wheel.now")
             modifier.stringValue = ""
+            date.stringValue = ""
         } else {
-            offset.stringValue = formatter.string(from: abs(moonraker.offset)) ?? ""
+            offset.stringValue = components.string(from: abs(moonraker.offset)) ?? ""
             modifier.stringValue = moonraker.offset > 0 ? "+" : "-"
+            if abs(moonraker.offset) > 3600 {
+                formatter.dateStyle = abs(moonraker.offset) >= 86400 ? .short : .none
+                date.stringValue = formatter.string(from: moonraker.date.addingTimeInterval(moonraker.offset))
+            }
         }
     }
     
@@ -224,6 +240,7 @@ final class Wheel: NSView {
                 future.alphaValue = 0.6
                 offset.alphaValue = 0.4
                 modifier.alphaValue = 0.4
+                date.alphaValue = 0.4
             case .drag:
                 ring.strokeColor = .dark()
                 outer.strokeColor = .shade()
@@ -234,6 +251,7 @@ final class Wheel: NSView {
                 future.alphaValue = 0.3
                 offset.alphaValue = 1
                 modifier.alphaValue = 1
+                date.alphaValue = 1
             default:
                 ring.strokeColor = .dark()
                 outer.strokeColor = .shade()
@@ -256,6 +274,7 @@ final class Wheel: NSView {
         image.layer!.backgroundColor = .shade(0.5)
         offset.alphaValue = 1
         modifier.alphaValue = 1
+        date.alphaValue = 1
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
             NSAnimationContext.runAnimationGroup ({

@@ -24,9 +24,9 @@ final class Graph: NSView {
         }
         
         widthAnchor.constraint(equalToConstant: 220).isActive = true
-        heightAnchor.constraint(equalToConstant: 70).isActive = true
+        bottomAnchor.constraint(equalTo: percent.bottomAnchor, constant: 5).isActive = true
         
-        phase.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
+        phase.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
         phase.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         percent.topAnchor.constraint(equalTo: phase.bottomAnchor, constant: 5).isActive = true

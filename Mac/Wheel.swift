@@ -14,7 +14,7 @@ final class Wheel: NSView {
     private weak var backward: Image!
     private let components = DateComponentsFormatter()
     private let formatter = DateFormatter()
-    private let ratio = CGFloat(120)
+    private let ratio = CGFloat(360)
     
     private var drag = Drag.no {
         didSet {

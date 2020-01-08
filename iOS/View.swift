@@ -27,7 +27,7 @@ final class View: UIView {
         horizon.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         
         wheel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        wheel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
+        wheel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -80).isActive = true
     }
     
     override func traitCollectionDidChange(_: UITraitCollection?) {

@@ -1,6 +1,6 @@
-import AppKit
+import UIKit
 
-final class Wheel: NSView {
+final class Wheel: UIView {
     weak var horizon: Horizon!
     private weak var date: Label!
     private weak var offset: Label!
@@ -22,55 +22,52 @@ final class Wheel: NSView {
         }
     }
     
-    override var mouseDownCanMoveWindow: Bool { false }
-    
     required init?(coder: NSCoder) { nil }
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        wantsLayer = true
         components.allowedUnits = [.year, .month, .weekOfMonth, .day, .hour, .minute]
         components.unitsStyle = .abbreviated
         formatter.timeStyle = .short
         
-        widthAnchor.constraint(equalToConstant: 200).isActive = true
-        heightAnchor.constraint(equalToConstant: 250).isActive = true
+        widthAnchor.constraint(equalToConstant: 260).isActive = true
+        heightAnchor.constraint(equalToConstant: 310).isActive = true
         
         let ring = CAShapeLayer()
         ring.fillColor = .clear
         ring.lineWidth = 2
         ring.path = {
-            $0.addArc(center: .init(x: 100, y: 100), radius: 92.5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 130, y: 180), radius: 122.5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
-        layer!.addSublayer(ring)
+        layer.addSublayer(ring)
         self.ring = ring
         
         let outer = CAShapeLayer()
         outer.fillColor = .clear
         outer.lineWidth = 5
         outer.path = {
-            $0.addArc(center: .init(x: 100, y: 100), radius: 96, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 130, y: 180), radius: 126, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
-        layer!.addSublayer(outer)
+        layer.addSublayer(outer)
         self.outer = outer
         
         let inner = CAShapeLayer()
         inner.path = {
-            $0.addArc(center: .init(x: 100, y: 100), radius: 32, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 130, y: 180), radius: 47, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
-        layer!.addSublayer(inner)
+        layer.addSublayer(inner)
         self.inner = inner
         
         let gradient = CAGradientLayer()
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
         gradient.endPoint = CGPoint(x: 0.5, y: 1)
         gradient.locations = [0, 1]
-        gradient.colors = [CGColor(gray: 0, alpha: 0.2), CGColor.clear]
-        gradient.cornerRadius = 30
-        gradient.frame = .init(x: 70, y: 70, width: 60, height: 60)
+        gradient.colors = [CGColor.clear, UIColor(white: 0, alpha: 0.2).cgColor]
+        gradient.cornerRadius = 45
+        gradient.frame = .init(x: 85, y: 135, width: 90, height: 90)
         inner.addSublayer(gradient)
         
         let offset = Label("", .regular(12), .haze())
@@ -113,10 +110,8 @@ final class Wheel: NSView {
         
         highlight()
         update()
-        
-        addTrackingArea(.init(rect: .zero, options: [.mouseEnteredAndExited, .mouseMoved, .activeInActiveApp, .inVisibleRect], owner: self))
     }
-    
+    /*
     override func mouseMoved(with: NSEvent) {
         if valid(convert(with.locationInWindow, from: nil)) {
             NSCursor.pointingHand.set()
@@ -190,7 +185,7 @@ final class Wheel: NSView {
             drag = .no
         }
     }
-    
+    */
     private func rotate(_ point: CGPoint, _ x: CGFloat, _ y: CGFloat) {
         var delta = CGFloat()
         
@@ -212,55 +207,57 @@ final class Wheel: NSView {
     
     private func update() {
         if moonraker.offset == 0 {
-            offset.stringValue = .key("Wheel.now")
-            modifier.stringValue = ""
-            date.stringValue = ""
+            offset.text = .key("Wheel.now")
+            modifier.text = ""
+            date.text = ""
         } else {
-            offset.stringValue = components.string(from: abs(moonraker.offset)) ?? ""
-            modifier.stringValue = moonraker.offset > 0 ? "+" : "-"
+            offset.text = components.string(from: abs(moonraker.offset)) ?? ""
+            modifier.text = moonraker.offset > 0 ? "+" : "-"
             if abs(moonraker.offset) > 3600 {
                 formatter.dateStyle = abs(moonraker.offset) >= 86400 ? .short : .none
-                date.stringValue = formatter.string(from: moonraker.date.addingTimeInterval(moonraker.offset))
+                date.text = formatter.string(from: moonraker.date.addingTimeInterval(moonraker.offset))
             }
         }
     }
     
     private func highlight() {
-        NSAnimationContext.runAnimationGroup {
-            $0.duration = 0.6
-            $0.allowsImplicitAnimation = true
-            switch drag {
-            case .no:
-                ring.strokeColor = .shade(0.3)
-                outer.strokeColor = .shade(0.4)
-                inner.fillColor = .shade(0.4)
-                forward.alphaValue = 0.6
-                backward.alphaValue = 0.6
-                now.alphaValue = 0.6
-                zoom.alphaValue = 0.6
-                offset.alphaValue = 0.4
-                modifier.alphaValue = 0.4
-                date.alphaValue = 0.4
-            case .drag:
-                ring.strokeColor = .dark()
-                outer.strokeColor = .shade()
-                inner.fillColor = .shade()
-                forward.alphaValue = 0.3
-                backward.alphaValue = 0.3
-                now.alphaValue = 0.3
-                zoom.alphaValue = 0.3
-                offset.alphaValue = 1
-                modifier.alphaValue = 1
-                date.alphaValue = 1
-            default:
-                ring.strokeColor = .dark()
-                outer.strokeColor = .shade()
-                inner.fillColor = .shade()
-                forward.alphaValue = 1
-                backward.alphaValue = 1
-                now.alphaValue = 1
-                zoom.alphaValue = 1
-            }
+        UIView.animate(withDuration: 0.6) {
+            self.animate()
+        }
+    }
+    
+    private func animate() {
+        switch drag {
+        case .no:
+            ring.strokeColor = .shade(0.3)
+            outer.strokeColor = .shade(0.4)
+            inner.fillColor = .shade(0.4)
+            forward.alpha = 0.6
+            backward.alpha = 0.6
+            now.alpha = 0.6
+            zoom.alpha = 0.6
+            offset.alpha = 0.4
+            modifier.alpha = 0.4
+            date.alpha = 0.4
+        case .drag:
+            ring.strokeColor = .dark()
+            outer.strokeColor = .shade()
+            inner.fillColor = .shade()
+            forward.alpha = 0.3
+            backward.alpha = 0.3
+            now.alpha = 0.3
+            zoom.alpha = 0.3
+            offset.alpha = 1
+            modifier.alpha = 1
+            date.alpha = 1
+        default:
+            ring.strokeColor = .dark()
+            outer.strokeColor = .shade()
+            inner.fillColor = .shade()
+            forward.alpha = 1
+            backward.alpha = 1
+            now.alpha = 1
+            zoom.alpha = 1
         }
     }
     
@@ -270,18 +267,16 @@ final class Wheel: NSView {
     }
     
     private func flash(_ image: Image) {
-        image.alphaValue = 1
-        image.layer!.backgroundColor = .shade(0.5)
-        offset.alphaValue = 1
-        modifier.alphaValue = 1
-        date.alphaValue = 1
+        image.alpha = 1
+        image.backgroundColor = .shade(0.5)
+        offset.alpha = 1
+        modifier.alpha = 1
+        date.alpha = 1
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            NSAnimationContext.runAnimationGroup ({
-                $0.duration = 0.3
-                $0.allowsImplicitAnimation = true
-                image.layer!.backgroundColor = .clear
-            }) {
+            UIView.animate(withDuration: 0.3, animations: {
+                image.backgroundColor = .clear
+            }) { _ in
                 self.drag = .no
             }
         }
@@ -289,13 +284,12 @@ final class Wheel: NSView {
     
     private func control(_ image: String) -> Image {
         let control = Image(image)
-        control.wantsLayer = true
-        control.layer!.borderColor = .clear
-        control.layer!.cornerRadius = 15
+        control.layer.borderColor = .clear
+        control.layer.cornerRadius = 25
         addSubview(control)
         
-        control.widthAnchor.constraint(equalToConstant: 30).isActive = true
-        control.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        control.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        control.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         return control
     }

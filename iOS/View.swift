@@ -18,9 +18,16 @@ final class View: UIView {
         addSubview(horizon)
         self.horizon = horizon
         
+        let wheel = Wheel()
+        wheel.horizon = horizon
+        addSubview(wheel)
+        
         horizon.topAnchor.constraint(equalTo: topAnchor).isActive = true
         horizon.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
         horizon.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
+        
+        wheel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        wheel.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
     }
     
     override func traitCollectionDidChange(_: UITraitCollection?) {

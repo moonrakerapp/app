@@ -1,11 +1,11 @@
 import Moonraker
-import AppKit
+import QuartzCore
 
 final class Moon: CAShapeLayer {
     var phase = Phase.new
     var fraction = Double()
     var angle = Double()
-    var center = CGPoint()
+    var middle = CGPoint()
     var radius = CGFloat()
     private weak var face: CAShapeLayer!
     private let map = [Phase.new : new,
@@ -53,12 +53,12 @@ final class Moon: CAShapeLayer {
         animate(self, refresh)
         animate(face, map[phase]!(self)())
         animateRadius()
-        animateCenter()
+        animatemiddle()
     }
     
     func update() {
         face.path = map[phase]!(self)()
-        animateCenter()
+        animatemiddle()
     }
     
     private func animate(_ layer: CAShapeLayer, _ path: CGPath) {
@@ -81,8 +81,8 @@ final class Moon: CAShapeLayer {
         add(animation, forKey: "shadowRadius")
     }
     
-    private func animateCenter() {
-        let translate = CATransform3DTranslate(CATransform3DIdentity, center.x, center.y, 0)
+    private func animatemiddle() {
+        let translate = CATransform3DTranslate(CATransform3DIdentity, middle.x, middle.y, 0)
         let rotate = CATransform3DRotate(translate, (.pi / 2) + .init(angle), 0, 0, 1)
         let animation = CABasicAnimation(keyPath: "transform")
         animation.duration = 1.5

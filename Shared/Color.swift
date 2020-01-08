@@ -44,6 +44,18 @@ extension UIColor {
     static func haze(_ alpha: CGFloat = 1) -> UIColor {
         alpha == 1 ? UIColor(named: "haze")! : UIColor(named: "haze")!.withAlphaComponent(alpha)
     }
+    
+    static func rain(_ alpha: CGFloat = 1) -> UIColor {
+        alpha == 1 ? UIColor(named: "rain")! : UIColor(named: "rain")!.withAlphaComponent(alpha)
+    }
+    
+    static func shade(_ alpha: CGFloat = 1) -> UIColor {
+        alpha == 1 ? UIColor(named: "shade")! : UIColor(named: "shade")!.withAlphaComponent(alpha)
+    }
+    
+    static func dark(_ alpha: CGFloat = 1) -> UIColor {
+        alpha == 1 ? UIColor(named: "dark")! : UIColor(named: "dark")!.withAlphaComponent(alpha)
+    }
 }
 
 extension CGColor {
@@ -51,6 +63,19 @@ extension CGColor {
         UIColor.haze(alpha).cgColor
     }
     
+    static func rain(_ alpha: CGFloat = 1) -> CGColor {
+        UIColor.rain(alpha).cgColor
+    }
+    
+    static func shade(_ alpha: CGFloat = 1) -> CGColor {
+        UIColor.shade(alpha).cgColor
+    }
+    
+    static func dark(_ alpha: CGFloat = 1) -> CGColor {
+        UIColor.dark(alpha).cgColor
+    }
+    
+    static let black = UIColor.black.cgColor
     static let clear = UIColor.clear.cgColor
 }
 #endif

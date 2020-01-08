@@ -1,8 +1,8 @@
 import Moonraker
-import AppKit
+import UIKit
 import Combine
 
-final class Horizon: NSView {
+final class Horizon: UIView {
     var zoom = false {
         didSet {
             animate(dash)
@@ -21,11 +21,7 @@ final class Horizon: NSView {
     private weak var path: CAShapeLayer!
     private weak var dash: CAShapeLayer!
     
-    override var frame: NSRect {
-        didSet {
-            resize()
-        }
-    }
+    override class var layerClass: AnyClass { CAShapeLayer.self }
     
     private var radius: CGFloat {
         (min(bounds.width, bounds.height) * 0.5) - 2
@@ -51,20 +47,17 @@ final class Horizon: NSView {
         .init(x: bounds.width / 2, y: bounds.height / 2)
     }
     
-    override var mouseDownCanMoveWindow: Bool { true }
-    
     required init?(coder: NSCoder) { nil }
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
+        isUserInteractionEnabled = false
         
-        let path = CAShapeLayer()
+        let path = layer as! CAShapeLayer
         path.fillColor = .clear
         path.strokeColor = .shade()
         path.lineCap = .round
         path.strokeEnd = 1
-        layer = path
-        wantsLayer = true
         self.path = path
         
         let dash = CAShapeLayer()
@@ -92,7 +85,10 @@ final class Horizon: NSView {
         }
     }
     
-    private func resize() {
+    func resize() {
+        dash.strokeEnd = 0
+        path.strokeEnd = 0
+        
         dash.path = {
             $0.move(to: .init(x: middle.x + amplitude, y: middle.y))
             $0.addLine(to: .init(x: middle.x - amplitude, y: middle.y))
@@ -100,12 +96,17 @@ final class Horizon: NSView {
         } (CGMutablePath())
         
         path.path = { p in
-            p.move(to: .init(x: middle.x - radius, y: middle.y - amplitude))
+            p.move(to: .init(x: middle.x - radius, y: middle.y + amplitude))
             stride(from: 2, through: period, by: 2).forEach {
                 p.addLine(to: point($0))
             }
             return p
         } (CGMutablePath())
+        
+        moon.transform = CATransform3DTranslate(CATransform3DIdentity, middle.x, middle.y, 0)
+        
+        animate(dash)
+        animate(path)
         
         path.lineWidth = radius < 50 ? 1 : radius < 100 ? 2 : radius < 200 ? 3 : 4
         moon.radius = moonradius
@@ -115,7 +116,7 @@ final class Horizon: NSView {
     }
     
     private func point(_ deg: CGFloat) -> CGPoint {
-        .init(x: middle.x - radius + (deg / period * diameter), y: middle.y - (cos(deg / 180 * .pi) * amplitude))
+        .init(x: middle.x - radius + (deg / period * diameter), y: middle.y + (cos(deg / 180 * .pi) * amplitude))
     }
     
     private func animate(_ layer: CAShapeLayer) {

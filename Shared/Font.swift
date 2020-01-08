@@ -23,12 +23,24 @@ extension NSFont {
 import UIKit
 
 extension UIFont {
+    class func light(_ size: CGFloat) -> UIFont {
+        font("Lato-Light", size)
+    }
+    
+    class func regular(_ size: CGFloat) -> UIFont {
+        font("Lato-Regular", size)
+    }
+    
     class func medium(_ size: CGFloat) -> UIFont {
-        UIFont(name: "AlteDIN1451Mittelschrift", size: UIFontMetrics.default.scaledValue(for: size))!
+        font("Lato-Bold", size)
     }
     
     class func bold(_ size: CGFloat) -> UIFont {
-        UIFont(name: "AlteDIN1451Mittelschriftgepraegt", size: UIFontMetrics.default.scaledValue(for: size))!
+        font("Lato-Black", size)
+    }
+    
+    private class func font(_ name: String, _ size: CGFloat) -> UIFont {
+        UIFont(name: name, size: UIFontMetrics.default.scaledValue(for: size))!
     }
 }
 #endif

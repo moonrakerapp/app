@@ -16,6 +16,9 @@ final class Window: NSWindow {
         isMovableByWindowBackground = true
         contentView!.wantsLayer = true
         contentView!.layer!.backgroundColor = .black
+        contentView!.layer!.borderWidth = 1
+        contentView!.layer!.borderColor = .shade(0.5)
+        contentView!.layer!.cornerRadius = 5
         
         let horizon = Horizon()
         contentView!.addSubview(horizon)

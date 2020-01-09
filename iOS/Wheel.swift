@@ -194,8 +194,8 @@ final class Wheel: UIView {
         let control = Image(image)
         addSubview(control)
         
-        control.widthAnchor.constraint(equalToConstant: 40).isActive = true
-        control.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        control.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        control.heightAnchor.constraint(equalToConstant: 50).isActive = true
         return control
     }
 }

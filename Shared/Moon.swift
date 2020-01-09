@@ -61,12 +61,12 @@ final class Moon: CAShapeLayer {
         animate(face, map[phase]!(self)())
         animate(surface, craters())
         animateRadius()
-        animatemiddle()
+        animateMiddle()
     }
     
     func update() {
         face.path = map[phase]!(self)()
-        animatemiddle()
+        animateMiddle()
     }
     
     private func animate(_ layer: CAShapeLayer, _ path: CGPath) {
@@ -89,7 +89,7 @@ final class Moon: CAShapeLayer {
         add(animation, forKey: "shadowRadius")
     }
     
-    private func animatemiddle() {
+    private func animateMiddle() {
         let translate = CATransform3DTranslate(CATransform3DIdentity, middle.x, middle.y, 0)
         let rotate = CATransform3DRotate(translate, (.pi / 2) + .init(angle), 0, 0, 1)
         let animation = CABasicAnimation(keyPath: "transform")

@@ -9,7 +9,7 @@ final class Disk: CAShapeLayer {
     override init() {
         super.init()
         fillColor = .clear
-        strokeColor = .shade(0.2)
+        strokeColor = .shade(0.3)
         lineWidth = 3
         path = {
             $0.addArc(center: .init(x: 150, y: 170), radius: 116, startAngle: 0, endAngle: .pi * 2, clockwise: false)
@@ -39,7 +39,7 @@ final class Disk: CAShapeLayer {
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
         gradient.endPoint = CGPoint(x: 0.5, y: 1)
         gradient.locations = [0, 1]
-        gradient.colors = [CGColor(srgbRed: 0, green: 0, blue: 0, alpha: 0.3), CGColor.clear]
+        gradient.colors = [CGColor(srgbRed: 0, green: 0, blue: 0, alpha: 0.5), CGColor.clear]
         gradient.cornerRadius = 120
         gradient.frame = .init(x: 31, y: 51, width: 238, height: 238)
         addSublayer(gradient)
@@ -53,17 +53,13 @@ final class Disk: CAShapeLayer {
     func animate(_ drag: Drag) {
         switch drag {
         case .no:
-            inner.strokeColor = .shade(0.3)
-            ring.strokeColor = .shade(0.2)
-            ring.fillColor = .shade(0.5)
-        case .drag:
-            inner.strokeColor = .haze()
-            ring.strokeColor = .haze()
+            inner.strokeColor = .haze(0.2)
+            ring.strokeColor = .haze(0.2)
             ring.fillColor = .shade()
         default:
-            inner.strokeColor = .shade(0.4)
-            ring.strokeColor = .shade(0.4)
-            ring.fillColor = .shade(0.7)
+            inner.strokeColor = .haze(0.6)
+            ring.strokeColor = .haze(0.6)
+            ring.fillColor = .shade(0.6)
         }
     }
 }

@@ -22,7 +22,7 @@ final class View: UIView {
         wheel.horizon = horizon
         addSubview(wheel)
         
-        horizon.topAnchor.constraint(equalTo: topAnchor).isActive = true
+        horizon.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
         horizon.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
         horizon.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         
@@ -31,7 +31,7 @@ final class View: UIView {
     }
     
     override func traitCollectionDidChange(_: UITraitCollection?) {
-        height = horizon.heightAnchor.constraint(equalTo: heightAnchor, multiplier: bounds.width > bounds.height ? 1 : 0.3)
+        height = horizon.heightAnchor.constraint(equalToConstant: 250)
         layoutIfNeeded()
         horizon.resize()
     }

@@ -8,16 +8,11 @@ final class Wheel: UIView {
     private weak var now: Image!
     private weak var forward: Image!
     private weak var backward: Image!
+    private var drag = Drag.no
     private let _date = DateFormatter()
     private let _time = DateFormatter()
     private let ratio = CGFloat(360)
     private let haptics = UIImpactFeedbackGenerator(style: .light)
-    
-    private var drag = Drag.no {
-        didSet {
-            highlight()
-        }
-    }
     
     required init?(coder: NSCoder) { nil }
     init() {
@@ -78,9 +73,9 @@ final class Wheel: UIView {
         let point = touches.first!.location(in: self)
         let previous = touches.first!.previousLocation(in: self)
         if valid(point) {
-            disk.rotate(atan2(point.x - 150, 170 - point.y))
             switch drag {
             case .drag:
+                disk.rotate(atan2(point.x - 150, 170 - point.y))
                 rotate(point, point.x - previous.x, point.y - previous.y)
             case .start(var x, var y):
                 x += point.x - previous.x
@@ -88,6 +83,7 @@ final class Wheel: UIView {
                 if abs(x) + abs(y) > 15 {
                     rotate(point, x, y)
                     drag = .drag
+                    highlight()
                 } else {
                     drag = .start(x: x, y: y)
                 }
@@ -100,40 +96,35 @@ final class Wheel: UIView {
     
     override func touchesEnded(_ touches: Set<UITouch>, with: UIEvent?) {
         super.touchesEnded(touches, with: with)
-        var flashed = false
         switch drag {
         case .start(_, _):
             let point = touches.first!.location(in: self)
             if forward.frame.contains(point) {
-                flash(forward)
-                moonraker.offset += 43_200
+                forward.alpha = 0.1
+                moonraker.offset += 518_400
                 update()
-                flashed = true
             } else if backward.frame.contains(point) {
-                flash(backward)
-                moonraker.offset -= 43_200
+                backward.alpha = 0.1
+                moonraker.offset -= 518_400
                 update()
-                flashed = true
             } else if now.frame.contains(point) {
-                flash(now)
+                now.alpha = 0.1
                 moonraker.offset = 0
                 update()
-                flashed = true
             } else if zoom.frame.contains(point) {
-                flash(zoom)
+                zoom.alpha = 0.1
                 horizon.zoom.toggle()
-                flashed = true
             }
         default: break
         }
-        if !flashed {
-            drag = .no
-        }
+        drag = .no
+        highlight()
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with: UIEvent?) {
         super.touchesCancelled(touches, with: with)
         drag = .no
+        highlight()
     }
     
     private func rotate(_ point: CGPoint, _ x: CGFloat, _ y: CGFloat) {
@@ -170,7 +161,7 @@ final class Wheel: UIView {
     }
     
     private func highlight() {
-        UIView.animate(withDuration: 0.6) {
+        UIView.animate(withDuration: 0.7) {
             self.animate()
             self.disk.animate(self.drag)
         }
@@ -178,23 +169,18 @@ final class Wheel: UIView {
     
     private func animate() {
         switch drag {
-        case .no:
-            forward.alpha = 0.9
-            backward.alpha = 0.9
-            now.alpha = 0.9
-            zoom.alpha = 0.9
-            date.alpha = 0.4
         case .drag:
-            forward.alpha = 0.2
-            backward.alpha = 0.2
-            now.alpha = 0.2
-            zoom.alpha = 0.2
+            forward.alpha = 0
+            backward.alpha = 0
+            now.alpha = 0
+            zoom.alpha = 0
             date.alpha = 1
         default:
             forward.alpha = 1
             backward.alpha = 1
             now.alpha = 1
             zoom.alpha = 1
+            date.alpha = 0.5
         }
     }
     
@@ -203,20 +189,8 @@ final class Wheel: UIView {
         return distance > 400 && distance < 12_100
     }
     
-    private func flash(_ image: Image) {
-        image.alpha = 1
-        image.backgroundColor = .haze(0.3)
-        date.alpha = 1
-        drag = .no
-        
-        UIView.animate(withDuration: 0.3) {
-            image.backgroundColor = .clear
-        }
-    }
-    
     private func control(_ image: String) -> Image {
         let control = Image(image)
-        control.layer.cornerRadius = 20
         addSubview(control)
         
         control.widthAnchor.constraint(equalToConstant: 40).isActive = true

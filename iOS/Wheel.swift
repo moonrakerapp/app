@@ -13,6 +13,7 @@ final class Wheel: UIView {
     private let _date = DateFormatter()
     private let _time = DateFormatter()
     private let ratio = CGFloat(360)
+    private let haptics = UIImpactFeedbackGenerator(style: .light)
     
     private var drag = Drag.no {
         didSet {
@@ -23,6 +24,7 @@ final class Wheel: UIView {
     required init?(coder: NSCoder) { nil }
     init() {
         super.init(frame: .zero)
+        haptics.prepare()
         translatesAutoresizingMaskIntoConstraints = false
         _date.dateFormat = "MM.dd.yy\n"
         _time.dateFormat = "h a"
@@ -101,6 +103,7 @@ final class Wheel: UIView {
     override func touchesBegan(_ touches: Set<UITouch>, with: UIEvent?) {
         super.touchesBegan(touches, with: with)
         if valid(touches.first!.location(in: self)) {
+            haptics.impactOccurred()
             drag = .start(x: 0, y: 0)
         } else {
             drag = .no
@@ -113,7 +116,6 @@ final class Wheel: UIView {
         let previous = touches.first!.previousLocation(in: self)
         if valid(point) {
             gradient.transform = CATransform3DRotate(CATransform3DIdentity, atan2(point.x - 150, 170 - point.y), 0, 0, 1)
-            
             switch drag {
             case .drag:
                 rotate(point, point.x - previous.x, point.y - previous.y)

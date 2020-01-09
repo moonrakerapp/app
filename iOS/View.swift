@@ -14,30 +14,30 @@ final class View: UIView {
         super.init(frame: .zero)
         backgroundColor = .black
         
+        let graph = Graph()
+        addSubview(graph)
+        
         let horizon = Horizon()
         addSubview(horizon)
         self.horizon = horizon
-        
-        let graph = Graph()
-        addSubview(graph)
         
         let wheel = Wheel()
         wheel.horizon = horizon
         addSubview(wheel)
         
-        horizon.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
+        horizon.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
         horizon.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true
         horizon.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -10).isActive = true
         
         graph.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        graph.bottomAnchor.constraint(equalTo: wheel.topAnchor, constant: 20).isActive = true
+        graph.topAnchor.constraint(equalTo: horizon.bottomAnchor, constant: -70).isActive = true
         
         wheel.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         wheel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -80).isActive = true
     }
     
     override func traitCollectionDidChange(_: UITraitCollection?) {
-        height = horizon.heightAnchor.constraint(equalToConstant: 300)
+        height = horizon.heightAnchor.constraint(equalToConstant: 250)
         layoutIfNeeded()
         horizon.resize()
     }

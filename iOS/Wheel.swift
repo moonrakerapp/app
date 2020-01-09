@@ -3,9 +3,7 @@ import UIKit
 final class Wheel: UIView {
     weak var horizon: Horizon!
     private weak var date: Label!
-    private weak var ring: CAShapeLayer!
-    private weak var inner: CAShapeLayer!
-    private weak var gradient: CAGradientLayer!
+    private weak var disk: Disk!
     private weak var zoom: Image!
     private weak var now: Image!
     private weak var forward: Image!
@@ -32,44 +30,9 @@ final class Wheel: UIView {
         widthAnchor.constraint(equalToConstant: 300).isActive = true
         heightAnchor.constraint(equalToConstant: 320).isActive = true
         
-        let outer = CAShapeLayer()
-        outer.fillColor = .clear
-        outer.strokeColor = .shade(0.2)
-        outer.lineWidth = 3
-        outer.path = {
-            $0.addArc(center: .init(x: 150, y: 170), radius: 116, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            return $0
-        } (CGMutablePath())
-        layer.addSublayer(outer)
-        
-        let ring = CAShapeLayer()
-        ring.lineWidth = 1
-        ring.path = {
-            $0.addArc(center: .init(x: 150, y: 170), radius: 112.5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            return $0
-        } (CGMutablePath())
-        layer.addSublayer(ring)
-        self.ring = ring
-        
-        let inner = CAShapeLayer()
-        inner.fillColor = .black
-        inner.lineWidth = 1
-        inner.path = {
-            $0.addArc(center: .init(x: 150, y: 170), radius: 45, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            return $0
-        } (CGMutablePath())
-        layer.addSublayer(inner)
-        self.inner = inner
-        
-        let gradient = CAGradientLayer()
-        gradient.startPoint = CGPoint(x: 0.5, y: 0)
-        gradient.endPoint = CGPoint(x: 0.5, y: 1)
-        gradient.locations = [0, 1]
-        gradient.colors = [UIColor(white: 0, alpha: 0.3).cgColor, CGColor.clear]
-        gradient.cornerRadius = 120
-        gradient.frame = .init(x: 31, y: 51, width: 238, height: 238)
-        layer.addSublayer(gradient)
-        self.gradient = gradient
+        let disk = Disk()
+        layer.addSublayer(disk)
+        self.disk = disk
         
         let date = Label([])
         date.numberOfLines = 2
@@ -115,7 +78,7 @@ final class Wheel: UIView {
         let point = touches.first!.location(in: self)
         let previous = touches.first!.previousLocation(in: self)
         if valid(point) {
-            gradient.transform = CATransform3DRotate(CATransform3DIdentity, atan2(point.x - 150, 170 - point.y), 0, 0, 1)
+            disk.rotate(atan2(point.x - 150, 170 - point.y))
             switch drag {
             case .drag:
                 rotate(point, point.x - previous.x, point.y - previous.y)
@@ -209,33 +172,25 @@ final class Wheel: UIView {
     private func highlight() {
         UIView.animate(withDuration: 0.6) {
             self.animate()
+            self.disk.animate(self.drag)
         }
     }
     
     private func animate() {
         switch drag {
         case .no:
-            inner.strokeColor = .shade(0.3)
-            ring.strokeColor = .shade(0.2)
-            ring.fillColor = .shade(0.5)
             forward.alpha = 0.9
             backward.alpha = 0.9
             now.alpha = 0.9
             zoom.alpha = 0.9
             date.alpha = 0.4
         case .drag:
-            inner.strokeColor = .haze()
-            ring.strokeColor = .haze()
-            ring.fillColor = .shade()
             forward.alpha = 0.2
             backward.alpha = 0.2
             now.alpha = 0.2
             zoom.alpha = 0.2
             date.alpha = 1
         default:
-            inner.strokeColor = .shade(0.4)
-            ring.strokeColor = .shade(0.4)
-            ring.fillColor = .shade(0.7)
             forward.alpha = 1
             backward.alpha = 1
             now.alpha = 1

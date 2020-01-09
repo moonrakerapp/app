@@ -26,6 +26,7 @@
 		DA2BC40823C769AD00B52F12 /* Rubik-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA2BC40023C769AD00B52F12 /* Rubik-Bold.ttf */; };
 		DA2BC40A23C786E200B52F12 /* Disk.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2BC40923C786E200B52F12 /* Disk.swift */; };
 		DA2BC40B23C786E200B52F12 /* Disk.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2BC40923C786E200B52F12 /* Disk.swift */; };
+		DA2BC40D23C790DD00B52F12 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2BC40C23C790DD00B52F12 /* Graph.swift */; };
 		DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5831A123BB8A8C00AD5BBB /* Moon.swift */; };
 		DA83879323C5E066008D018F /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E82023C0A1A80029EB87 /* Font.swift */; };
 		DA83879423C5E06E008D018F /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA86B41D23BDE16400F448B2 /* Color.swift */; };
@@ -121,6 +122,7 @@
 		DA2BC3FF23C769AC00B52F12 /* Rubik-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Medium.ttf"; sourceTree = "<group>"; };
 		DA2BC40023C769AD00B52F12 /* Rubik-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Bold.ttf"; sourceTree = "<group>"; };
 		DA2BC40923C786E200B52F12 /* Disk.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Disk.swift; sourceTree = "<group>"; };
+		DA2BC40C23C790DD00B52F12 /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
 		DA5831A123BB8A8C00AD5BBB /* Moon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moon.swift; sourceTree = "<group>"; };
 		DA83879723C5E1A8008D018F /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		DA83879923C5E1F7008D018F /* Horizon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horizon.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				DAA7AF6423C5CFAD00B829D7 /* Info.plist */,
 				DAA7AF7923C5D0E400B829D7 /* LaunchScreen.storyboard */,
 				DAA7AF5623C5CFAA00B829D7 /* App.swift */,
+				DA2BC40C23C790DD00B52F12 /* Graph.swift */,
 				DA83879923C5E1F7008D018F /* Horizon.swift */,
 				DAABA69823C5FEAE002BD579 /* Image.swift */,
 				DAABA69A23C5FEC0002BD579 /* Label.swift */,
@@ -515,6 +518,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA2BC40B23C786E200B52F12 /* Disk.swift in Sources */,
+				DA2BC40D23C790DD00B52F12 /* Graph.swift in Sources */,
 				DAABA69723C5FE6A002BD579 /* Wheel.swift in Sources */,
 				DA83879323C5E066008D018F /* Font.swift in Sources */,
 				DA83879C23C5E283008D018F /* Moon.swift in Sources */,

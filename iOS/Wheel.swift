@@ -19,8 +19,9 @@ final class Wheel: UIView {
         super.init(frame: .zero)
         haptics.prepare()
         translatesAutoresizingMaskIntoConstraints = false
-        _date.dateFormat = "MM.dd.yy\n"
-        _time.dateFormat = "h a"
+        _date.timeStyle = .none
+        _date.dateStyle = .short
+        _time.dateFormat = "\nh a"
         
         widthAnchor.constraint(equalToConstant: 300).isActive = true
         heightAnchor.constraint(equalToConstant: 320).isActive = true

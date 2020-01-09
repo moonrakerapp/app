@@ -20,13 +20,15 @@ final class About: NSWindow {
         contentView!.layer!.borderWidth = 1
         contentView!.layer!.cornerRadius = 5
         
-        let icon = Image("AppIcon")
+        let icon = Image("splash")
         contentView!.addSubview(icon)
         
         let title = Label([(.key("About.title") + "\n", .bold(20), .haze()),
                            (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String, .regular(14), .shade())])
         contentView!.addSubview(title)
         
+        icon.widthAnchor.constraint(equalToConstant: 120).isActive = true
+        icon.heightAnchor.constraint(equalToConstant: 120).isActive = true
         icon.centerYAnchor.constraint(equalTo: contentView!.centerYAnchor, constant: 10).isActive = true
         icon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 40).isActive = true
         

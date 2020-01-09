@@ -45,7 +45,7 @@ final class Moon: CAShapeLayer {
         self.face = face
         
         let surface = CAShapeLayer()
-        surface.fillColor = .init(gray: 0, alpha: 0.1)
+        surface.fillColor = .init(srgbRed: 0, green: 0, blue: 0, alpha: 0.1)
         addSublayer(surface)
         self.surface = surface
     }

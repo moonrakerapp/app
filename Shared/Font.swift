@@ -24,19 +24,19 @@ import UIKit
 
 extension UIFont {
     class func light(_ size: CGFloat) -> UIFont {
-        font("Lato-Light", size)
+        font("Rubik-Light", size)
     }
     
     class func regular(_ size: CGFloat) -> UIFont {
-        font("Lato-Regular", size)
+        font("Rubik-Regular", size)
     }
     
     class func medium(_ size: CGFloat) -> UIFont {
-        font("Lato-Bold", size)
+        font("Rubik-Medium", size)
     }
     
     class func bold(_ size: CGFloat) -> UIFont {
-        font("Lato-Black", size)
+        font("Rubik-Bold", size)
     }
     
     private class func font(_ name: String, _ size: CGFloat) -> UIFont {

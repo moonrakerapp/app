@@ -3,8 +3,6 @@ import UIKit
 final class Wheel: UIView {
     weak var horizon: Horizon!
     private weak var date: Label!
-    private weak var offset: Label!
-    private weak var modifier: Label!
     private weak var ring: CAShapeLayer!
     private weak var inner: CAShapeLayer!
     private weak var gradient: CAGradientLayer!
@@ -12,8 +10,8 @@ final class Wheel: UIView {
     private weak var now: Image!
     private weak var forward: Image!
     private weak var backward: Image!
-    private let components = DateComponentsFormatter()
-    private let formatter = DateFormatter()
+    private let _date = DateFormatter()
+    private let _time = DateFormatter()
     private let ratio = CGFloat(360)
     
     private var drag = Drag.no {
@@ -26,8 +24,8 @@ final class Wheel: UIView {
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
-        components.allowedUnits = [.year, .month, .weekOfMonth, .day, .hour]
-        components.unitsStyle = .abbreviated
+        _date.dateFormat = "MM.dd.yy\n"
+        _time.dateFormat = "h a"
         
         widthAnchor.constraint(equalToConstant: 300).isActive = true
         heightAnchor.constraint(equalToConstant: 320).isActive = true
@@ -65,21 +63,14 @@ final class Wheel: UIView {
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
         gradient.endPoint = CGPoint(x: 0.5, y: 1)
         gradient.locations = [0, 1]
-        gradient.colors = [UIColor(white: 0, alpha: 0.4).cgColor, CGColor.clear]
+        gradient.colors = [UIColor(white: 0, alpha: 0.3).cgColor, CGColor.clear]
         gradient.cornerRadius = 120
         gradient.frame = .init(x: 31, y: 51, width: 238, height: 238)
         layer.addSublayer(gradient)
         self.gradient = gradient
         
-        let offset = Label("", .regular(12), .haze())
-        addSubview(offset)
-        self.offset = offset
-        
-        let modifier = Label("", .medium(14), .rain())
-        addSubview(modifier)
-        self.modifier = modifier
-        
-        let date = Label("", .regular(12), .haze())
+        let date = Label([])
+        date.numberOfLines = 2
         addSubview(date)
         self.date = date
         
@@ -88,13 +79,7 @@ final class Wheel: UIView {
         forward = control("forward")
         backward = control("backward")
         
-        offset.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
-        offset.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
-        modifier.centerYAnchor.constraint(equalTo: offset.centerYAnchor).isActive = true
-        modifier.rightAnchor.constraint(equalTo: offset.leftAnchor).isActive = true
-        
-        date.topAnchor.constraint(equalTo: offset.bottomAnchor).isActive = true
+        date.bottomAnchor.constraint(equalTo: topAnchor, constant: 40).isActive = true
         date.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         zoom.centerYAnchor.constraint(equalTo: topAnchor, constant: 87).isActive = true
@@ -206,17 +191,16 @@ final class Wheel: UIView {
     }
     
     private func update() {
-        if moonraker.offset == 0 {
-            offset.text = .key("Wheel.now")
-            modifier.text = ""
-            date.text = ""
-        } else {
-            offset.text = components.string(from: abs(moonraker.offset)) ?? ""
-            modifier.text = moonraker.offset > 0 ? "+" : "-"
-            if abs(moonraker.offset) > 10_800 {
-                formatter.dateFormat = abs(moonraker.offset) >= 86400 ? "MM.dd.yy, h a" : "h a"
-                date.text = formatter.string(from: moonraker.date.addingTimeInterval(moonraker.offset))
+        if abs(moonraker.offset) > 3600 {
+            let date = moonraker.date.addingTimeInterval(moonraker.offset)
+            if abs(moonraker.offset) >= 86400 {
+                self.date.attributed([(_date.string(from: date), .regular(14), .shade()),
+                                      (_time.string(from: date), .medium(14), .haze())], align: .center)
+            } else {
+                self.date.attributed([(_time.string(from: date), .medium(14), .haze())])
             }
+        } else {
+            date.text = ""
         }
     }
     
@@ -236,8 +220,6 @@ final class Wheel: UIView {
             backward.alpha = 0.9
             now.alpha = 0.9
             zoom.alpha = 0.9
-            offset.alpha = 0.4
-            modifier.alpha = 0.4
             date.alpha = 0.4
         case .drag:
             inner.strokeColor = .haze()
@@ -247,8 +229,6 @@ final class Wheel: UIView {
             backward.alpha = 0.2
             now.alpha = 0.2
             zoom.alpha = 0.2
-            offset.alpha = 1
-            modifier.alpha = 1
             date.alpha = 1
         default:
             inner.strokeColor = .shade(0.4)
@@ -269,8 +249,6 @@ final class Wheel: UIView {
     private func flash(_ image: Image) {
         image.alpha = 1
         image.backgroundColor = .haze(0.3)
-        offset.alpha = 1
-        modifier.alpha = 1
         date.alpha = 1
         drag = .no
         

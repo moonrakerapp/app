@@ -8,6 +8,7 @@ final class Moon: CAShapeLayer {
     var middle = CGPoint()
     var radius = CGFloat()
     private weak var face: CAShapeLayer!
+    private weak var surface: CAShapeLayer!
     private let map = [Phase.new : new,
                        .waxingCrescent : waxingCrescent,
                        .firstQuarter : firstQuarter,
@@ -42,16 +43,23 @@ final class Moon: CAShapeLayer {
         face.fillColor = .haze()
         addSublayer(face)
         self.face = face
+        
+        let surface = CAShapeLayer()
+        surface.fillColor = .init(gray: 0, alpha: 0.1)
+        addSublayer(surface)
+        self.surface = surface
     }
     
     func resize() {
         path = refresh
         shadowRadius = radius
+        surface.path = craters()
     }
     
     func animate() {
         animate(self, refresh)
         animate(face, map[phase]!(self)())
+        animate(surface, craters())
         animateRadius()
         animatemiddle()
     }
@@ -160,5 +168,30 @@ final class Moon: CAShapeLayer {
                         control2: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius))
             return $0
         } (CGMutablePath())
+    }
+    
+    private func craters() -> CGPath {
+        let path = CGMutablePath()
+        path.addPath({
+            $0.addArc(center: .init(x: radius / -3, y: radius / -3.5), radius: radius / 2.2, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        path.addPath({
+            $0.addArc(center: .init(x: radius / -3, y: radius / 2.25), radius: radius / 4, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        path.addPath({
+            $0.addArc(center: .init(x: radius / 2, y: radius / 3.5), radius: radius / 4, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        path.addPath({
+            $0.addArc(center: .init(x: radius / 6, y: radius / 1.5), radius: radius / 5, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        path.addPath({
+            $0.addArc(center: .init(x: radius / 4, y: radius / -1.5), radius: radius / 6, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        return path
     }
 }

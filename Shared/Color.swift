@@ -13,10 +13,6 @@ extension NSColor {
     static func shade(_ alpha: CGFloat = 1) -> NSColor {
         alpha == 1 ? NSColor(named: "shade")! : NSColor(named: "shade")!.withAlphaComponent(alpha)
     }
-    
-    static func dark(_ alpha: CGFloat = 1) -> NSColor {
-        alpha == 1 ? NSColor(named: "dark")! : NSColor(named: "dark")!.withAlphaComponent(alpha)
-    }
 }
 
 extension CGColor {
@@ -30,10 +26,6 @@ extension CGColor {
     
     static func shade(_ alpha: CGFloat = 1) -> CGColor {
         NSColor.shade(alpha).cgColor
-    }
-    
-    static func dark(_ alpha: CGFloat = 1) -> CGColor {
-        NSColor.dark(alpha).cgColor
     }
 }
 #endif
@@ -52,10 +44,6 @@ extension UIColor {
     static func shade(_ alpha: CGFloat = 1) -> UIColor {
         alpha == 1 ? UIColor(named: "shade")! : UIColor(named: "shade")!.withAlphaComponent(alpha)
     }
-    
-    static func dark(_ alpha: CGFloat = 1) -> UIColor {
-        alpha == 1 ? UIColor(named: "dark")! : UIColor(named: "dark")!.withAlphaComponent(alpha)
-    }
 }
 
 extension CGColor {
@@ -69,10 +57,6 @@ extension CGColor {
     
     static func shade(_ alpha: CGFloat = 1) -> CGColor {
         UIColor.shade(alpha).cgColor
-    }
-    
-    static func dark(_ alpha: CGFloat = 1) -> CGColor {
-        UIColor.dark(alpha).cgColor
     }
     
     static let black = UIColor.black.cgColor

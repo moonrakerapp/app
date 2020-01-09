@@ -32,10 +32,10 @@ final class Moon: CAShapeLayer {
     override init() {
         super.init()
         fillColor = .black
-        lineWidth = 1
-        strokeColor = .dark()
+        strokeColor = .shade()
         shadowColor = .haze()
         shadowOpacity = 1
+        lineWidth = 2
         shadowOffset = .zero
         
         let face = CAShapeLayer()

@@ -19,7 +19,7 @@ final class Stat: NSView {
         addSubview(date)
         self.date = date
         
-        let counter = Label("", .regular(12), .rain())
+        let counter = Label("", .regular(12), .haze())
         counter.maximumNumberOfLines = 1
         addSubview(counter)
         self.counter = counter

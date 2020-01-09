@@ -16,7 +16,7 @@ final class About: NSWindow {
         isMovableByWindowBackground = true
         contentView!.wantsLayer = true
         contentView!.layer!.backgroundColor = .black
-        contentView!.layer!.borderColor = .dark()
+        contentView!.layer!.borderColor = .shade(0.5)
         contentView!.layer!.borderWidth = 1
         contentView!.layer!.cornerRadius = 5
         
@@ -24,7 +24,7 @@ final class About: NSWindow {
         contentView!.addSubview(icon)
         
         let title = Label([(.key("About.title") + "\n", .bold(20), .haze()),
-                           (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String, .regular(14), .rain())])
+                           (Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as! String, .regular(14), .shade())])
         contentView!.addSubview(title)
         
         icon.centerYAnchor.constraint(equalTo: contentView!.centerYAnchor, constant: 10).isActive = true

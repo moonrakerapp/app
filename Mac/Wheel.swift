@@ -242,7 +242,7 @@ final class Wheel: NSView {
                 modifier.alphaValue = 0.4
                 date.alphaValue = 0.4
             case .drag:
-                ring.strokeColor = .dark()
+                ring.strokeColor = .black
                 outer.strokeColor = .shade()
                 inner.fillColor = .shade()
                 forward.alphaValue = 0.3
@@ -253,7 +253,7 @@ final class Wheel: NSView {
                 modifier.alphaValue = 1
                 date.alphaValue = 1
             default:
-                ring.strokeColor = .dark()
+                ring.strokeColor = .black
                 outer.strokeColor = .shade()
                 inner.fillColor = .shade()
                 forward.alphaValue = 1

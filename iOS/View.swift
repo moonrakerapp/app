@@ -14,6 +14,9 @@ final class View: UIView {
         super.init(frame: .zero)
         backgroundColor = .black
         
+        let stats = Stats()
+        addSubview(stats)
+        
         let graph = Graph()
         addSubview(graph)
         
@@ -24,6 +27,10 @@ final class View: UIView {
         let wheel = Wheel()
         wheel.horizon = horizon
         addSubview(wheel)
+        
+        stats.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor).isActive = true
+        stats.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor).isActive = true
+        stats.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor).isActive = true
         
         horizon.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
         horizon.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 10).isActive = true

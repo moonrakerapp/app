@@ -152,9 +152,9 @@ final class Wheel: UIView {
             let date = moonraker.date.addingTimeInterval(moonraker.offset)
             if abs(moonraker.offset) >= 86400 {
                 self.date.attributed([(_date.string(from: date), .regular(14), .shade()),
-                                      (_time.string(from: date), .medium(14), .haze())], align: .center)
+                                      (_time.string(from: date), .medium(14), .shade())], align: .center)
             } else {
-                self.date.attributed([(_time.string(from: date), .medium(14), .haze())])
+                self.date.attributed([(_time.string(from: date), .medium(14), .shade())])
             }
         } else {
             date.text = ""
@@ -175,13 +175,11 @@ final class Wheel: UIView {
             backward.alpha = 0
             now.alpha = 0
             zoom.alpha = 0
-            date.alpha = 1
         default:
             forward.alpha = 1
             backward.alpha = 1
             now.alpha = 1
             zoom.alpha = 1
-            date.alpha = 0.5
         }
     }
     

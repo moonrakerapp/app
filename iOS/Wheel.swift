@@ -2,7 +2,6 @@ import UIKit
 
 final class Wheel: UIView {
     weak var horizon: Horizon!
-    private weak var date: Label!
     private weak var disk: Disk!
     private weak var zoom: Image!
     private weak var now: Image!
@@ -10,8 +9,6 @@ final class Wheel: UIView {
     private weak var backward: Image!
     private weak var stats: Image!
     private var drag = Drag.no
-    private let _date = DateFormatter()
-    private let _time = DateFormatter()
     private let ratio = CGFloat(360)
     private let haptics = UIImpactFeedbackGenerator(style: .light)
     
@@ -20,9 +17,6 @@ final class Wheel: UIView {
         super.init(frame: .zero)
         haptics.prepare()
         translatesAutoresizingMaskIntoConstraints = false
-        _date.timeStyle = .none
-        _date.dateStyle = .short
-        _time.dateFormat = "\nh a"
         
         widthAnchor.constraint(equalToConstant: 300).isActive = true
         heightAnchor.constraint(equalToConstant: 320).isActive = true
@@ -31,19 +25,11 @@ final class Wheel: UIView {
         layer.addSublayer(disk)
         self.disk = disk
         
-        let date = Label([])
-        date.numberOfLines = 2
-        addSubview(date)
-        self.date = date
-        
         zoom = control("zoom")
         now = control("now")
         forward = control("forward")
         backward = control("backward")
         stats = control("stats")
-        
-        date.bottomAnchor.constraint(equalTo: topAnchor, constant: 40).isActive = true
-        date.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         zoom.centerYAnchor.constraint(equalTo: topAnchor, constant: 87).isActive = true
         zoom.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -61,7 +47,6 @@ final class Wheel: UIView {
         stats.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         highlight()
-        update()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with: UIEvent?) {
@@ -113,15 +98,12 @@ final class Wheel: UIView {
             if forward.frame.contains(point) {
                 forward.alpha = 0.1
                 moonraker.offset += 518_400
-                update()
             } else if backward.frame.contains(point) {
                 backward.alpha = 0.1
                 moonraker.offset -= 518_400
-                update()
             } else if now.frame.contains(point) {
                 now.alpha = 0.1
                 moonraker.offset = 0
-                update()
             } else if zoom.frame.contains(point) {
                 zoom.alpha = 0.1
                 horizon.zoom.toggle()
@@ -156,21 +138,6 @@ final class Wheel: UIView {
         }
         
         moonraker.offset += .init(delta * ratio)
-        update()
-    }
-    
-    private func update() {
-        if abs(moonraker.offset) > 3600 {
-            let date = moonraker.date.addingTimeInterval(moonraker.offset)
-            if abs(moonraker.offset) >= 86400 {
-                self.date.attributed([(_date.string(from: date), .regular(14), .shade()),
-                                      (_time.string(from: date), .medium(14), .shade())], align: .center)
-            } else {
-                self.date.attributed([(_time.string(from: date), .medium(14), .shade())])
-            }
-        } else {
-            date.text = ""
-        }
     }
     
     private func highlight() {
@@ -199,7 +166,7 @@ final class Wheel: UIView {
     
     private func valid(_ point: CGPoint) -> Bool {
         let distance = pow(point.x - 150, 2) + pow(point.y - 170, 2)
-        return distance > 400 && distance < 12_100
+        return distance > 900 && distance < 19_600
     }
     
     private func control(_ image: String) -> Image {

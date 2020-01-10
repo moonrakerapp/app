@@ -37,9 +37,9 @@ final class Disk: CAShapeLayer {
         
         let gradient = CAGradientLayer()
         gradient.startPoint = CGPoint(x: 0.5, y: 0)
-        gradient.endPoint = CGPoint(x: 0.5, y: 1)
+        gradient.endPoint = CGPoint(x: 0.5, y: 0.5)
         gradient.locations = [0, 1]
-        gradient.colors = [CGColor(srgbRed: 0, green: 0, blue: 0, alpha: 0.5), CGColor.clear]
+        gradient.colors = [CGColor(srgbRed: 0, green: 0, blue: 0, alpha: 0.4), CGColor.clear]
         gradient.cornerRadius = 120
         gradient.frame = .init(x: 31, y: 51, width: 238, height: 238)
         addSublayer(gradient)
@@ -57,9 +57,9 @@ final class Disk: CAShapeLayer {
             ring.strokeColor = .haze(0.2)
             ring.fillColor = .shade()
         default:
-            inner.strokeColor = .haze(0.6)
-            ring.strokeColor = .haze(0.6)
-            ring.fillColor = .shade(0.6)
+            inner.strokeColor = .haze(0.75)
+            ring.strokeColor = .haze(0.75)
+            ring.fillColor = .shade(0.75)
         }
     }
 }

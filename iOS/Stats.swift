@@ -6,15 +6,12 @@ final class Stats: UIView {
     private var times: AnyCancellable!
     private var phases: AnyCancellable!
     private let timer = DispatchSource.makeTimerSource(queue: .main)
-    private let time = DateFormatter()
     
     required init?(coder: NSCoder) { nil }
     init() {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         isUserInteractionEnabled = false
-        time.dateStyle = .none
-        time.timeStyle = .medium
         
         let counter = DateComponentsFormatter()
         let remains = DateComponentsFormatter()
@@ -23,6 +20,10 @@ final class Stats: UIView {
         let date = DateFormatter()
         date.dateStyle = .short
         date.timeStyle = .none
+        
+        let time = DateFormatter()
+        time.dateStyle = .none
+        time.timeStyle = .medium
         
         let rise = Stat("rise")
         rise.accessibilityLabel = .key("Stats.rise")
@@ -66,10 +67,21 @@ final class Stats: UIView {
         
         phases = moonraker.phases.receive(on: DispatchQueue.main).sink {
             let now = Date()
-            new.date.text = date.string(from: $0.0)
-            new.counter.text = remains.string(from: now, to: $0.0) ?? ""
-            full.date.text = date.string(from: $0.1)
-            full.counter.text = remains.string(from: now, to: $0.1) ?? ""
+            if Calendar.current.date(byAdding: .hour, value: -23, to: $0.0)! < now {
+                new.date.text = .key("Stats.now")
+                new.counter.text = ""
+            } else {
+                new.date.text = date.string(from: $0.0)
+                new.counter.text = remains.string(from: now, to: $0.0) ?? ""
+            }
+            
+            if Calendar.current.date(byAdding: .hour, value: -23, to: $0.1)! < now {
+                full.date.text = .key("Stats.now")
+                full.counter.text = ""
+            } else {
+                full.date.text = date.string(from: $0.1)
+                full.counter.text = remains.string(from: now, to: $0.1) ?? ""
+            }
         }
         
         timer.activate()
@@ -91,17 +103,15 @@ final class Stats: UIView {
         heightAnchor.constraint(equalToConstant: 110).isActive = true
         
         rise.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        rise.leftAnchor.constraint(equalTo: leftAnchor, constant: 20).isActive = true
+        rise.rightAnchor.constraint(equalTo: set.leftAnchor).isActive = true
         
         set.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        set.leftAnchor.constraint(equalTo: rise.rightAnchor).isActive = true
-        set.rightAnchor.constraint(lessThanOrEqualTo: centerXAnchor).isActive = true
+        set.rightAnchor.constraint(equalTo: centerXAnchor, constant: -5).isActive = true
         
         new.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        new.rightAnchor.constraint(equalTo: full.leftAnchor).isActive = true
-        new.leftAnchor.constraint(greaterThanOrEqualTo: centerXAnchor).isActive = true
+        new.leftAnchor.constraint(equalTo: centerXAnchor, constant: 5).isActive = true
         
         full.topAnchor.constraint(equalTo: topAnchor, constant: 20).isActive = true
-        full.rightAnchor.constraint(equalTo: rightAnchor, constant: -20).isActive = true
+        full.leftAnchor.constraint(equalTo: new.rightAnchor).isActive = true
     }
 }

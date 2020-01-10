@@ -5,6 +5,7 @@ Stats.down="Always below the horizon";
 Stats.up="Always above the horizon";
 Stats.new="New Moon";
 Stats.full="Full Moon";
+Stats.now="Now";
 Menu.title="Moonraker";
 Menu.about="About";
 Menu.hide="Hide";

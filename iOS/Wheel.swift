@@ -8,6 +8,7 @@ final class Wheel: UIView {
     private weak var now: Image!
     private weak var forward: Image!
     private weak var backward: Image!
+    private weak var stats: Image!
     private var drag = Drag.no
     private let _date = DateFormatter()
     private let _time = DateFormatter()
@@ -39,6 +40,7 @@ final class Wheel: UIView {
         now = control("now")
         forward = control("forward")
         backward = control("backward")
+        stats = control("stats")
         
         date.bottomAnchor.constraint(equalTo: topAnchor, constant: 40).isActive = true
         date.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
@@ -54,6 +56,9 @@ final class Wheel: UIView {
         
         backward.centerYAnchor.constraint(equalTo: topAnchor, constant: 170).isActive = true
         backward.centerXAnchor.constraint(equalTo: leftAnchor, constant: 67).isActive = true
+        
+        stats.centerYAnchor.constraint(equalTo: topAnchor, constant: 170).isActive = true
+        stats.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         highlight()
         update()
@@ -91,14 +96,19 @@ final class Wheel: UIView {
             default: break
             }
         } else {
-            drag = .no
+            switch drag {
+            case .start(_, _):
+                drag = .no
+            default: break
+            }
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with: UIEvent?) {
         super.touchesEnded(touches, with: with)
         switch drag {
-        case .start(_, _):
+        case .drag: break
+        default:
             let point = touches.first!.location(in: self)
             if forward.frame.contains(point) {
                 forward.alpha = 0.1
@@ -115,8 +125,10 @@ final class Wheel: UIView {
             } else if zoom.frame.contains(point) {
                 zoom.alpha = 0.1
                 horizon.zoom.toggle()
+            } else if stats.frame.contains(point) {
+                stats.alpha = 0.1
+                (UIApplication.shared.delegate as! App).present(Stats(), animated: true)
             }
-        default: break
         }
         drag = .no
         highlight()
@@ -175,11 +187,13 @@ final class Wheel: UIView {
             backward.alpha = 0
             now.alpha = 0
             zoom.alpha = 0
+            stats.alpha = 0
         default:
             forward.alpha = 1
             backward.alpha = 1
             now.alpha = 1
             zoom.alpha = 1
+            stats.alpha = 1
         }
     }
     

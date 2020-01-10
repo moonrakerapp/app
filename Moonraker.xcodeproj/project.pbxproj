@@ -29,6 +29,7 @@
 		DA2BC40D23C790DD00B52F12 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2BC40C23C790DD00B52F12 /* Graph.swift */; };
 		DA46C02323C86AB8003D19B0 /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA46C02223C86AB8003D19B0 /* Stat.swift */; };
 		DA46C02523C86AF3003D19B0 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA46C02423C86AF3003D19B0 /* Stats.swift */; };
+		DA46C02723C879E1003D19B0 /* Button.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA46C02623C879E1003D19B0 /* Button.swift */; };
 		DA5831A223BB8A8C00AD5BBB /* Moon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA5831A123BB8A8C00AD5BBB /* Moon.swift */; };
 		DA83879323C5E066008D018F /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E82023C0A1A80029EB87 /* Font.swift */; };
 		DA83879423C5E06E008D018F /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA86B41D23BDE16400F448B2 /* Color.swift */; };
@@ -127,6 +128,7 @@
 		DA2BC40C23C790DD00B52F12 /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
 		DA46C02223C86AB8003D19B0 /* Stat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stat.swift; sourceTree = "<group>"; };
 		DA46C02423C86AF3003D19B0 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
+		DA46C02623C879E1003D19B0 /* Button.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Button.swift; sourceTree = "<group>"; };
 		DA5831A123BB8A8C00AD5BBB /* Moon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moon.swift; sourceTree = "<group>"; };
 		DA83879723C5E1A8008D018F /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		DA83879923C5E1F7008D018F /* Horizon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horizon.swift; sourceTree = "<group>"; };
@@ -233,6 +235,7 @@
 				DAA7AF6423C5CFAD00B829D7 /* Info.plist */,
 				DAA7AF7923C5D0E400B829D7 /* LaunchScreen.storyboard */,
 				DAA7AF5623C5CFAA00B829D7 /* App.swift */,
+				DA46C02623C879E1003D19B0 /* Button.swift */,
 				DA2BC40C23C790DD00B52F12 /* Graph.swift */,
 				DA83879923C5E1F7008D018F /* Horizon.swift */,
 				DAABA69823C5FEAE002BD579 /* Image.swift */,
@@ -526,6 +529,7 @@
 				DA2BC40B23C786E200B52F12 /* Disk.swift in Sources */,
 				DA46C02523C86AF3003D19B0 /* Stats.swift in Sources */,
 				DA2BC40D23C790DD00B52F12 /* Graph.swift in Sources */,
+				DA46C02723C879E1003D19B0 /* Button.swift in Sources */,
 				DAABA69723C5FE6A002BD579 /* Wheel.swift in Sources */,
 				DA83879323C5E066008D018F /* Font.swift in Sources */,
 				DA83879C23C5E283008D018F /* Moon.swift in Sources */,

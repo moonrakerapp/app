@@ -1,11 +1,12 @@
 About.title="Moonraker";
+View.stats="Calendar";
 Stats.rise="Rise";
 Stats.set="Set";
 Stats.down="Always below the horizon";
 Stats.up="Always above the horizon";
 Stats.new="New Moon";
 Stats.full="Full Moon";
-Stats.now="Now";
+Stats.now="Today";
 Menu.title="Moonraker";
 Menu.about="About";
 Menu.hide="Hide";

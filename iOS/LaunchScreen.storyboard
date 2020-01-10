@@ -16,10 +16,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="splash" translatesAutoresizingMaskIntoConstraints="NO" id="TDf-kG-XFp">
-                                <rect key="frame" x="146.59999999999991" y="388.40000000000009" width="120" height="120"/>
+                                <rect key="frame" x="32" y="273" width="350" height="350"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="120" id="2Lr-A8-tOW"/>
-                                    <constraint firstAttribute="width" constant="120" id="o1M-7Q-adC"/>
+                                    <constraint firstAttribute="height" constant="350" id="2Lr-A8-tOW"/>
+                                    <constraint firstAttribute="width" constant="350" id="o1M-7Q-adC"/>
                                 </constraints>
                             </imageView>
                         </subviews>
@@ -37,6 +37,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="splash" width="120" height="120"/>
+        <image name="splash" width="350" height="350"/>
     </resources>
 </document>

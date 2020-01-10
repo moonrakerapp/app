@@ -3,6 +3,8 @@ import UIKit
 final class View: UIView {
     private weak var horizon: Horizon!
     private weak var wheel: Wheel!
+    private weak var graph: Graph!
+    private weak var equalizer: UIView!
     
     private weak var horizonTop: NSLayoutConstraint! {
         didSet {
@@ -46,13 +48,35 @@ final class View: UIView {
         }
     }
     
+    private weak var equalizerY: NSLayoutConstraint! {
+        didSet {
+            oldValue?.isActive = false
+            equalizerY.isActive = true
+        }
+    }
+    
+    private weak var graphBottom: NSLayoutConstraint! {
+        didSet {
+            oldValue?.isActive = false
+            graphBottom.isActive = true
+        }
+    }
+    
     required init?(coder: NSCoder) { nil }
     init() {
         super.init(frame: .zero)
         backgroundColor = .black
         
+        let equalizer = UIView()
+        equalizer.translatesAutoresizingMaskIntoConstraints = false
+        equalizer.isUserInteractionEnabled = false
+        equalizer.layer.addSublayer(Equalizer())
+        addSubview(equalizer)
+        self.equalizer = equalizer
+        
         let graph = Graph()
         addSubview(graph)
+        self.graph = graph
         
         let horizon = Horizon()
         addSubview(horizon)
@@ -63,25 +87,32 @@ final class View: UIView {
         addSubview(wheel)
         self.wheel = wheel
         
+        equalizer.widthAnchor.constraint(equalToConstant: 160).isActive = true
+        equalizer.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        equalizer.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        
         graph.centerXAnchor.constraint(equalTo: horizon.centerXAnchor).isActive = true
-        graph.topAnchor.constraint(equalTo: horizon.centerYAnchor, constant: 50).isActive = true
     }
     
-    override func traitCollectionDidChange(_: UITraitCollection?) {
-        if bounds.height > bounds.width || (bounds.height < bounds.width && bounds.height > 600) {
+    func align() {
+        if bounds.height > bounds.width {
             horizonTop = horizon.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20)
             horizonLeft = horizon.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor)
             horizonRight = horizon.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor)
-            horizonBottom = horizon.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.33)
+            horizonBottom = horizon.heightAnchor.constraint(equalTo: heightAnchor, multiplier: 0.34)
             wheelX = wheel.centerXAnchor.constraint(equalTo: centerXAnchor)
             wheelY = wheel.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -30)
+            equalizerY = equalizer.bottomAnchor.constraint(equalTo: wheel.topAnchor, constant: 40)
+            graphBottom = graph.bottomAnchor.constraint(equalTo: horizon.bottomAnchor, constant: 30)
         } else {
-            horizonTop = horizon.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor)
+            horizonTop = horizon.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 20)
             horizonLeft = horizon.leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: 30)
-            horizonRight = horizon.rightAnchor.constraint(equalTo: wheel.leftAnchor, constant: -30)
-            horizonBottom = horizon.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor)
+            horizonRight = horizon.rightAnchor.constraint(equalTo: centerXAnchor, constant: -40)
+            horizonBottom = horizon.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20)
             wheelX = wheel.rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -30)
             wheelY = wheel.centerYAnchor.constraint(equalTo: centerYAnchor)
+            equalizerY = equalizer.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -20)
+            graphBottom = graph.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: -10)
         }
         layoutIfNeeded()
         horizon.resize()

@@ -23,9 +23,16 @@ let moonraker = Moonraker()
         view = View()
     }
     
+    override func viewWillTransition(to size: CGSize, with: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: with)
+        with.animate(alongsideTransition: { _ in
+            (self.view as! View).align()
+        }, completion: nil)
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         moonraker.date = .init()
-        view.traitCollectionDidChange(traitCollection)
+        (view as! View).align()
     }
 }

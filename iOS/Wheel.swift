@@ -19,7 +19,7 @@ final class Wheel: UIView {
         translatesAutoresizingMaskIntoConstraints = false
         
         widthAnchor.constraint(equalToConstant: 300).isActive = true
-        heightAnchor.constraint(equalToConstant: 320).isActive = true
+        heightAnchor.constraint(equalToConstant: 300).isActive = true
         
         let disk = Disk()
         layer.addSublayer(disk)
@@ -31,19 +31,19 @@ final class Wheel: UIView {
         backward = control("backward")
         stats = control("stats")
         
-        zoom.centerYAnchor.constraint(equalTo: topAnchor, constant: 87).isActive = true
+        zoom.centerYAnchor.constraint(equalTo: topAnchor, constant: 67).isActive = true
         zoom.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         now.centerYAnchor.constraint(equalTo: bottomAnchor, constant: -67).isActive = true
         now.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        forward.centerYAnchor.constraint(equalTo: topAnchor, constant: 170).isActive = true
+        forward.centerYAnchor.constraint(equalTo: topAnchor, constant: 150).isActive = true
         forward.centerXAnchor.constraint(equalTo: rightAnchor, constant: -67).isActive = true
         
-        backward.centerYAnchor.constraint(equalTo: topAnchor, constant: 170).isActive = true
+        backward.centerYAnchor.constraint(equalTo: topAnchor, constant: 150).isActive = true
         backward.centerXAnchor.constraint(equalTo: leftAnchor, constant: 67).isActive = true
         
-        stats.centerYAnchor.constraint(equalTo: topAnchor, constant: 170).isActive = true
+        stats.centerYAnchor.constraint(equalTo: topAnchor, constant: 150).isActive = true
         stats.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         highlight()
@@ -66,7 +66,7 @@ final class Wheel: UIView {
         if valid(point) {
             switch drag {
             case .drag:
-                disk.rotate(atan2(point.x - 150, 170 - point.y))
+                disk.rotate(atan2(point.x - 150, 150 - point.y))
                 rotate(point, point.x - previous.x, point.y - previous.y)
             case .start(var x, var y):
                 x += point.x - previous.x
@@ -125,7 +125,7 @@ final class Wheel: UIView {
     private func rotate(_ point: CGPoint, _ x: CGFloat, _ y: CGFloat) {
         var delta = CGFloat()
         
-        if point.y > 170 {
+        if point.y > 150 {
             delta -= x
         } else {
             delta += x
@@ -165,7 +165,7 @@ final class Wheel: UIView {
     }
     
     private func valid(_ point: CGPoint) -> Bool {
-        let distance = pow(point.x - 150, 2) + pow(point.y - 170, 2)
+        let distance = pow(point.x - 150, 2) + pow(point.y - 150, 2)
         return distance > 900 && distance < 19_600
     }
     

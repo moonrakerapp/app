@@ -20,8 +20,8 @@ final class Equalizer: CAShapeLayer {
                 let i = CGFloat($0)
                 let delta = 4 / max(abs(i - point), 0.2)
                 path.addPath({
-                    $0.move(to: .init(x: 80 + (i * 5), y: 110 - delta))
-                    $0.addLine(to: .init(x: 80 + (i * 5), y: 110 + delta))
+                    $0.move(to: .init(x: 5 + (i * 5), y: 40 - delta))
+                    $0.addLine(to: .init(x: 5 + (i * 5), y: 40 + delta))
                     return $0
                 } (CGMutablePath()))
             }

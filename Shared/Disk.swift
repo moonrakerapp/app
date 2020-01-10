@@ -12,14 +12,14 @@ final class Disk: CAShapeLayer {
         strokeColor = .shade(0.3)
         lineWidth = 3
         path = {
-            $0.addArc(center: .init(x: 150, y: 170), radius: 116, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 150, y: 150), radius: 116, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
         
         let ring = CAShapeLayer()
         ring.lineWidth = 1
         ring.path = {
-            $0.addArc(center: .init(x: 150, y: 170), radius: 112.5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 150, y: 150), radius: 112.5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
         addSublayer(ring)
@@ -29,7 +29,7 @@ final class Disk: CAShapeLayer {
         inner.fillColor = .black
         inner.lineWidth = 1
         inner.path = {
-            $0.addArc(center: .init(x: 150, y: 170), radius: 45, startAngle: 0, endAngle: .pi * 2, clockwise: false)
+            $0.addArc(center: .init(x: 150, y: 150), radius: 45, startAngle: 0, endAngle: .pi * 2, clockwise: false)
             return $0
         } (CGMutablePath())
         addSublayer(inner)
@@ -41,7 +41,7 @@ final class Disk: CAShapeLayer {
         gradient.locations = [0, 1]
         gradient.colors = [CGColor(srgbRed: 0, green: 0, blue: 0, alpha: 0.4), CGColor.clear]
         gradient.cornerRadius = 120
-        gradient.frame = .init(x: 31, y: 51, width: 238, height: 238)
+        gradient.frame = .init(x: 31, y: 31, width: 238, height: 238)
         addSublayer(gradient)
         self.gradient = gradient
     }

@@ -17,7 +17,7 @@ final class Stats: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .init(white: 0, alpha: 0.8)
+        view.backgroundColor = .init(white: 0, alpha: 0.85)
         
         let counter = DateComponentsFormatter()
         let remains = DateComponentsFormatter()
@@ -48,7 +48,7 @@ final class Stats: UIViewController {
         let border = UIView()
         border.translatesAutoresizingMaskIntoConstraints = false
         border.isUserInteractionEnabled = false
-        border.backgroundColor = .shade(0.4)
+        border.backgroundColor = .shade(0.3)
         view.addSubview(border)
         
         let rise = Stat("rise")

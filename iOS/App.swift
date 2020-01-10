@@ -1,9 +1,11 @@
 import Moonraker
 import UIKit
+import CoreLocation
 
 let moonraker = Moonraker()
-@UIApplicationMain final class App: UIViewController, UIApplicationDelegate {
+@UIApplicationMain final class App: UIViewController, UIApplicationDelegate, CLLocationManagerDelegate {
     var window: UIWindow?
+    private let location = CLLocationManager()
     
     func application(_: UIApplication, didFinishLaunchingWithOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         let window = UIWindow()
@@ -23,6 +25,18 @@ let moonraker = Moonraker()
         view = View()
     }
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        location.desiredAccuracy = kCLLocationAccuracyThreeKilometers
+        location.delegate = self
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        moonraker.date = .init()
+        (view as! View).align()
+    }
+    
     override func viewWillTransition(to size: CGSize, with: UIViewControllerTransitionCoordinator) {
         super.viewWillTransition(to: size, with: with)
         with.animate(alongsideTransition: { _ in
@@ -30,9 +44,21 @@ let moonraker = Moonraker()
         }, completion: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        moonraker.date = .init()
-        (view as! View).align()
+    func locationManager(_: CLLocationManager, didChangeAuthorization: CLAuthorizationStatus) {
+        switch didChangeAuthorization {
+        case .denied: break
+        case .notDetermined: location.requestWhenInUseAuthorization()
+        default: location.requestLocation()
+        }
+    }
+    
+    func locationManager(_: CLLocationManager, didUpdateLocations: [CLLocation]) {
+        didUpdateLocations.first.map {
+            moonraker.coords = ($0.coordinate.latitude, $0.coordinate.longitude)
+        }
+    }
+    
+    func locationManager(_: CLLocationManager, didFailWithError: Error) {
+
     }
 }

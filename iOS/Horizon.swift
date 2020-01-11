@@ -27,10 +27,6 @@ final class Horizon: UIView {
         (min(bounds.width, bounds.height) * 0.5) - 2
     }
     
-    private var diameter: CGFloat {
-        radius * 2
-    }
-    
     private var amplitude: CGFloat {
         radius / 3
     }
@@ -116,7 +112,7 @@ final class Horizon: UIView {
     }
     
     private func point(_ deg: CGFloat) -> CGPoint {
-        .init(x: middle.x - radius + (deg / period * diameter), y: middle.y + (cos(deg / 180 * .pi) * amplitude))
+        .init(x: middle.x - radius + (deg / period * (radius * 2)), y: middle.y + (cos(deg / 180 * .pi) * amplitude))
     }
     
     private func animate(_ layer: CAShapeLayer) {

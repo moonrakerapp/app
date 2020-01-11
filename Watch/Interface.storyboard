@@ -6,10 +6,10 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="15501"/>
     </dependencies>
     <scenes>
-        <!--Horizon-->
+        <!--Main-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <hostingController id="3mp-fW-waa" customClass="Horizon" customModule="MoonrakerWatchExtension"/>
+                <hostingController id="3mp-fW-waa" customClass="Main" customModule="MoonrakerWatchExtension"/>
             </objects>
             <point key="canvasLocation" x="34" y="31"/>
         </scene>

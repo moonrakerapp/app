@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
+		<key>Watch.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>iOS.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -17,6 +22,16 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
+		<key>DA432EF723C9DEF4009202D1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>DA432EFA23C9DEF4009202D1</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
 		<key>DAA7AF5323C5CFAA00B829D7</key>
 		<dict>
 			<key>primary</key>

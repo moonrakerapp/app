@@ -12,7 +12,7 @@ struct MainContent: View {
     var body: some View {
         GeometryReader {
             if self.model.info != nil {
-                Moon(viewModel: .init(self.model.info!, size: $0.size, ratio: self.ratio, zoom: false))
+                Sky(viewModel: .init(self.model.info!, size: $0.size, ratio: self.ratio, zoom: false))
             }
         }.edgesIgnoringSafeArea(.all)
             .navigationBarHidden(true)
@@ -24,13 +24,23 @@ struct MainContent: View {
     }
 }
 
+private struct Sky: View {
+    var viewModel: ViewModel
+    
+    var body: some View {
+        Group {
+            Horizon(viewModel: viewModel)
+                .stroke(Color("shade"), style: .init(lineWidth: 3, lineCap: .round))
+            Moon(viewModel: viewModel)
+        }
+    }
+}
+
 private struct Moon: View {
     var viewModel: ViewModel
     
     var body: some View {
-        ZStack {
-            Horizon(viewModel: viewModel)
-                .stroke(Color("shade"), style: .init(lineWidth: 3, lineCap: .round))
+        Group {
             Outer(viewModel: viewModel)
                 .fill(Color.black)
                 .shadow(color: Color("haze"), radius: viewModel.radius,
@@ -82,13 +92,13 @@ private struct Face: Shape {
     func path(in rect: CGRect) -> Path {
         switch viewModel.phase {
         case .new: return new()
-//        case .waxingCrescent: return waxingCrescent()
-//        case .firstQuarter: return firstQuarter()
-//        case .waxingGibbous: return waxingGibbous()
-//        case .full: return full()
-//        case .waningGibbous: return waningGibbous()
-//        case .lastQuarter: return lastQuarter()
-//        case .waningCrescent: return waningCrescent()
+        case .waxingCrescent: return waxingCrescent()
+        case .firstQuarter: return firstQuarter()
+        case .waxingGibbous: return waxingGibbous()
+        case .full: return full()
+        case .waningGibbous: return waningGibbous()
+        case .lastQuarter: return lastQuarter()
+        case .waningCrescent: return waningCrescent()
         default: return new()
         }
     }
@@ -96,66 +106,66 @@ private struct Face: Shape {
     private func new() -> Path {
         .init()
     }
-    /*
+    
     private func waxingCrescent() -> Path {
         var path = Path()
-        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
-        path.addLine(to: .init(x: center.x, y: center.y - animatable.radius))
-        path.addCurve(to: .init(x: center.x, y: center.y + animatable.radius),
-                      control1: .init(x: ((animatable.fraction - 0.5) / -0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / 0.5) * animatable.radius),
-                      control2: .init(x: ((animatable.fraction - 0.5) / -0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / -0.5) * animatable.radius))
+        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addLine(to: .init(x: viewModel.center.x, y: viewModel.center.y - viewModel.radius))
+        path.addCurve(to: .init(x: viewModel.center.x, y: viewModel.center.y + viewModel.radius),
+                      control1: .init(x: ((viewModel.fraction - 0.5) / -0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius),
+                      control2: .init(x: ((viewModel.fraction - 0.5) / -0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / -0.5) * viewModel.radius))
         return path
     }
     
     private func firstQuarter() -> Path {
         var path = Path()
-        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
         return path
     }
     
     private func waxingGibbous() -> Path {
         var path = Path()
-        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
-        path.addLine(to: .init(x: center.x, y: center.y - animatable.radius))
-        path.addCurve(to: .init(x: center.x, y: center.y + animatable.radius),
-                      control1: .init(x: ((animatable.fraction - 0.5) / -0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / -0.5) * animatable.radius),
-                      control2: .init(x: ((animatable.fraction - 0.5) / -0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / 0.5) * animatable.radius))
+        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addLine(to: .init(x: viewModel.center.x, y: viewModel.center.y - viewModel.radius))
+        path.addCurve(to: .init(x: viewModel.center.x, y: viewModel.center.y + viewModel.radius),
+                      control1: .init(x: ((viewModel.fraction - 0.5) / -0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / -0.5) * viewModel.radius),
+                      control2: .init(x: ((viewModel.fraction - 0.5) / -0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius))
         return path
     }
     
     private func full() -> Path {
         var path = Path()
-        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
         return path
     }
     
     private func waningGibbous() -> Path {
         var path = Path()
-        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
-        path.addLine(to: .init(x: center.x, y: center.y + animatable.radius))
-        path.addCurve(to: .init(x: center.x, y: center.y - animatable.radius),
-                      control1: .init(x: center.x + (((animatable.fraction - 0.5) / 0.5) * (animatable.radius * 1.35)),
-                                      y: center.y + ((animatable.fraction - 0.5) / 0.5) * animatable.radius),
-                      control2: .init(x: center.x + ((animatable.fraction - 0.5) / 0.5) * (animatable.radius * 1.35),
-                                      y: center.y + ((animatable.fraction - 0.5) / -0.5) * animatable.radius))
+        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addLine(to: .init(x: viewModel.center.x, y: viewModel.center.y + viewModel.radius))
+        path.addCurve(to: .init(x: viewModel.center.x, y: viewModel.center.y - viewModel.radius),
+                      control1: .init(x: viewModel.center.x + (((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35)),
+                                      y: viewModel.center.y + ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius),
+                      control2: .init(x: viewModel.center.x + ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35),
+                                      y: viewModel.center.y + ((viewModel.fraction - 0.5) / -0.5) * viewModel.radius))
         return path
     }
     
     private func lastQuarter() -> Path {
         var path = Path()
-        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
         return path
     }
     
     private func waningCrescent() -> Path {
         var path = Path()
-        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
-        path.addLine(to: .init(x: center.x, y: center.y + animatable.radius))
-        path.addCurve(to: .init(x: center.x, y: center.y - animatable.radius),
-                      control1: .init(x: ((animatable.fraction - 0.5) / 0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / -0.5) * animatable.radius),
-                      control2: .init(x: ((animatable.fraction - 0.5) / 0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / 0.5) * animatable.radius))
+        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addLine(to: .init(x: viewModel.center.x, y: viewModel.center.y + viewModel.radius))
+        path.addCurve(to: .init(x: viewModel.center.x, y: viewModel.center.y - viewModel.radius),
+                      control1: .init(x: ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / -0.5) * viewModel.radius),
+                      control2: .init(x: ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius))
         return path
-    }*/
+    }
     
     var animatableData: ViewModel {
         get { viewModel }
@@ -167,42 +177,42 @@ private struct Surface: Shape {
     var viewModel: ViewModel
     
     func path(in rect: CGRect) -> Path {
-        var path = Path()/*
+        var path = Path()
         path.addPath({
             var path = Path()
             path.addArc(center:
-                .init(x: animatable.x + (animatable.radius / -3), y: animatable.y + (animatable.radius / -3.5)),
-                        radius: animatable.radius / 2.2, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+                .init(x: viewModel.center.x + (viewModel.radius / -3), y: viewModel.center.y + (viewModel.radius / -3.5)),
+                        radius: viewModel.radius / 2.2, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
             path.addArc(center:
-                .init(x: animatable.x + (animatable.radius / -3), y: animatable.y + (animatable.radius / 2.25)),
-                        radius: animatable.radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+                .init(x: viewModel.center.x + (viewModel.radius / -3), y: viewModel.center.y + (viewModel.radius / 2.25)),
+                        radius: viewModel.radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
             path.addArc(center:
-                .init(x: animatable.x + (animatable.radius / 2), y: animatable.y + (animatable.radius / 3.5)),
-                        radius: animatable.radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+                .init(x: viewModel.center.x + (viewModel.radius / 2), y: viewModel.center.y + (viewModel.radius / 3.5)),
+                        radius: viewModel.radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
             path.addArc(center:
-                .init(x: animatable.x + (animatable.radius / 6), y: animatable.y + (animatable.radius / 1.5)),
-                        radius: animatable.radius / 5, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+                .init(x: viewModel.center.x + (viewModel.radius / 6), y: viewModel.center.y + (viewModel.radius / 1.5)),
+                        radius: viewModel.radius / 5, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
             path.addArc(center:
-                .init(x: animatable.x + (animatable.radius / 4), y: animatable.y + (animatable.radius / -1.5)),
-                        radius: animatable.radius / 6, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+                .init(x: viewModel.center.x + (viewModel.radius / 4), y: viewModel.center.y + (viewModel.radius / -1.5)),
+                        radius: viewModel.radius / 6, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
-        } ())*/
+        } ())
         return path
     }
     
@@ -211,4 +221,3 @@ private struct Surface: Shape {
         set { viewModel = newValue }
     }
 }
-

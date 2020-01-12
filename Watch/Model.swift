@@ -21,12 +21,11 @@ final class Model: ObservableObject {
             self?.info = $0
             self?.percent = "\(Int(round($0.fraction * 1000) / 10))"
             self?.name = NSLocalizedString("Phase.\($0.phase)", comment: "")
-            if abs(moonraker.offset) > 3600 || true {
+            self?.date = ""
+            if abs(moonraker.offset) > 3600 {
                 let day = moonraker.date.addingTimeInterval(moonraker.offset)
-                if abs(moonraker.offset) >= 86400 || true {
+                if abs(moonraker.offset) >= 86400 {
                     self?.date = formatter.string(from: day) + " "
-                } else {
-                    self?.date = ""
                 }
                 self?.date += time.string(from: day)
             }

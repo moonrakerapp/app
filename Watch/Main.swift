@@ -7,43 +7,41 @@ final class Main: WKHostingController<MainContent> {
 
 struct MainContent: View {
     @ObservedObject var model: Model
-    @State private var ratio = CGFloat()
     
     var body: some View {
         GeometryReader {
             if self.model.info != nil {
-                Sky(viewModel: .init(self.model.info!, size: $0.size, ratio: self.ratio, zoom: false))
-                .animation(.easeInOut(duration: 5))
+                Sky(viewModel: .init(self.model.info!, size: $0.size, zoom: false))
             }
         }.edgesIgnoringSafeArea(.all)
             .navigationBarHidden(true)
-            .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    withAnimation(.easeOut(duration: 5)) {
-                        self.ratio = 1
-                    }
-                }
-            }
     }
 }
 
 private struct Sky: View {
-    var viewModel: ViewModel
+    @State private var ratio = Float()
+    let viewModel: ViewModel
     
     var body: some View {
         Group {
-            Horizon(viewModel: viewModel)
+            Horizon(ratio: ratio, viewModel: viewModel)
                 .stroke(Color("shade"), style: .init(lineWidth: 3, lineCap: .round))
-                .animation(.easeInOut(duration: 5))
             Moon(viewModel: viewModel)
                 .rotationEffect(.radians((.pi / -2) + viewModel.angle), anchor: .topLeading)
                 .offset(x: viewModel.center.x, y: viewModel.center.y)
+                .animation(.easeInOut(duration: 1))
+        }.onAppear {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                withAnimation(.easeOut(duration: 1)) {
+                    self.ratio = 1
+                }
+            }
         }
     }
 }
 
 private struct Moon: View {
-    var viewModel: ViewModel
+    let viewModel: ViewModel
     
     var body: some View {
         Group {
@@ -62,33 +60,34 @@ private struct Moon: View {
 }
 
 private struct Horizon: Shape {
-    var viewModel: ViewModel
+    var ratio: Float
+    let viewModel: ViewModel
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
         path.move(to: viewModel.start)
-        path.addLines(viewModel.points)
+        path.addLines(.init(viewModel.points.prefix(.init(.init(viewModel.points.count) * ratio))))
         return path
+    }
+    
+    var animatableData: Float {
+        get { ratio }
+        set { ratio = newValue }
     }
 }
 
 private struct Outer: Shape {
-    var viewModel: ViewModel
+    let viewModel: ViewModel
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
         path.addArc(center: .zero, radius: viewModel.radius + 1, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
         return path
     }
-    
-    var animatableData: ViewModel {
-        get { viewModel }
-        set { viewModel = newValue }
-    }
 }
 
 private struct Face: Shape {
-    var viewModel: ViewModel
+    let viewModel: ViewModel
     
     func path(in rect: CGRect) -> Path {
         switch viewModel.phase {
@@ -166,15 +165,10 @@ private struct Face: Shape {
                       control2: .init(x: ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius))
         return path
     }
-    
-    var animatableData: ViewModel {
-        get { viewModel }
-        set { viewModel = newValue }
-    }
 }
 
 private struct Surface: Shape {
-    var viewModel: ViewModel
+    let viewModel: ViewModel
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
@@ -209,10 +203,5 @@ private struct Surface: Shape {
             return path
         } ())
         return path
-    }
-    
-    var animatableData: ViewModel {
-        get { viewModel }
-        set { viewModel = newValue }
     }
 }

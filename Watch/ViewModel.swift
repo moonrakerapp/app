@@ -1,16 +1,7 @@
 import Moonraker
 import CoreGraphics
-import SwiftUI
 
-struct ViewModel: VectorArithmetic {
-    mutating func scale(by rhs: Double) {
-        <#code#>
-    }
-    
-    var magnitudeSquared: Double
-    
-    static var zero: ViewModel
-    
+struct ViewModel {
     let phase: Phase
     let points: [CGPoint]
     let start: CGPoint
@@ -20,14 +11,14 @@ struct ViewModel: VectorArithmetic {
     let angle: Double
     private static let period = CGFloat(360)
     
-    init(_ info: Info, size: CGSize, ratio: CGFloat, zoom: Bool) {
+    init(_ info: Info, size: CGSize, zoom: Bool) {
         phase = info.phase
         fraction = .init(info.fraction)
         angle = info.angle
         
         let middle = CGPoint(x: size.width / 2, y: size.height / 2)
         let radius = (min(size.width, size.height) * 0.5) - 2
-        let amplitude = (radius / 3) * ratio
+        let amplitude = radius / 3
         start = .init(x: middle.x - radius, y: middle.y + amplitude)
         points = stride(from: 2, through: ViewModel.period, by: 2).map { ViewModel.point(middle, radius, $0, amplitude) }
         center = zoom ? middle :

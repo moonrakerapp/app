@@ -1,11 +1,9 @@
+import Moonraker
 import WatchKit
 
+let moonraker = Moonraker()
 final class App: NSObject, WKExtensionDelegate {
-    override init() {
-        super.init()
-    }
-    
     func applicationDidBecomeActive() {
-
+        moonraker.date = .init()
     }
 }

@@ -46,7 +46,7 @@ private struct Moon: View {
             Outer(viewModel: viewModel)
                 .fill(Color.black)
                 .shadow(color: Color("haze"), radius: viewModel.radius,
-                        x: viewModel.radius - viewModel.center.x, y: viewModel.radius - viewModel.center.y)
+                        x: viewModel.radius, y: viewModel.radius)
             Outer(viewModel: viewModel)
                 .stroke(Color("shade"), style: .init(lineWidth: 2, lineCap: .round))
             Face(viewModel: viewModel)

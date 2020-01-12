@@ -19,13 +19,16 @@ struct MainContent: View {
 }
 
 private struct Sky: View {
-    @State private var ratio = Float()
+    @State private var ratio = CGFloat()
     let viewModel: ViewModel
     
     var body: some View {
         Group {
             Horizon(ratio: ratio, viewModel: viewModel)
                 .stroke(Color("shade"), style: .init(lineWidth: 3, lineCap: .round))
+            Dash(ratio: ratio, viewModel: viewModel)
+                .stroke(style: StrokeStyle(lineWidth: 1, dash: [1, 3]))
+                .foregroundColor(Color("shade"))
             Moon(viewModel: viewModel)
                 .rotationEffect(.radians((.pi / -2) + viewModel.angle), anchor: .topLeading)
                 .offset(x: viewModel.center.x, y: viewModel.center.y)
@@ -60,7 +63,7 @@ private struct Moon: View {
 }
 
 private struct Horizon: Shape {
-    var ratio: Float
+    var ratio: CGFloat
     let viewModel: ViewModel
     
     func path(in rect: CGRect) -> Path {
@@ -70,7 +73,24 @@ private struct Horizon: Shape {
         return path
     }
     
-    var animatableData: Float {
+    var animatableData: CGFloat {
+        get { ratio }
+        set { ratio = newValue }
+    }
+}
+
+private struct Dash: Shape {
+    var ratio: CGFloat
+    let viewModel: ViewModel
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: .init(x: viewModel.middle.x - (viewModel.amplitude * ratio), y: viewModel.middle.y))
+        path.addLine(to: .init(x: viewModel.middle.x + (viewModel.amplitude * ratio), y: viewModel.middle.y))
+        return path
+    }
+    
+    var animatableData: CGFloat {
         get { ratio }
         set { ratio = newValue }
     }

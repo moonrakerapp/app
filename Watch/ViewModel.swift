@@ -4,11 +4,13 @@ import CoreGraphics
 struct ViewModel {
     let phase: Phase
     let points: [CGPoint]
+    let middle: CGPoint
     let start: CGPoint
     let center: CGPoint
     let radius: CGFloat
     let fraction: CGFloat
     let angle: Double
+    let amplitude: CGFloat
     private static let period = CGFloat(360)
     
     init(_ info: Info, size: CGSize, zoom: Bool) {
@@ -19,10 +21,13 @@ struct ViewModel {
         let middle = CGPoint(x: size.width / 2, y: size.height / 2)
         let radius = (min(size.width, size.height) * 0.5) - 2
         let amplitude = radius / 3
+        
         start = .init(x: middle.x - radius, y: middle.y + amplitude)
         points = stride(from: 2, through: ViewModel.period, by: 2).map { ViewModel.point(middle, radius, $0, amplitude) }
         center = zoom ? middle :
             ViewModel.point(middle, radius, .init(info.azimuth >= 0 ? (.pi * 1.5) - info.altitude : info.altitude + (.pi / 2)) * 180 / .pi, amplitude)
+        self.middle = middle
+        self.amplitude = amplitude
         self.radius = zoom ? radius / 2 : radius / 5
     }
     

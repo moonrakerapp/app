@@ -10,12 +10,13 @@ struct MainContent: View {
     @State private var ratio = CGFloat()
     @State private var zoom = false
     
+    
     var body: some View {
         ZStack {
             if self.model.info != nil {
                 GeometryReader { g in
                     Sky(ratio: self.$ratio, viewModel: .init(self.model.info!, size: g.size, zoom: self.zoom))
-                }
+                }.edgesIgnoringSafeArea(.all)
             }
             Button(action: {
                 self.zoom.toggle()
@@ -23,7 +24,23 @@ struct MainContent: View {
                     self.ratio = self.zoom ? 0 : 1
                 }
             }) {
-                Color.clear
+                VStack {
+                    Spacer()
+                    HStack {
+                        Text(model.percent)
+                            .font(Font.body.bold())
+                            .foregroundColor(Color("haze"))
+                        Text("%")
+                            .font(.footnote)
+                            .foregroundColor(Color("shade"))
+                    }
+                    Text(model.name)
+                        .font(Font.caption.bold())
+                        .foregroundColor(Color("haze"))
+                    Text(model.date)
+                        .font(.footnote)
+                        .foregroundColor(Color("shade"))
+                }
             }.background(Color.clear)
                 .accentColor(.clear)
         }.edgesIgnoringSafeArea(.all)

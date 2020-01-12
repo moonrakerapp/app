@@ -24,7 +24,7 @@ struct ViewModel {
         
         start = .init(x: middle.x - radius, y: middle.y + amplitude)
         points = stride(from: 2, through: ViewModel.period, by: 2).map { ViewModel.point(middle, radius, $0, amplitude) }
-        center = zoom ? middle :
+        center = zoom ? .init(x: middle.x, y: middle.y - amplitude) :
             ViewModel.point(middle, radius, .init(info.azimuth >= 0 ? (.pi * 1.5) - info.altitude : info.altitude + (.pi / 2)) * 180 / .pi, amplitude)
         self.middle = middle
         self.amplitude = amplitude

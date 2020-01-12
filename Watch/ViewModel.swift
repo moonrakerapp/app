@@ -2,12 +2,12 @@ import Moonraker
 import CoreGraphics
 
 struct ViewModel {
+    var radius: CGFloat
     let phase: Phase
     let points: [CGPoint]
     let middle: CGPoint
     let start: CGPoint
     let center: CGPoint
-    let radius: CGFloat
     let fraction: CGFloat
     let angle: Double
     let amplitude: CGFloat
@@ -28,7 +28,7 @@ struct ViewModel {
             ViewModel.point(middle, radius, .init(info.azimuth >= 0 ? (.pi * 1.5) - info.altitude : info.altitude + (.pi / 2)) * 180 / .pi, amplitude)
         self.middle = middle
         self.amplitude = amplitude
-        self.radius = zoom ? radius / 2 : radius / 5
+        self.radius = zoom ? radius / 3 : radius / 8
     }
     
     private static func point(_ middle: CGPoint, _ radius: CGFloat, _ deg: CGFloat, _ amplitude: CGFloat) -> CGPoint {

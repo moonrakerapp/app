@@ -7,19 +7,38 @@ final class Main: WKHostingController<MainContent> {
 
 struct MainContent: View {
     @ObservedObject var model: Model
+    @State private var ratio = CGFloat()
+    @State private var zoom = false
     
     var body: some View {
-        GeometryReader {
+        ZStack {
             if self.model.info != nil {
-                Sky(viewModel: .init(self.model.info!, size: $0.size, zoom: false))
+                GeometryReader { g in
+                    Sky(ratio: self.$ratio, viewModel: .init(self.model.info!, size: g.size, zoom: self.zoom))
+                }
             }
+            Button(action: {
+                self.zoom.toggle()
+                withAnimation(.easeOut(duration: 1)) {
+                    self.ratio = self.zoom ? 0 : 1
+                }
+            }) {
+                Color.clear
+            }.background(Color.clear)
+                .accentColor(.clear)
         }.edgesIgnoringSafeArea(.all)
-            .navigationBarHidden(true)
+            .navigationBarHidden(true).onAppear {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    withAnimation(.easeOut(duration: 1)) {
+                        self.ratio = 1
+                    }
+                }
+            }
     }
 }
 
 private struct Sky: View {
-    @State private var ratio = CGFloat()
+    @Binding var ratio: CGFloat
     let viewModel: ViewModel
     
     var body: some View {
@@ -32,13 +51,7 @@ private struct Sky: View {
             Moon(viewModel: viewModel)
                 .rotationEffect(.radians((.pi / -2) + viewModel.angle), anchor: .topLeading)
                 .offset(x: viewModel.center.x, y: viewModel.center.y)
-                .animation(.easeInOut(duration: 1))
-        }.onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                withAnimation(.easeOut(duration: 1)) {
-                    self.ratio = 1
-                }
-            }
+                .animation(.easeInOut(duration: 1.5))
         }
     }
 }
@@ -97,17 +110,22 @@ private struct Dash: Shape {
 }
 
 private struct Outer: Shape {
-    let viewModel: ViewModel
+    var viewModel: ViewModel
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
         path.addArc(center: .zero, radius: viewModel.radius + 1, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
         return path
     }
+    
+    var animatableData: CGFloat {
+        get { viewModel.radius }
+        set { viewModel.radius = newValue }
+    }
 }
 
 private struct Face: Shape {
-    let viewModel: ViewModel
+    var viewModel: ViewModel
     
     func path(in rect: CGRect) -> Path {
         switch viewModel.phase {
@@ -185,10 +203,15 @@ private struct Face: Shape {
                       control2: .init(x: ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius))
         return path
     }
+    
+    var animatableData: CGFloat {
+        get { viewModel.radius }
+        set { viewModel.radius = newValue }
+    }
 }
 
 private struct Surface: Shape {
-    let viewModel: ViewModel
+    var viewModel: ViewModel
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
@@ -223,5 +246,10 @@ private struct Surface: Shape {
             return path
         } ())
         return path
+    }
+    
+    var animatableData: CGFloat {
+        get { viewModel.radius }
+        set { viewModel.radius = newValue }
     }
 }

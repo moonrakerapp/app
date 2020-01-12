@@ -31,6 +31,7 @@ struct MainContent: View {
                         Text(model.percent)
                             .font(Font.body.bold())
                             .foregroundColor(Color("haze"))
+                            .padding(.trailing, -7)
                         Text("%")
                             .font(.footnote)
                             .foregroundColor(Color("shade"))
@@ -47,7 +48,7 @@ struct MainContent: View {
                 .focusable()
                 .digitalCrownRotation($crown)
                 .onReceive(Just(crown)) {
-                    let offset = TimeInterval($0 * 360)
+                    let offset = TimeInterval($0 * 500)
                     if moonraker.offset != offset {
                         moonraker.offset = offset
                     }

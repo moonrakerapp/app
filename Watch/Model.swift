@@ -25,7 +25,7 @@ final class Model: ObservableObject {
             if abs(moonraker.offset) > 3600 {
                 let day = moonraker.date.addingTimeInterval(moonraker.offset)
                 if abs(moonraker.offset) >= 86400 {
-                    self?.date = formatter.string(from: day) + " "
+                    self?.date = formatter.string(from: day) + " - "
                 }
                 self?.date += time.string(from: day)
             }

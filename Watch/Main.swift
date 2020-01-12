@@ -32,6 +32,8 @@ private struct Sky: View {
             Horizon(viewModel: viewModel)
                 .stroke(Color("shade"), style: .init(lineWidth: 3, lineCap: .round))
             Moon(viewModel: viewModel)
+//                .rotationEffect(.radians((.pi / -2) + viewModel.angle))
+                .offset(x: viewModel.center.x, y: viewModel.center.y)
         }
     }
 }
@@ -76,7 +78,7 @@ private struct Outer: Shape {
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.addArc(center: viewModel.center, radius: viewModel.radius + 1, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+        path.addArc(center: .zero, radius: viewModel.radius + 1, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
         return path
     }
     
@@ -99,7 +101,6 @@ private struct Face: Shape {
         case .waningGibbous: return waningGibbous()
         case .lastQuarter: return lastQuarter()
         case .waningCrescent: return waningCrescent()
-        default: return new()
         }
     }
     
@@ -109,9 +110,9 @@ private struct Face: Shape {
     
     private func waxingCrescent() -> Path {
         var path = Path()
-        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
-        path.addLine(to: .init(x: viewModel.center.x, y: viewModel.center.y - viewModel.radius))
-        path.addCurve(to: .init(x: viewModel.center.x, y: viewModel.center.y + viewModel.radius),
+        path.addArc(center: .zero, radius: viewModel.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addLine(to: .init(x: 0, y: -viewModel.radius))
+        path.addCurve(to: .init(x: 0, y: viewModel.radius),
                       control1: .init(x: ((viewModel.fraction - 0.5) / -0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius),
                       control2: .init(x: ((viewModel.fraction - 0.5) / -0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / -0.5) * viewModel.radius))
         return path
@@ -119,15 +120,15 @@ private struct Face: Shape {
     
     private func firstQuarter() -> Path {
         var path = Path()
-        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addArc(center: .zero, radius: viewModel.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
         return path
     }
     
     private func waxingGibbous() -> Path {
         var path = Path()
         path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
-        path.addLine(to: .init(x: viewModel.center.x, y: viewModel.center.y - viewModel.radius))
-        path.addCurve(to: .init(x: viewModel.center.x, y: viewModel.center.y + viewModel.radius),
+        path.addLine(to: .init(x: 0, y: -viewModel.radius))
+        path.addCurve(to: .init(x: 0, y: viewModel.radius),
                       control1: .init(x: ((viewModel.fraction - 0.5) / -0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / -0.5) * viewModel.radius),
                       control2: .init(x: ((viewModel.fraction - 0.5) / -0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius))
         return path
@@ -135,33 +136,33 @@ private struct Face: Shape {
     
     private func full() -> Path {
         var path = Path()
-        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+        path.addArc(center: .zero, radius: viewModel.radius, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
         return path
     }
     
     private func waningGibbous() -> Path {
         var path = Path()
-        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
-        path.addLine(to: .init(x: viewModel.center.x, y: viewModel.center.y + viewModel.radius))
-        path.addCurve(to: .init(x: viewModel.center.x, y: viewModel.center.y - viewModel.radius),
-                      control1: .init(x: viewModel.center.x + (((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35)),
-                                      y: viewModel.center.y + ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius),
-                      control2: .init(x: viewModel.center.x + ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35),
-                                      y: viewModel.center.y + ((viewModel.fraction - 0.5) / -0.5) * viewModel.radius))
+        path.addArc(center: .zero, radius: viewModel.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addLine(to: .init(x: 0, y: viewModel.radius))
+        path.addCurve(to: .init(x: 0, y: -viewModel.radius),
+                      control1: .init(x: ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35),
+                                      y: ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius),
+                      control2: .init(x: ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35),
+                                      y: ((viewModel.fraction - 0.5) / -0.5) * viewModel.radius))
         return path
     }
     
     private func lastQuarter() -> Path {
         var path = Path()
-        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addArc(center: .zero, radius: viewModel.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
         return path
     }
     
     private func waningCrescent() -> Path {
         var path = Path()
-        path.addArc(center: viewModel.center, radius: viewModel.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
-        path.addLine(to: .init(x: viewModel.center.x, y: viewModel.center.y + viewModel.radius))
-        path.addCurve(to: .init(x: viewModel.center.x, y: viewModel.center.y - viewModel.radius),
+        path.addArc(center: .zero, radius: viewModel.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addLine(to: .init(x: 0, y: viewModel.radius))
+        path.addCurve(to: .init(x: 0, y: -viewModel.radius),
                       control1: .init(x: ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / -0.5) * viewModel.radius),
                       control2: .init(x: ((viewModel.fraction - 0.5) / 0.5) * (viewModel.radius * 1.35), y: ((viewModel.fraction - 0.5) / 0.5) * viewModel.radius))
         return path
@@ -180,36 +181,31 @@ private struct Surface: Shape {
         var path = Path()
         path.addPath({
             var path = Path()
-            path.addArc(center:
-                .init(x: viewModel.center.x + (viewModel.radius / -3), y: viewModel.center.y + (viewModel.radius / -3.5)),
+            path.addArc(center: .init(x: viewModel.radius / -3, y: viewModel.radius / -3.5),
                         radius: viewModel.radius / 2.2, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
-            path.addArc(center:
-                .init(x: viewModel.center.x + (viewModel.radius / -3), y: viewModel.center.y + (viewModel.radius / 2.25)),
+            path.addArc(center: .init(x: viewModel.radius / -3, y: viewModel.radius / 2.25),
                         radius: viewModel.radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
-            path.addArc(center:
-                .init(x: viewModel.center.x + (viewModel.radius / 2), y: viewModel.center.y + (viewModel.radius / 3.5)),
+            path.addArc(center: .init(x: viewModel.radius / 2, y: viewModel.radius / 3.5),
                         radius: viewModel.radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
-            path.addArc(center:
-                .init(x: viewModel.center.x + (viewModel.radius / 6), y: viewModel.center.y + (viewModel.radius / 1.5)),
+            path.addArc(center: .init(x: viewModel.radius / 6, y: viewModel.radius / 1.5),
                         radius: viewModel.radius / 5, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
-            path.addArc(center:
-                .init(x: viewModel.center.x + (viewModel.radius / 4), y: viewModel.center.y + (viewModel.radius / -1.5)),
+            path.addArc(center: .init(x: viewModel.radius / 4, y: viewModel.radius / -1.5),
                         radius: viewModel.radius / 6, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())

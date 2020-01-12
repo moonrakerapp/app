@@ -9,11 +9,13 @@ struct ViewModel {
     let radius: CGFloat
     let fraction: CGFloat
     let ratio: CGFloat
+    let angle: Double
     private static let period = CGFloat(360)
     
     init(_ info: Info, size: CGSize, ratio: CGFloat, zoom: Bool) {
         phase = info.phase
         fraction = .init(info.fraction)
+        angle = info.angle
         self.ratio = ratio
         
         let middle = CGPoint(x: size.width / 2, y: size.height / 2)

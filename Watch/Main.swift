@@ -13,12 +13,15 @@ struct MainContent: View {
         GeometryReader {
             if self.model.info != nil {
                 Sky(viewModel: .init(self.model.info!, size: $0.size, ratio: self.ratio, zoom: false))
+                .animation(.easeInOut(duration: 5))
             }
         }.edgesIgnoringSafeArea(.all)
             .navigationBarHidden(true)
             .onAppear {
-                withAnimation(.easeOut(duration: 1.5)) {
-                    self.ratio = 1
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                    withAnimation(.easeOut(duration: 5)) {
+                        self.ratio = 1
+                    }
                 }
             }
     }
@@ -31,6 +34,7 @@ private struct Sky: View {
         Group {
             Horizon(viewModel: viewModel)
                 .stroke(Color("shade"), style: .init(lineWidth: 3, lineCap: .round))
+                .animation(.easeInOut(duration: 5))
             Moon(viewModel: viewModel)
                 .rotationEffect(.radians((.pi / -2) + viewModel.angle), anchor: .topLeading)
                 .offset(x: viewModel.center.x, y: viewModel.center.y)
@@ -65,11 +69,6 @@ private struct Horizon: Shape {
         path.move(to: viewModel.start)
         path.addLines(viewModel.points)
         return path
-    }
-    
-    var animatableData: ViewModel {
-        get { viewModel }
-        set { viewModel = newValue }
     }
 }
 

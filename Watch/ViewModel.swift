@@ -1,14 +1,22 @@
 import Moonraker
 import CoreGraphics
+import SwiftUI
 
-struct ViewModel {
+struct ViewModel: VectorArithmetic {
+    mutating func scale(by rhs: Double) {
+        <#code#>
+    }
+    
+    var magnitudeSquared: Double
+    
+    static var zero: ViewModel
+    
     let phase: Phase
     let points: [CGPoint]
     let start: CGPoint
     let center: CGPoint
     let radius: CGFloat
     let fraction: CGFloat
-    let ratio: CGFloat
     let angle: Double
     private static let period = CGFloat(360)
     
@@ -16,21 +24,18 @@ struct ViewModel {
         phase = info.phase
         fraction = .init(info.fraction)
         angle = info.angle
-        self.ratio = ratio
         
         let middle = CGPoint(x: size.width / 2, y: size.height / 2)
         let radius = (min(size.width, size.height) * 0.5) - 2
-        let amplitude = radius / 3
-        start = .init(x: middle.x - radius, y: middle.y + (amplitude * ratio))
-        points = stride(from: 2, through: ViewModel.period, by: 2).map { ViewModel.point(middle, radius, $0, amplitude, ratio) }
+        let amplitude = (radius / 3) * ratio
+        start = .init(x: middle.x - radius, y: middle.y + amplitude)
+        points = stride(from: 2, through: ViewModel.period, by: 2).map { ViewModel.point(middle, radius, $0, amplitude) }
         center = zoom ? middle :
-            ViewModel.point(middle, radius,
-                            .init(info.azimuth >= 0 ? (.pi * 1.5) - info.altitude : info.altitude + (.pi / 2)) * 180 / .pi,
-                            amplitude, ratio)
+            ViewModel.point(middle, radius, .init(info.azimuth >= 0 ? (.pi * 1.5) - info.altitude : info.altitude + (.pi / 2)) * 180 / .pi, amplitude)
         self.radius = zoom ? radius / 2 : radius / 5
     }
     
-    private static func point(_ middle: CGPoint, _ radius: CGFloat, _ deg: CGFloat, _ amplitude: CGFloat, _ ratio: CGFloat) -> CGPoint {
-        .init(x: middle.x - radius + (deg / period * (radius * 2)), y: middle.y + (cos(deg / 180 * .pi) * (amplitude * ratio)))
+    private static func point(_ middle: CGPoint, _ radius: CGFloat, _ deg: CGFloat, _ amplitude: CGFloat) -> CGPoint {
+        .init(x: middle.x - radius + (deg / period * (radius * 2)), y: middle.y + (cos(deg / 180 * .pi) * amplitude))
     }
 }

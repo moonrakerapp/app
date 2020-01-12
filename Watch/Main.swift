@@ -91,79 +91,78 @@ private struct Face: Shape {
     
     func path(in rect: CGRect) -> Path {
         switch animatable.phase {
-        case .new: return new(rect)
-        case .waxingCrescent: return waxingCrescent(rect)
-        case .firstQuarter: return firstQuarter(rect)
-        default: return new(rect)
+        case .new: return new()
+        case .waxingCrescent: return waxingCrescent()
+        case .firstQuarter: return firstQuarter()
+        case .waxingGibbous: return waxingGibbous()
+        case .full: return full()
+        case .waningGibbous: return waningGibbous()
+        case .lastQuarter: return lastQuarter()
+        case .waningCrescent: return waningCrescent()
         }
     }
     
-    private func new(_ rect: CGRect) -> Path {
+    private func new() -> Path {
         .init()
     }
     
-    private func waxingCrescent(_ rect: CGRect) -> Path {
+    private func waxingCrescent() -> Path {
         var path = Path()
         path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
-        path.addLine(to: .init(x: center.x, y: -animatable.radius))
-        path.addCurve(to: .init(x: center.y, y: animatable.radius),
+        path.addLine(to: .init(x: center.x, y: center.y - animatable.radius))
+        path.addCurve(to: .init(x: center.x, y: center.y + animatable.radius),
                       control1: .init(x: ((animatable.fraction - 0.5) / -0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / 0.5) * animatable.radius),
                       control2: .init(x: ((animatable.fraction - 0.5) / -0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / -0.5) * animatable.radius))
         return path
     }
     
-    private func firstQuarter(_ rect: CGRect) -> Path {
+    private func firstQuarter() -> Path {
         var path = Path()
         path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
         return path
     }
-    /*
-    private func waxingGibbous() -> CGPath {
-        {
-            $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
-            $0.addLine(to: .init(x: 0, y: -radius))
-            $0.addCurve(to: .init(x: 0, y: radius),
-                        control1: .init(x: .init((fraction - 0.5) / -0.5) * (radius * 1.35), y: .init((fraction - 0.5) / -0.5) * radius),
-                        control2: .init(x: .init((fraction - 0.5) / -0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius))
-            return $0
-        } (CGMutablePath())
+    
+    private func waxingGibbous() -> Path {
+        var path = Path()
+        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addLine(to: .init(x: center.x, y: center.y - animatable.radius))
+        path.addCurve(to: .init(x: center.x, y: center.y + animatable.radius),
+                      control1: .init(x: ((animatable.fraction - 0.5) / -0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / -0.5) * animatable.radius),
+                      control2: .init(x: ((animatable.fraction - 0.5) / -0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / 0.5) * animatable.radius))
+        return path
     }
     
-    private func full() -> CGPath {
-        {
-            $0.addArc(center: .init(), radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
-            return $0
-        } (CGMutablePath())
+    private func full() -> Path {
+        var path = Path()
+        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+        return path
     }
     
-    private func waningGibbous() -> CGPath {
-        {
-            $0.addArc(center: .init(), radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
-            $0.addLine(to: .init(x: 0, y: radius))
-            $0.addCurve(to: .init(x: 0, y: -radius),
-                        control1: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius),
-                        control2: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / -0.5) * radius))
-            return $0
-        } (CGMutablePath())
+    private func waningGibbous() -> Path {
+        var path = Path()
+        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addLine(to: .init(x: center.x, y: center.y + animatable.radius))
+        path.addCurve(to: .init(x: center.x, y: center.y - animatable.radius),
+                      control1: .init(x: ((animatable.fraction - 0.5) / 0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / 0.5) * animatable.radius),
+                      control2: .init(x: ((animatable.fraction - 0.5) / 0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / -0.5) * animatable.radius))
+        return path
     }
     
-    private func lastQuarter() -> CGPath {
-        {
-            $0.addArc(center: .init(), radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
-            return $0
-        } (CGMutablePath())
+    private func lastQuarter() -> Path {
+        var path = Path()
+        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        return path
     }
     
-    private func waningCrescent() -> CGPath {
-        {
-            $0.addArc(center: .init(), radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
-            $0.addLine(to: .init(x: 0, y: radius))
-            $0.addCurve(to: .init(x: 0, y: -radius),
-                        control1: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / -0.5) * radius),
-                        control2: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius))
-            return $0
-        } (CGMutablePath())
-    }*/
+    private func waningCrescent() -> Path {
+        var path = Path()
+        path.addArc(center: center, radius: animatable.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addLine(to: .init(x: center.x, y: center.y + animatable.radius))
+        path.addCurve(to: .init(x: center.x, y: center.y - animatable.radius),
+                      control1: .init(x: ((animatable.fraction - 0.5) / 0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / -0.5) * animatable.radius),
+                      control2: .init(x: ((animatable.fraction - 0.5) / 0.5) * (animatable.radius * 1.35), y: ((animatable.fraction - 0.5) / 0.5) * animatable.radius))
+        return path
+    }
     
     var animatableData: Animatable {
         get { animatable }

@@ -32,7 +32,7 @@ private struct Sky: View {
             Horizon(viewModel: viewModel)
                 .stroke(Color("shade"), style: .init(lineWidth: 3, lineCap: .round))
             Moon(viewModel: viewModel)
-//                .rotationEffect(.radians((.pi / -2) + viewModel.angle))
+                .rotationEffect(.radians((.pi / -2) + viewModel.angle), anchor: .topLeading)
                 .offset(x: viewModel.center.x, y: viewModel.center.y)
         }
     }

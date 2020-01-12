@@ -46,6 +46,12 @@
 		<key>NSExtensionPointIdentifier</key>
 		<string>com.apple.watchkit</string>
 	</dict>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Moonraker can display Moon information based on your current location.</string>
+	<key>NSLocationUsageDescription</key>
+	<string>Moonraker can display Moon information based on your current location.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Moonraker can display Moon information based on your current location.</string>
 	<key>WKExtensionDelegateClassName</key>
 	<string>$(PRODUCT_MODULE_NAME).App</string>
 	<key>WKWatchOnly</key>

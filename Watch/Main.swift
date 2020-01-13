@@ -189,11 +189,13 @@ private struct Face: Shape {
     
     private func waxingGibbous() -> Path {
         var path = Path()
-        path.addArc(center: render.center, radius: render.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addArc(center: .zero, radius: render.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
         path.addLine(to: .init(x: 0, y: -render.radius))
         path.addCurve(to: .init(x: 0, y: render.radius),
-                      control1: .init(x: ((render.fraction - 0.5) / -0.5) * (render.radius * 1.35), y: ((render.fraction - 0.5) / -0.5) * render.radius),
-                      control2: .init(x: ((render.fraction - 0.5) / -0.5) * (render.radius * 1.35), y: ((render.fraction - 0.5) / 0.5) * render.radius))
+                      control1: .init(x: ((render.fraction - 0.5) / -0.5) * (render.radius * 1.35),
+                                      y: ((render.fraction - 0.5) / -0.5) * render.radius),
+                      control2: .init(x: ((render.fraction - 0.5) / -0.5) * (render.radius * 1.35),
+                                      y: ((render.fraction - 0.5) / 0.5) * render.radius))
         return path
     }
     

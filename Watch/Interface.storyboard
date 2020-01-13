@@ -17,12 +17,23 @@
             </objects>
             <point key="canvasLocation" x="34" y="31"/>
         </scene>
-        <!--Stats-->
+        <!--Times-->
         <scene sceneID="c1d-Iz-6RP">
             <objects>
-                <hostingController id="HfL-f8-Pmt" customClass="Stats" customModule="MoonrakerWatchExtension"/>
+                <hostingController id="HfL-f8-Pmt" customClass="Times" customModule="MoonrakerWatchExtension">
+                    <connections>
+                        <segue destination="07c-xw-2LR" kind="relationship" relationship="nextPage" id="gzP-Iy-vaV"/>
+                    </connections>
+                </hostingController>
             </objects>
             <point key="canvasLocation" x="276" y="30"/>
+        </scene>
+        <!--Dates-->
+        <scene sceneID="Dlb-G2-SoK">
+            <objects>
+                <hostingController id="07c-xw-2LR" customClass="Dates" customModule="MoonrakerWatchExtension"/>
+            </objects>
+            <point key="canvasLocation" x="529" y="30"/>
         </scene>
     </scenes>
 </document>

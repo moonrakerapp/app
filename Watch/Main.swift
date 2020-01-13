@@ -2,11 +2,11 @@ import SwiftUI
 import Combine
 
 final class Main: WKHostingController<MainContent> {
-    override var body: MainContent { .init(model: Model()) }
+    override var body: MainContent { .init(model: .init()) }
 }
 
 struct MainContent: View {
-    @ObservedObject var model: Model
+    @ObservedObject var model: MainModel
     @State private var ratio = CGFloat()
     @State private var crown = Double()
     @State private var zoom = false
@@ -50,7 +50,7 @@ struct MainContent: View {
                         moonraker.offset = offset
                     }
                 }
-            if !self.model.date.isEmpty {
+            if !model.date.isEmpty {
                 VStack {
                     Button(action: {
                         self.crown = 0

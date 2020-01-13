@@ -82,7 +82,7 @@ final class Stats: UIViewController {
                 set.date.text = "-"
                 set.counter.text = ""
             case .set(let _set):
-                rise.date.text = .key("Stats.rise") + " -"
+                rise.date.text = "-"
                 rise.counter.text = ""
                 set.date.text = time.string(from: _set)
             case .both(let _rise, let _set):

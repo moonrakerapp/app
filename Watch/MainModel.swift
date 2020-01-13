@@ -2,7 +2,7 @@ import Moonraker
 import Foundation
 import Combine
 
-final class Model: ObservableObject {
+final class MainModel: ObservableObject {
     @Published private(set) var info: Info?
     @Published private(set) var percent = ""
     @Published private(set) var name = ""
@@ -17,17 +17,17 @@ final class Model: ObservableObject {
         let time = DateFormatter()
         time.dateFormat = "h a"
         
-        sub = moonraker.info.receive(on: DispatchQueue.main).sink { [weak self] in
-            self?.info = $0
-            self?.percent = "\(Int(round($0.fraction * 1000) / 10))"
-            self?.name = NSLocalizedString("Phase.\($0.phase)", comment: "")
-            self?.date = ""
+        sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+            self.info = $0
+            self.percent = "\(Int(round($0.fraction * 1000) / 10))"
+            self.name = NSLocalizedString("Phase.\($0.phase)", comment: "")
+            self.date = ""
             if abs(moonraker.offset) > 3600 {
                 let day = moonraker.date.addingTimeInterval(moonraker.offset)
                 if abs(moonraker.offset) >= 86400 {
-                    self?.date = formatter.string(from: day) + " - "
+                    self.date = formatter.string(from: day) + " - "
                 }
-                self?.date += time.string(from: day)
+                self.date += time.string(from: day)
             }
         }
     }

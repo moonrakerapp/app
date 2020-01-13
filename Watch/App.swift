@@ -18,6 +18,10 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
         }
     }
     
+    func applicationWillResignActive() {
+        WKExtension.shared().rootInterfaceController!.becomeCurrentPage()
+    }
+    
     func locationManager(_: CLLocationManager, didChangeAuthorization: CLAuthorizationStatus) {
         switch didChangeAuthorization {
         case .denied: break

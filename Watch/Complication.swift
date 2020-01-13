@@ -2,34 +2,18 @@ import ClockKit
 
 final class Complication: NSObject, CLKComplicationDataSource {
     func getCurrentTimelineEntry(for complication: CLKComplication, withHandler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
-
-
-            
-    //        let template = CLKComplicationTemplateModularSmallStackImage()
-            
-    //        UIGraphicsBeginImageContext(.init(width: Argonaut.tile * 2, height: Argonaut.tile * 2))
-    //        UIGraphicsGetCurrentContext()!.translateBy(x: 0, y: .init(Argonaut.tile) * 2)
-    //        UIGraphicsGetCurrentContext()!.scaleBy(x: 1, y: -1)
-    //        UIGraphicsGetCurrentContext()!.draw(cgImage!, in:
-    //            .init(x: Argonaut.tile * 2 * -.init(x), y: (Argonaut.tile * 2 * .init(y + 1)) - .init(cgImage!.height), width: .init(cgImage!.width), height: .init(cgImage!.height)))
-    //
-    //        split.data = UIImage(cgImage: UIGraphicsGetCurrentContext()!.makeImage()!).pngData()!
-    //        UIGraphicsEndImageContext()
-            
-            // Set the data providers.
-    //        template.line1ImageProvider = CLKImageProvider(onePieceImage: UIGraphicsEndImageContext())
         withHandler(.init(date: .init(), complicationTemplate: {
             switch $0 {
             case .circularSmall: return circularSmall()
-            case .extraLarge: return .init()
-            case .modularSmall: return .init()
-            case .modularLarge: return .init()
-            case .utilitarianSmall: return .init()
-            case .utilitarianSmallFlat: return .init()
-            case .utilitarianLarge: return .init()
-            case .graphicCorner: return .init()
+            case .extraLarge: return extraLarge()
+            case .modularSmall: return modularSmall()
+            case .modularLarge: return modularLarge()
+            case .utilitarianSmall: return utilitarianSmall()
+            case .utilitarianSmallFlat: return utilitarianSmallFlat()
+            case .utilitarianLarge: return utilitarianFlat()
+            case .graphicCorner: return graphicCorner()
             case .graphicCircular: return graphicCircular()
-            case .graphicBezel: return .init()
+            case .graphicBezel: return graphicBezel()
             case .graphicRectangular: return .init()
             @unknown default: return .init() }
         } (complication.family)))
@@ -63,20 +47,108 @@ final class Complication: NSObject, CLKComplicationDataSource {
         withHandler(nil)
     }
     
-    private func circularSmall() -> CLKComplicationTemplate {
-        let template = CLKComplicationTemplateCircularSmallStackImage()
-        template.line1ImageProvider = CLKImageProvider(onePieceImage: UIImage(named: "new")!)
-        template.line2TextProvider = CLKSimpleTextProvider(text: "as",
-                                                           shortText: "d")
+    private func circularSmall() -> CLKComplicationTemplateCircularSmallStackImage {
+//        let template = CLKComplicationTemplateCircularSmallStackImage()
+//        template.line1ImageProvider = CLKImageProvider(onePieceImage: image(18))
+//        template.line2TextProvider = CLKSimpleTextProvider(text: "as", shortText: "d")
+//        template.tintColor = UIColor(named: "haze")
+//        return template
         
+        .init()
+    }
+    
+    private func extraLarge() -> CLKComplicationTemplateExtraLargeSimpleImage {
+        .init()
+    }
+    
+    private func modularSmall() -> CLKComplicationTemplateModularSmallSimpleImage {
+        .init()
+    }
+    
+    private func modularLarge() -> CLKComplicationTemplateModularLargeStandardBody {
+        .init()
+    }
+    
+    private func utilitarianSmall() -> CLKComplicationTemplateUtilitarianSmallRingImage {
+        .init()
+    }
+    
+    private func utilitarianSmallFlat() -> CLKComplicationTemplateUtilitarianSmallFlat {
+        .init()
+    }
+    
+    private func utilitarianFlat() -> CLKComplicationTemplateUtilitarianLargeFlat {
+        .init()
+    }
+    
+    private func graphicCorner() -> CLKComplicationTemplateGraphicCornerCircularImage {
+        let template = CLKComplicationTemplateGraphicCornerCircularImage()
+        template.imageProvider = .init(fullColorImage: image(36))
         return template
+    }
+    
+    private func graphicBezel() -> CLKComplicationTemplateGraphicBezelCircularText {
+        let template = CLKComplicationTemplateGraphicBezelCircularText()
         
-        
+        let circular = CLKComplicationTemplateGraphicCircularImage()
+        circular.imageProvider = .init(fullColorImage: image(47))
+        template.circularTemplate = circular
+
+        return template
+    }
+    
+    private func graphicRectangular() -> CLKComplicationTemplateGraphicRectangularLargeImage {
+        .init()
     }
     
     private func graphicCircular() -> CLKComplicationTemplate {
         let template = CLKComplicationTemplateGraphicCircularImage()
-        template.imageProvider = CLKFullColorImageProvider(fullColorImage: UIImage(named: "new")!)
+        template.imageProvider = .init(fullColorImage: image(47))
+//        template.tintColor = UIColor(named: "haze")
         return template
+    }
+    
+    private func image(_ size: CGFloat) -> UIImage {
+        let middle = size * 0.5
+        let radius = middle - 1
+        
+        UIGraphicsBeginImageContext(.init(width: size, height: size))
+        let c = UIGraphicsGetCurrentContext()!
+        c.addEllipse(in: .init(x: 1, y: 1, width: radius * 2, height: radius * 2))
+        c.setFillColor(UIColor(named: "haze")!.cgColor)
+        c.drawPath(using: .fill)
+        
+        c.addPath(craters(middle, radius))
+        c.setFillColor(.init(srgbRed: 0, green: 0, blue: 0, alpha: 0.2))
+        c.drawPath(using: .fill)
+        
+        let image = UIImage(cgImage: c.makeImage()!)
+        UIGraphicsEndImageContext()
+        return image
+    }
+    
+    private func craters(_ middle: CGFloat, _ radius: CGFloat) -> CGPath {
+        let path = CGMutablePath()
+        path.addPath({
+            $0.addArc(center: .init(x: middle + (radius / -3), y: middle + (radius / -3.5)), radius: radius / 2.2, startAngle: 0, endAngle: .pi * -2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        path.addPath({
+            $0.addArc(center: .init(x: middle + (radius / -3), y: middle + (radius / 2.25)), radius: radius / 4, startAngle: 0, endAngle: .pi * -2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        path.addPath({
+            $0.addArc(center: .init(x: middle + (radius / 2), y: middle + (radius / 3.5)), radius: radius / 4, startAngle: 0, endAngle: .pi * -2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        path.addPath({
+            $0.addArc(center: .init(x: middle + (radius / 6), y: middle + (radius / 1.5)), radius: radius / 5, startAngle: 0, endAngle: .pi * -2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        path.addPath({
+            $0.addArc(center: .init(x: middle + (radius / 4), y: middle + (radius / -1.5)), radius: radius / 6, startAngle: 0, endAngle: .pi * -2, clockwise: true)
+            return $0
+        } (CGMutablePath()))
+        return path
     }
 }

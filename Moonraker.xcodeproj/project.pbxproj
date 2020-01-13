@@ -30,7 +30,7 @@
 		DA2BC40B23C786E200B52F12 /* Disk.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2BC40923C786E200B52F12 /* Disk.swift */; };
 		DA2BC40D23C790DD00B52F12 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2BC40C23C790DD00B52F12 /* Graph.swift */; };
 		DA432F0423C9DEF6009202D1 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA432F0323C9DEF6009202D1 /* Images.xcassets */; };
-		DA432F1623C9DEF6009202D1 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA432F1523C9DEF6009202D1 /* ComplicationController.swift */; };
+		DA432F1623C9DEF6009202D1 /* Complication.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA432F1523C9DEF6009202D1 /* Complication.swift */; };
 		DA432F1823C9DEF7009202D1 /* Complication.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DA432F1723C9DEF7009202D1 /* Complication.xcassets */; };
 		DA432F2923C9E06E009202D1 /* Interface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DA432F2823C9E06E009202D1 /* Interface.storyboard */; };
 		DA432F2A23C9E09F009202D1 /* Info.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA00DE9023BF698600B04423 /* Info.swift */; };
@@ -209,7 +209,7 @@
 		DA432F0323C9DEF6009202D1 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		DA432F0523C9DEF6009202D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DA432F0A23C9DEF6009202D1 /* Moonraker.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = Moonraker.appex; sourceTree = BUILT_PRODUCTS_DIR; };
-		DA432F1523C9DEF6009202D1 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		DA432F1523C9DEF6009202D1 /* Complication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Complication.swift; sourceTree = "<group>"; };
 		DA432F1723C9DEF7009202D1 /* Complication.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Complication.xcassets; sourceTree = "<group>"; };
 		DA432F1C23C9DEF7009202D1 /* WatchExtension.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = WatchExtension.plist; sourceTree = "<group>"; };
 		DA432F2823C9E06E009202D1 /* Interface.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Interface.storyboard; sourceTree = "<group>"; };
@@ -328,7 +328,7 @@
 				DA432F1C23C9DEF7009202D1 /* WatchExtension.plist */,
 				DA432F2823C9E06E009202D1 /* Interface.storyboard */,
 				DA7911C723C9E67A00CBBAF9 /* App.swift */,
-				DA432F1523C9DEF6009202D1 /* ComplicationController.swift */,
+				DA432F1523C9DEF6009202D1 /* Complication.swift */,
 				DA0F09F823CC6AB50070C7E0 /* Dates.swift */,
 				DAF43A5A23CC6E69006D61A7 /* DatesModel.swift */,
 				DA7911C923C9E71400CBBAF9 /* Main.swift */,
@@ -783,7 +783,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DA0F09F723CC63F50070C7E0 /* Times.swift in Sources */,
-				DA432F1623C9DEF6009202D1 /* ComplicationController.swift in Sources */,
+				DA432F1623C9DEF6009202D1 /* Complication.swift in Sources */,
 				DA7911C823C9E67A00CBBAF9 /* App.swift in Sources */,
 				DAF43A5E23CC857E006D61A7 /* String.swift in Sources */,
 				DA0F09F923CC6AB50070C7E0 /* Dates.swift in Sources */,

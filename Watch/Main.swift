@@ -43,8 +43,8 @@ private struct Content: View {
                 .digitalCrownRotation($crown)
                 .onReceive(Just(crown)) {
                     let offset = TimeInterval($0 * 500)
-                    if moonraker.offset != offset {
-                        moonraker.offset = offset
+                    if app.moonraker.offset != offset {
+                        app.moonraker.offset = offset
                     }
                 }
             if !model.date.isEmpty {

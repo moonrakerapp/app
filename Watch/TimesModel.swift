@@ -15,7 +15,7 @@ final class TimesModel: ObservableObject {
         time.dateStyle = .none
         time.timeStyle = .medium
         
-        sub = moonraker.times.receive(on: DispatchQueue.main).sink {
+        sub = app.moonraker.times.receive(on: DispatchQueue.main).sink {
             switch $0 {
             case .down:
                 self.riseDate = "-"
@@ -42,7 +42,7 @@ final class TimesModel: ObservableObject {
         timer.activate()
         timer.setEventHandler {
             let now = Date()
-            switch moonraker.times.value {
+            switch app.moonraker.times.value {
             case .rise(let time):
                 self.riseCounter = counter.string(from: now, to: time) ?? ""
             case .set(let time):

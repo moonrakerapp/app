@@ -37,7 +37,7 @@ final class MainModel: ObservableObject {
         let time = DateFormatter()
         time.dateFormat = "h a"
         
-        sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+        sub = app.moonraker.info.receive(on: DispatchQueue.main).sink {
             self.phase = $0.phase
             self.fraction = .init($0.fraction)
             self.angle = $0.angle
@@ -48,9 +48,9 @@ final class MainModel: ObservableObject {
             self.percent = "\(Int(round($0.fraction * 1000) / 10))"
             self.name = .key("Phase.\($0.phase)")
             self.date = ""
-            if abs(moonraker.offset) > 3600 {
-                let day = moonraker.date.addingTimeInterval(moonraker.offset)
-                if abs(moonraker.offset) >= 86400 {
+            if abs(app.moonraker.offset) > 3600 {
+                let day = app.moonraker.date.addingTimeInterval(app.moonraker.offset)
+                if abs(app.moonraker.offset) >= 86400 {
                     self.date = formatter.string(from: day) + " - "
                 }
                 self.date += time.string(from: day)

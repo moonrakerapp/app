@@ -16,7 +16,7 @@ final class DatesModel: ObservableObject {
         date.dateStyle = .short
         date.timeStyle = .none
         
-        sub = moonraker.phases.receive(on: DispatchQueue.main).sink {
+        sub = app.moonraker.phases.receive(on: DispatchQueue.main).sink {
             let now = Date()
             if Calendar.current.date(byAdding: .hour, value: -23, to: $0.0)! < now {
                 self.newDate = .key("Stats.now")

@@ -13,6 +13,9 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
     
     func applicationDidBecomeActive() {
         moonraker.date = .init()
+        if CLLocationManager.authorizationStatus() == .authorizedWhenInUse {
+            location.requestLocation()
+        }
     }
     
     func locationManager(_: CLLocationManager, didChangeAuthorization: CLAuthorizationStatus) {
@@ -24,6 +27,7 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
     }
     
     func locationManager(_: CLLocationManager, didUpdateLocations: [CLLocation]) {
+        print("location")
         didUpdateLocations.first.map {
             moonraker.coords = ($0.coordinate.latitude, $0.coordinate.longitude)
         }

@@ -21,7 +21,7 @@ struct MainContent: View {
             }
             Button(action: {
                 self.zoom.toggle()
-                withAnimation(.easeOut(duration: 1)) {
+                withAnimation(.easeOut(duration: 0.6)) {
                     self.ratio = self.zoom ? 0 : 1
                 }
             }) {
@@ -53,6 +53,19 @@ struct MainContent: View {
                         moonraker.offset = offset
                     }
                 }
+            if !self.model.date.isEmpty {
+                VStack {
+                    Button(action: {
+                        self.crown = 0
+                    }) {
+                        Image("now")
+                    }.background(Color.clear)
+                        .accentColor(.clear)
+                        .foregroundColor(Color("haze"))
+                        .padding(.top, 15)
+                    Spacer()
+                }
+            }
         }.edgesIgnoringSafeArea(.all)
             .navigationBarHidden(true).onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -78,7 +91,7 @@ private struct Sky: View {
             Moon(render: render)
                 .rotationEffect(.radians((.pi / -2) + render.angle), anchor: .topLeading)
                 .offset(x: render.center.x, y: render.center.y)
-                .animation(.easeInOut(duration: 1.5))
+                .animation(.easeInOut(duration: 0.6))
         }
     }
 }

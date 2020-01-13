@@ -7,7 +7,7 @@ private(set) weak var app: App!
 final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
     let moonraker = Moonraker()
     private(set) var phase = Phase.new
-    private(set) var illumination = Float()
+    private(set) var fraction = CGFloat()
     private var sub: AnyCancellable?
     private let complication = Moonraker()
     private let location = CLLocationManager()
@@ -17,7 +17,7 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
         app = self
         sub = complication.info.sink {
             self.phase = $0.phase
-            self.illumination = .init($0.fraction)
+            self.fraction = .init($0.fraction)
             CLKComplicationServer.sharedInstance().activeComplications?.forEach(CLKComplicationServer.sharedInstance().reloadTimeline(for:))
         }
     }

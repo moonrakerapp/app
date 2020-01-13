@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder.WatchKit.Storyboard" version="3.0" toolsVersion="15702" targetRuntime="watchKit" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="3mp-fW-waa">
-    <device id="watch38"/>
+    <device id="watch44"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBWatchKitPlugin" version="15501"/>
@@ -9,9 +9,20 @@
         <!--Main-->
         <scene sceneID="aou-V4-d1y">
             <objects>
-                <hostingController id="3mp-fW-waa" customClass="Main" customModule="MoonrakerWatchExtension"/>
+                <hostingController id="3mp-fW-waa" customClass="Main" customModule="MoonrakerWatchExtension">
+                    <connections>
+                        <segue destination="HfL-f8-Pmt" kind="relationship" relationship="nextPage" id="0vQ-Qd-sDQ"/>
+                    </connections>
+                </hostingController>
             </objects>
             <point key="canvasLocation" x="34" y="31"/>
+        </scene>
+        <!--Stats-->
+        <scene sceneID="c1d-Iz-6RP">
+            <objects>
+                <hostingController id="HfL-f8-Pmt" customClass="Stats" customModule="MoonrakerWatchExtension"/>
+            </objects>
+            <point key="canvasLocation" x="276" y="30"/>
         </scene>
     </scenes>
 </document>

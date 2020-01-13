@@ -24,7 +24,7 @@ struct Render {
         
         start = .init(x: middle.x - radius, y: middle.y + amplitude)
         points = stride(from: 2, through: Render.period, by: 2).map { Render.point(middle, radius, $0, amplitude) }
-        center = zoom ? .init(x: middle.x, y: middle.y - (amplitude / 2)) :
+        center = zoom ? middle :
             Render.point(middle, radius, .init(info.azimuth >= 0 ? (.pi * 1.5) - info.altitude : info.altitude + (.pi / 2)) * 180 / .pi, amplitude)
         self.middle = middle
         self.amplitude = amplitude

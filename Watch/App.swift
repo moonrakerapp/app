@@ -27,7 +27,6 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
     }
     
     func locationManager(_: CLLocationManager, didUpdateLocations: [CLLocation]) {
-        print("location")
         didUpdateLocations.first.map {
             moonraker.coords = ($0.coordinate.latitude, $0.coordinate.longitude)
         }

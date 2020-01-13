@@ -14,6 +14,7 @@
 		DA00DE9723BF90F900B04423 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA00DE9623BF90F900B04423 /* Stats.swift */; };
 		DA05ACDE23BE1F8D00B888E9 /* TestPosition.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */; };
 		DA077C2623BDF81100682BFE /* Horizon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA077C2523BDF81100682BFE /* Horizon.swift */; };
+		DA0F09F723CC63F50070C7E0 /* Stats.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA0F09F623CC63F50070C7E0 /* Stats.swift */; };
 		DA10C57323C2009B005FD07E /* About.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA10C57223C2009B005FD07E /* About.swift */; };
 		DA10C57523C203EC005FD07E /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA10C57423C203EC005FD07E /* Image.swift */; };
 		DA2BC40123C769AD00B52F12 /* Rubik-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = DA2BC3FD23C769AC00B52F12 /* Rubik-Regular.ttf */; };
@@ -189,6 +190,7 @@
 		DA00DE9623BF90F900B04423 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
 		DA05ACDD23BE1F8D00B888E9 /* TestPosition.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestPosition.swift; sourceTree = "<group>"; };
 		DA077C2523BDF81100682BFE /* Horizon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Horizon.swift; sourceTree = "<group>"; };
+		DA0F09F623CC63F50070C7E0 /* Stats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stats.swift; sourceTree = "<group>"; };
 		DA10C57223C2009B005FD07E /* About.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = About.swift; sourceTree = "<group>"; };
 		DA10C57423C203EC005FD07E /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		DA2BC3FD23C769AC00B52F12 /* Rubik-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Rubik-Regular.ttf"; sourceTree = "<group>"; };
@@ -323,6 +325,7 @@
 				DA7911C723C9E67A00CBBAF9 /* App.swift */,
 				DA432F1523C9DEF6009202D1 /* ComplicationController.swift */,
 				DA7911C923C9E71400CBBAF9 /* Main.swift */,
+				DA0F09F623CC63F50070C7E0 /* Stats.swift */,
 				DA7911CB23CA0B5100CBBAF9 /* Model.swift */,
 				DAF07EB923CB344300B053EA /* Render.swift */,
 				DA432F1723C9DEF7009202D1 /* Complication.xcassets */,
@@ -773,6 +776,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DAF07EBA23CB344300B053EA /* Render.swift in Sources */,
+				DA0F09F723CC63F50070C7E0 /* Stats.swift in Sources */,
 				DA432F1623C9DEF6009202D1 /* ComplicationController.swift in Sources */,
 				DA7911C823C9E67A00CBBAF9 /* App.swift in Sources */,
 				DA7911CA23C9E71400CBBAF9 /* Main.swift in Sources */,

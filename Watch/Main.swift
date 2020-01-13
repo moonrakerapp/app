@@ -1,4 +1,3 @@
-import Moonraker
 import SwiftUI
 import Combine
 
@@ -39,9 +38,7 @@ struct MainContent: View {
                     Text(model.name)
                         .font(Font.caption.bold())
                         .foregroundColor(Color("haze"))
-                    Text(model.date)
-                        .font(.footnote)
-                        .foregroundColor(Color("shade"))
+                        .padding(.bottom, 12)
                 }
             }.background(Color.clear)
                 .accentColor(.clear)
@@ -62,18 +59,19 @@ struct MainContent: View {
                     }.background(Color.clear)
                         .accentColor(.clear)
                         .foregroundColor(Color("haze"))
-                        .padding(.top, 15)
+                        .padding(.top, 25)
                     Spacer()
                 }
             }
         }.edgesIgnoringSafeArea(.all)
-            .navigationBarHidden(true).onAppear {
+            .navigationBarTitle(model.date)
+            .onAppear {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                     withAnimation(.easeOut(duration: 1)) {
                         self.ratio = 1
                     }
                 }
-        }
+            }
     }
 }
 

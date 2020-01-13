@@ -94,6 +94,7 @@
 		DAF2E82523C0E4430029EB87 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E82423C0E4430029EB87 /* Menu.swift */; };
 		DAF43A5B23CC6E69006D61A7 /* DatesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43A5A23CC6E69006D61A7 /* DatesModel.swift */; };
 		DAF43A5D23CC6EE2006D61A7 /* TimesModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF43A5C23CC6EE2006D61A7 /* TimesModel.swift */; };
+		DAF43A5E23CC857E006D61A7 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E81E23C0A1200029EB87 /* String.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -784,6 +785,7 @@
 				DA0F09F723CC63F50070C7E0 /* Times.swift in Sources */,
 				DA432F1623C9DEF6009202D1 /* ComplicationController.swift in Sources */,
 				DA7911C823C9E67A00CBBAF9 /* App.swift in Sources */,
+				DAF43A5E23CC857E006D61A7 /* String.swift in Sources */,
 				DA0F09F923CC6AB50070C7E0 /* Dates.swift in Sources */,
 				DAF43A5D23CC6EE2006D61A7 /* TimesModel.swift in Sources */,
 				DAF43A5B23CC6E69006D61A7 /* DatesModel.swift in Sources */,

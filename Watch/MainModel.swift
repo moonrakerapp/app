@@ -46,7 +46,7 @@ final class MainModel: ObservableObject {
             
             self.render()
             self.percent = "\(Int(round($0.fraction * 1000) / 10))"
-            self.name = NSLocalizedString("Phase.\($0.phase)", comment: "")
+            self.name = .key("Phase.\($0.phase)")
             self.date = ""
             if abs(moonraker.offset) > 3600 {
                 let day = moonraker.date.addingTimeInterval(moonraker.offset)

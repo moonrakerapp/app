@@ -1,5 +1,4 @@
 import SwiftUI
-import Combine
 
 final class Times: WKHostingController<TimesContent> {
     private let model = TimesModel()

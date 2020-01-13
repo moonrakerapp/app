@@ -86,7 +86,6 @@
 		DAE70A8E23C4760A0045FC2F /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE70A8D23C4760A0045FC2F /* Stat.swift */; };
 		DAEAD2F223BC8FC10053EBEA /* TestIllumination.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */; };
 		DAEAD2F423BCAE470053EBEA /* Phase.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F323BCAE470053EBEA /* Phase.swift */; };
-		DAF07EBA23CB344300B053EA /* Render.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF07EB923CB344300B053EA /* Render.swift */; };
 		DAF0BF7823C214BE0035F416 /* Graph.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF0BF7723C214BE0035F416 /* Graph.swift */; };
 		DAF2E81D23C09E440029EB87 /* Label.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E81C23C09E440029EB87 /* Label.swift */; };
 		DAF2E81F23C0A1200029EB87 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAF2E81E23C0A1200029EB87 /* String.swift */; };
@@ -254,7 +253,6 @@
 		DAE70A8D23C4760A0045FC2F /* Stat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stat.swift; sourceTree = "<group>"; };
 		DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIllumination.swift; sourceTree = "<group>"; };
 		DAEAD2F323BCAE470053EBEA /* Phase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Phase.swift; sourceTree = "<group>"; };
-		DAF07EB923CB344300B053EA /* Render.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Render.swift; sourceTree = "<group>"; };
 		DAF0BF7723C214BE0035F416 /* Graph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Graph.swift; sourceTree = "<group>"; };
 		DAF2E81C23C09E440029EB87 /* Label.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Label.swift; sourceTree = "<group>"; };
 		DAF2E81E23C0A1200029EB87 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
@@ -334,7 +332,6 @@
 				DAF43A5A23CC6E69006D61A7 /* DatesModel.swift */,
 				DA7911C923C9E71400CBBAF9 /* Main.swift */,
 				DA7911CB23CA0B5100CBBAF9 /* MainModel.swift */,
-				DAF07EB923CB344300B053EA /* Render.swift */,
 				DA0F09F623CC63F50070C7E0 /* Times.swift */,
 				DAF43A5C23CC6EE2006D61A7 /* TimesModel.swift */,
 				DA432F1723C9DEF7009202D1 /* Complication.xcassets */,
@@ -784,7 +781,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DAF07EBA23CB344300B053EA /* Render.swift in Sources */,
 				DA0F09F723CC63F50070C7E0 /* Times.swift in Sources */,
 				DA432F1623C9DEF6009202D1 /* ComplicationController.swift in Sources */,
 				DA7911C823C9E67A00CBBAF9 /* App.swift in Sources */,

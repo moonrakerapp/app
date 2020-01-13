@@ -1,27 +1,24 @@
+import Moonraker
 import SwiftUI
 import Combine
 
-final class Main: WKHostingController<MainContent> {
-    override var body: MainContent { .init(model: .init()) }
+final class Main: WKHostingController<AnyView> {
+    override var body: AnyView { .init(Content().environmentObject(MainModel())) }
 }
 
-struct MainContent: View {
-    @ObservedObject var model: MainModel
+private struct Content: View {
+    @EnvironmentObject var model: MainModel
     @State private var ratio = CGFloat()
     @State private var crown = Double()
-    @State private var zoom = false
     
     var body: some View {
         ZStack {
-            if self.model.info != nil {
-                GeometryReader { g in
-                    Sky(ratio: self.$ratio, render: .init(self.model.info!, size: g.size, zoom: self.zoom))
-                }.edgesIgnoringSafeArea(.all)
-            }
+            Sky(ratio: $ratio)
+                .edgesIgnoringSafeArea(.all)
             Button(action: {
-                self.zoom.toggle()
+                self.model.zoom.toggle()
                 withAnimation(.easeOut(duration: 0.6)) {
-                    self.ratio = self.zoom ? 0 : 1
+                    self.ratio = self.model.zoom ? 0 : 1
                 }
             }) {
                 VStack {
@@ -66,48 +63,45 @@ struct MainContent: View {
         }.edgesIgnoringSafeArea(.all)
             .navigationBarTitle(model.date)
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                    withAnimation(.easeOut(duration: 1)) {
-                        self.ratio = 1
-                    }
+                withAnimation(.easeOut(duration: 2)) {
+                    self.ratio = 1
                 }
             }
     }
 }
 
 private struct Sky: View {
+    @EnvironmentObject var model: MainModel
     @Binding var ratio: CGFloat
-    let render: Render
     
     var body: some View {
         Group {
-            Horizon(ratio: ratio, render: render)
+            Horizon(ratio: ratio, points: model.points, start: model.start)
                 .stroke(Color("shade"), style: .init(lineWidth: 3, lineCap: .round))
-            Dash(ratio: ratio, render: render)
+            Dash(ratio: ratio, middle: model.middle, amplitude: model.amplitude)
                 .stroke(style: StrokeStyle(lineWidth: 1, dash: [1, 3]))
                 .foregroundColor(Color("shade"))
-            Moon(render: render)
-                .rotationEffect(.radians((.pi / -2) + render.angle), anchor: .topLeading)
-                .offset(x: render.center.x, y: render.center.y)
+            Moon()
+                .rotationEffect(.radians((.pi / -2) + model.angle), anchor: .topLeading)
+                .offset(x: model.center.x, y: model.center.y)
                 .animation(.easeInOut(duration: 0.6))
         }
     }
 }
 
 private struct Moon: View {
-    let render: Render
+    @EnvironmentObject var model: MainModel
     
     var body: some View {
         Group {
-            Outer(render: render)
+            Outer(radius: model.radius)
                 .fill(Color.black)
-                .shadow(color: Color("haze"), radius: render.radius,
-                        x: render.radius, y: render.radius)
-            Outer(render: render)
+                .shadow(color: Color("haze"), radius: model.radius, x: model.radius, y: model.radius)
+            Outer(radius: model.radius)
                 .stroke(Color("shade"), style: .init(lineWidth: 2, lineCap: .round))
-            Face(render: render)
+            Face(radius: model.radius, fraction: model.fraction, phase: model.phase)
                 .fill(Color("haze"))
-            Surface(render: render)
+            Surface(radius: model.radius)
                 .fill(Color(.sRGB, white: 0, opacity: 0.1))
         }
     }
@@ -115,12 +109,13 @@ private struct Moon: View {
 
 private struct Horizon: Shape {
     var ratio: CGFloat
-    let render: Render
+    let points: [CGPoint]
+    let start: CGPoint
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.move(to: render.start)
-        path.addLines(.init(render.points.prefix(.init(.init(render.points.count) * ratio))))
+        path.move(to: start)
+        path.addLines(.init(points.prefix(.init(.init(points.count) * ratio))))
         return path
     }
     
@@ -132,12 +127,13 @@ private struct Horizon: Shape {
 
 private struct Dash: Shape {
     var ratio: CGFloat
-    let render: Render
+    let middle: CGPoint
+    let amplitude: CGFloat
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.move(to: .init(x: render.middle.x - (render.amplitude * ratio), y: render.middle.y))
-        path.addLine(to: .init(x: render.middle.x + (render.amplitude * ratio), y: render.middle.y))
+        path.move(to: .init(x: middle.x - (amplitude * ratio), y: middle.y))
+        path.addLine(to: .init(x: middle.x + (amplitude * ratio), y: middle.y))
         return path
     }
     
@@ -148,25 +144,27 @@ private struct Dash: Shape {
 }
 
 private struct Outer: Shape {
-    var render: Render
+    var radius: CGFloat
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.addArc(center: .zero, radius: render.radius + 1, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+        path.addArc(center: .zero, radius: radius + 1, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
         return path
     }
     
     var animatableData: CGFloat {
-        get { render.radius }
-        set { render.radius = newValue }
+        get { radius }
+        set { radius = newValue }
     }
 }
 
 private struct Face: Shape {
-    var render: Render
+    var radius: CGFloat
+    let fraction: CGFloat
+    let phase: Phase
     
     func path(in rect: CGRect) -> Path {
-        switch render.phase {
+        switch phase {
         case .new: return new()
         case .waxingCrescent: return waxingCrescent()
         case .firstQuarter: return firstQuarter()
@@ -184,112 +182,112 @@ private struct Face: Shape {
     
     private func waxingCrescent() -> Path {
         var path = Path()
-        path.addArc(center: .zero, radius: render.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
-        path.addLine(to: .init(x: 0, y: -render.radius))
-        path.addCurve(to: .init(x: 0, y: render.radius),
-                      control1: .init(x: ((render.fraction - 0.5) / -0.5) * (render.radius * 1.35), y: ((render.fraction - 0.5) / 0.5) * render.radius),
-                      control2: .init(x: ((render.fraction - 0.5) / -0.5) * (render.radius * 1.35), y: ((render.fraction - 0.5) / -0.5) * render.radius))
+        path.addArc(center: .zero, radius: radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addLine(to: .init(x: 0, y: -radius))
+        path.addCurve(to: .init(x: 0, y: radius),
+                      control1: .init(x: ((fraction - 0.5) / -0.5) * (radius * 1.35), y: ((fraction - 0.5) / 0.5) * radius),
+                      control2: .init(x: ((fraction - 0.5) / -0.5) * (radius * 1.35), y: ((fraction - 0.5) / -0.5) * radius))
         return path
     }
     
     private func firstQuarter() -> Path {
         var path = Path()
-        path.addArc(center: .zero, radius: render.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addArc(center: .zero, radius: radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
         return path
     }
     
     private func waxingGibbous() -> Path {
         var path = Path()
-        path.addArc(center: .zero, radius: render.radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
-        path.addLine(to: .init(x: 0, y: -render.radius))
-        path.addCurve(to: .init(x: 0, y: render.radius),
-                      control1: .init(x: ((render.fraction - 0.5) / -0.5) * (render.radius * 1.35),
-                                      y: ((render.fraction - 0.5) / -0.5) * render.radius),
-                      control2: .init(x: ((render.fraction - 0.5) / -0.5) * (render.radius * 1.35),
-                                      y: ((render.fraction - 0.5) / 0.5) * render.radius))
+        path.addArc(center: .zero, radius: radius, startAngle: .radians(.pi / 2), endAngle: .radians(.pi / -2), clockwise: true)
+        path.addLine(to: .init(x: 0, y: -radius))
+        path.addCurve(to: .init(x: 0, y: radius),
+                      control1: .init(x: ((fraction - 0.5) / -0.5) * (radius * 1.35),
+                                      y: ((fraction - 0.5) / -0.5) * radius),
+                      control2: .init(x: ((fraction - 0.5) / -0.5) * (radius * 1.35),
+                                      y: ((fraction - 0.5) / 0.5) * radius))
         return path
     }
     
     private func full() -> Path {
         var path = Path()
-        path.addArc(center: .zero, radius: render.radius, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+        path.addArc(center: .zero, radius: radius, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
         return path
     }
     
     private func waningGibbous() -> Path {
         var path = Path()
-        path.addArc(center: .zero, radius: render.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
-        path.addLine(to: .init(x: 0, y: render.radius))
-        path.addCurve(to: .init(x: 0, y: -render.radius),
-                      control1: .init(x: ((render.fraction - 0.5) / 0.5) * (render.radius * 1.35),
-                                      y: ((render.fraction - 0.5) / 0.5) * render.radius),
-                      control2: .init(x: ((render.fraction - 0.5) / 0.5) * (render.radius * 1.35),
-                                      y: ((render.fraction - 0.5) / -0.5) * render.radius))
+        path.addArc(center: .zero, radius: radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addLine(to: .init(x: 0, y: radius))
+        path.addCurve(to: .init(x: 0, y: -radius),
+                      control1: .init(x: ((fraction - 0.5) / 0.5) * (radius * 1.35),
+                                      y: ((fraction - 0.5) / 0.5) * radius),
+                      control2: .init(x: ((fraction - 0.5) / 0.5) * (radius * 1.35),
+                                      y: ((fraction - 0.5) / -0.5) * radius))
         return path
     }
     
     private func lastQuarter() -> Path {
         var path = Path()
-        path.addArc(center: .zero, radius: render.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addArc(center: .zero, radius: radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
         return path
     }
     
     private func waningCrescent() -> Path {
         var path = Path()
-        path.addArc(center: .zero, radius: render.radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
-        path.addLine(to: .init(x: 0, y: render.radius))
-        path.addCurve(to: .init(x: 0, y: -render.radius),
-                      control1: .init(x: ((render.fraction - 0.5) / 0.5) * (render.radius * 1.35), y: ((render.fraction - 0.5) / -0.5) * render.radius),
-                      control2: .init(x: ((render.fraction - 0.5) / 0.5) * (render.radius * 1.35), y: ((render.fraction - 0.5) / 0.5) * render.radius))
+        path.addArc(center: .zero, radius: radius, startAngle: .radians(.pi / -2), endAngle: .radians(.pi / 2), clockwise: true)
+        path.addLine(to: .init(x: 0, y: radius))
+        path.addCurve(to: .init(x: 0, y: -radius),
+                      control1: .init(x: ((fraction - 0.5) / 0.5) * (radius * 1.35), y: ((fraction - 0.5) / -0.5) * radius),
+                      control2: .init(x: ((fraction - 0.5) / 0.5) * (radius * 1.35), y: ((fraction - 0.5) / 0.5) * radius))
         return path
     }
     
     var animatableData: CGFloat {
-        get { render.radius }
-        set { render.radius = newValue }
+        get { radius }
+        set { radius = newValue }
     }
 }
 
 private struct Surface: Shape {
-    var render: Render
+    var radius: CGFloat
     
     func path(in rect: CGRect) -> Path {
         var path = Path()
         path.addPath({
             var path = Path()
-            path.addArc(center: .init(x: render.radius / -3, y: render.radius / -3.5),
-                        radius: render.radius / 2.2, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+            path.addArc(center: .init(x: radius / -3, y: radius / -3.5),
+                        radius: radius / 2.2, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
-            path.addArc(center: .init(x: render.radius / -3, y: render.radius / 2.25),
-                        radius: render.radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+            path.addArc(center: .init(x: radius / -3, y: radius / 2.25),
+                        radius: radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
-            path.addArc(center: .init(x: render.radius / 2, y: render.radius / 3.5),
-                        radius: render.radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+            path.addArc(center: .init(x: radius / 2, y: radius / 3.5),
+                        radius: radius / 4, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
-            path.addArc(center: .init(x: render.radius / 6, y: render.radius / 1.5),
-                        radius: render.radius / 5, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+            path.addArc(center: .init(x: radius / 6, y: radius / 1.5),
+                        radius: radius / 5, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         path.addPath({
             var path = Path()
-            path.addArc(center: .init(x: render.radius / 4, y: render.radius / -1.5),
-                        radius: render.radius / 6, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
+            path.addArc(center: .init(x: radius / 4, y: radius / -1.5),
+                        radius: radius / 6, startAngle: .radians(0), endAngle: .radians(.pi * 2), clockwise: true)
             return path
         } ())
         return path
     }
     
     var animatableData: CGFloat {
-        get { render.radius }
-        set { render.radius = newValue }
+        get { radius }
+        set { radius = newValue }
     }
 }

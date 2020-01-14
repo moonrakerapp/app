@@ -6,6 +6,7 @@ import Combine
 private(set) weak var app: App!
 final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
     let moonraker = Moonraker()
+    private var background: WKRefreshBackgroundTask?
     private(set) var phase = Phase.new
     private(set) var fraction = CGFloat()
     private var sub: AnyCancellable?
@@ -21,6 +22,8 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
             self.phase = .full
             self.fraction = 0.25
             CLKComplicationServer.sharedInstance().activeComplications?.forEach(CLKComplicationServer.sharedInstance().reloadTimeline(for:))
+            self.background?.setTaskCompletedWithSnapshot(false)
+            self.background = nil
         }
     }
     
@@ -38,7 +41,18 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
     }
     
     func applicationWillResignActive() {
+        schedule()
         WKExtension.shared().rootInterfaceController!.becomeCurrentPage()
+    }
+    
+    func handle(_ backgroundTasks: Set<WKRefreshBackgroundTask>) {
+        background?.setTaskCompletedWithSnapshot(false)
+        background = nil
+        if let first = backgroundTasks.first {
+            background = first
+            complication.date = .init()
+        }
+        schedule()
     }
     
     func locationManager(_: CLLocationManager, didChangeAuthorization: CLAuthorizationStatus) {
@@ -58,5 +72,9 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
     
     func locationManager(_: CLLocationManager, didFailWithError: Error) {
 
+    }
+    
+    private func schedule() {
+        WKExtension.shared().scheduleBackgroundRefresh(withPreferredDate: Date().addingTimeInterval(3600), userInfo: nil) { _ in }
     }
 }

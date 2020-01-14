@@ -110,14 +110,15 @@ final class Complication: NSObject, CLKComplicationDataSource {
     private func image(_ size: CGFloat) -> UIImage {
         let middle = size * 0.5
         let center = CGPoint(x: middle, y: middle)
-        let radius = middle - 1
+        let radius = middle - 8
         
         UIGraphicsBeginImageContext(.init(width: size, height: size))
         let c = UIGraphicsGetCurrentContext()!
-        c.addEllipse(in: .init(x: 1, y: 1, width: radius * 2, height: radius * 2))
+        c.addArc(center: center, radius: radius + 1, startAngle: 0, endAngle: .pi * 2, clockwise: false)
         c.setFillColor(UIColor.black.cgColor)
         c.setStrokeColor(UIColor(named: "shade")!.cgColor)
         c.setLineWidth(1)
+        c.setShadow(offset: .zero, blur: radius / 2, color: UIColor(named: "haze")!.cgColor)
         c.drawPath(using: .fillStroke)
         
         switch app.phase {
@@ -146,10 +147,12 @@ final class Complication: NSObject, CLKComplicationDataSource {
     private func waxingCrescent(_ center: CGPoint, _ radius: CGFloat) -> CGPath {
         {
             $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
-            $0.addLine(to: .init(x: 0, y: -radius))
-            $0.addCurve(to: CGPoint(x: 0, y: radius),
-                        control1: CGPoint(x: ((app.fraction - 0.5) / -0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / 0.5) * radius),
-                        control2: CGPoint(x: ((app.fraction - 0.5) / -0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / -0.5) * radius))
+            $0.addLine(to: .init(x: center.x, y: center.y - radius))
+            $0.addCurve(to: CGPoint(x: center.x, y: center.y + radius),
+                        control1: CGPoint(x: center.x + (((app.fraction - 0.5) / -0.5) * (radius * 1.35)),
+                                          y: center.y + (((app.fraction - 0.5) / 0.5) * radius)),
+                        control2: CGPoint(x: center.x + (((app.fraction - 0.5) / -0.5) * (radius * 1.35)),
+                                          y: center.y + (((app.fraction - 0.5) / -0.5) * radius)))
             return $0
         } (CGMutablePath())
     }
@@ -166,8 +169,10 @@ final class Complication: NSObject, CLKComplicationDataSource {
             $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
             $0.addLine(to: .init(x: center.x, y: center.y - radius))
             $0.addCurve(to: CGPoint(x: center.x, y: center.y + radius),
-                        control1: CGPoint(x: ((app.fraction - 0.5) / -0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / -0.5) * radius),
-                        control2: CGPoint(x: ((app.fraction - 0.5) / -0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / 0.5) * radius))
+                        control1: CGPoint(x: center.x + (((app.fraction - 0.5) / -0.5) * (radius * 1.35)),
+                                          y: center.y + (((app.fraction - 0.5) / -0.5) * radius)),
+                        control2: CGPoint(x: center.x + (((app.fraction - 0.5) / -0.5) * (radius * 1.35)),
+                                          y: center.y + (((app.fraction - 0.5) / 0.5) * radius)))
             return $0
         } (CGMutablePath())
     }
@@ -184,8 +189,10 @@ final class Complication: NSObject, CLKComplicationDataSource {
             $0.addArc(center: center, radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
             $0.addLine(to: .init(x: center.x, y: center.y + radius))
             $0.addCurve(to: CGPoint(x: center.x, y: center.y - radius),
-                        control1: CGPoint(x: ((app.fraction - 0.5) / 0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / 0.5) * radius),
-                        control2: CGPoint(x: ((app.fraction - 0.5) / 0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / -0.5) * radius))
+                        control1: CGPoint(x: center.x + (((app.fraction - 0.5) / 0.5) * (radius * 1.35)),
+                                          y: center.y + (((app.fraction - 0.5) / 0.5) * radius)),
+                        control2: CGPoint(x: center.x + (((app.fraction - 0.5) / 0.5) * (radius * 1.35)),
+                                          y: center.y + (((app.fraction - 0.5) / -0.5) * radius)))
             return $0
         } (CGMutablePath())
     }
@@ -202,8 +209,10 @@ final class Complication: NSObject, CLKComplicationDataSource {
             $0.addArc(center: center, radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
             $0.addLine(to: .init(x: center.x, y: center.y + radius))
             $0.addCurve(to: CGPoint(x: center.x, y: center.y - radius),
-                        control1: CGPoint(x: ((app.fraction - 0.5) / 0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / -0.5) * radius),
-                        control2: CGPoint(x: ((app.fraction - 0.5) / 0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / 0.5) * radius))
+                        control1: CGPoint(x: center.x + (((app.fraction - 0.5) / 0.5) * (radius * 1.35)),
+                                          y: center.y + (((app.fraction - 0.5) / -0.5) * radius)),
+                        control2: CGPoint(x: center.x + (((app.fraction - 0.5) / 0.5) * (radius * 1.35)),
+                                          y: center.y + (((app.fraction - 0.5) / 0.5) * radius)))
             return $0
         } (CGMutablePath())
     }

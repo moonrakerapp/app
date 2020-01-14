@@ -18,6 +18,8 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
         sub = complication.info.sink {
             self.phase = $0.phase
             self.fraction = .init($0.fraction)
+            self.phase = .firstQuarter
+            self.fraction = 0.25
             CLKComplicationServer.sharedInstance().activeComplications?.forEach(CLKComplicationServer.sharedInstance().reloadTimeline(for:))
         }
     }

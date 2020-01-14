@@ -47,37 +47,53 @@ final class Complication: NSObject, CLKComplicationDataSource {
         withHandler(nil)
     }
     
-    private func circularSmall() -> CLKComplicationTemplateCircularSmallStackImage {
-//        let template = CLKComplicationTemplateCircularSmallStackImage()
-//        template.line1ImageProvider = CLKImageProvider(onePieceImage: image(18))
-//        template.line2TextProvider = CLKSimpleTextProvider(text: "as", shortText: "d")
-//        template.tintColor = UIColor(named: "haze")
-//        return template
-        .init()
+    private func circularSmall() -> CLKComplicationTemplateCircularSmallSimpleImage {
+        let template = CLKComplicationTemplateCircularSmallSimpleImage()
+        template.imageProvider = .init(onePieceImage: .make(24))
+        template.tintColor = UIColor(named: "haze")
+        return template
     }
     
     private func extraLarge() -> CLKComplicationTemplateExtraLargeSimpleImage {
-        .init()
+        let template = CLKComplicationTemplateExtraLargeSimpleImage()
+        template.imageProvider = .init(onePieceImage: .make(112))
+        template.tintColor = UIColor(named: "haze")
+        return template
     }
     
     private func modularSmall() -> CLKComplicationTemplateModularSmallSimpleImage {
-        .init()
+        let template = CLKComplicationTemplateModularSmallSimpleImage()
+        template.imageProvider = .init(onePieceImage: .make(32))
+        template.tintColor = UIColor(named: "haze")
+        return template
     }
     
     private func modularLarge() -> CLKComplicationTemplateModularLargeStandardBody {
-        .init()
+        let template = CLKComplicationTemplateModularLargeStandardBody()
+        template.headerImageProvider = .init(onePieceImage: .make(42))
+        template.tintColor = UIColor(named: "haze")
+        return template
     }
     
-    private func utilitarianSmall() -> CLKComplicationTemplateUtilitarianSmallRingImage {
-        .init()
+    private func utilitarianSmall() -> CLKComplicationTemplateUtilitarianSmallSquare {
+        let template = CLKComplicationTemplateUtilitarianSmallSquare()
+        template.imageProvider = .init(onePieceImage: .make(50))
+        template.tintColor = UIColor(named: "haze")
+        return template
     }
     
     private func utilitarianSmallFlat() -> CLKComplicationTemplateUtilitarianSmallFlat {
-        .init()
+        let template = CLKComplicationTemplateUtilitarianSmallFlat()
+        template.imageProvider = .init(onePieceImage: .make(22))
+        template.tintColor = UIColor(named: "haze")
+        return template
     }
     
     private func utilitarianFlat() -> CLKComplicationTemplateUtilitarianLargeFlat {
-        .init()
+        let template = CLKComplicationTemplateUtilitarianLargeFlat()
+        template.imageProvider = .init(onePieceImage: .make(22))
+        template.tintColor = UIColor(named: "haze")
+        return template
     }
     
     private func graphicCorner() -> CLKComplicationTemplateGraphicCornerCircularImage {

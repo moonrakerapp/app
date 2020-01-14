@@ -14,7 +14,7 @@ final class Complication: NSObject, CLKComplicationDataSource {
             case .graphicCorner: return graphicCorner()
             case .graphicCircular: return graphicCircular()
             case .graphicBezel: return graphicBezel()
-            case .graphicRectangular: return .init()
+            case .graphicRectangular: return graphicRectangular()
             @unknown default: return .init() }
         } (complication.family)))
     }
@@ -99,6 +99,7 @@ final class Complication: NSObject, CLKComplicationDataSource {
     private func graphicCorner() -> CLKComplicationTemplateGraphicCornerCircularImage {
         let template = CLKComplicationTemplateGraphicCornerCircularImage()
         template.imageProvider = .init(fullColorImage: .make(36))
+        template.tintColor = UIColor(named: "haze")
         return template
     }
     
@@ -107,18 +108,24 @@ final class Complication: NSObject, CLKComplicationDataSource {
         
         let circular = CLKComplicationTemplateGraphicCircularImage()
         circular.imageProvider = .init(fullColorImage: .make(47))
+        circular.tintColor = UIColor(named: "haze")
+        template.tintColor = UIColor(named: "haze")
         template.circularTemplate = circular
 
         return template
     }
     
-    private func graphicRectangular() -> CLKComplicationTemplateGraphicRectangularLargeImage {
-        .init()
-    }
-    
     private func graphicCircular() -> CLKComplicationTemplate {
         let template = CLKComplicationTemplateGraphicCircularImage()
         template.imageProvider = .init(fullColorImage: .make(47))
+        template.tintColor = UIColor(named: "haze")
+        return template
+    }
+    
+    private func graphicRectangular() -> CLKComplicationTemplateGraphicRectangularLargeImage {
+        let template = CLKComplicationTemplateGraphicRectangularLargeImage()
+        template.imageProvider = .init(fullColorImage: .make(54))
+        template.tintColor = UIColor(named: "haze")
         return template
     }
 }

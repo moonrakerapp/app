@@ -1104,7 +1104,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch.App.Extension;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)WatchExtension";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1168,7 +1168,7 @@
 				MARKETING_VERSION = 145;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch.extension;
+				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch.App.Extension;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)WatchExtension";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1234,7 +1234,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch;
+				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch.App;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)Watch";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1294,7 +1294,7 @@
 				MARKETING_VERSION = 145;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch;
+				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch.App;
 				PRODUCT_MODULE_NAME = "$(PRODUCT_NAME:c99extidentifier)Watch";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -1357,7 +1357,7 @@
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = Moonraker;
+				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch;
 				PRODUCT_NAME = MoonrakerWrapper;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
@@ -1412,7 +1412,7 @@
 				MARKETING_VERSION = 145;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = Moonraker;
+				PRODUCT_BUNDLE_IDENTIFIER = Moonraker.Watch;
 				PRODUCT_NAME = MoonrakerWrapper;
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;

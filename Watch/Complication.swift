@@ -104,12 +104,12 @@ final class Complication: NSObject, CLKComplicationDataSource {
     private func graphicCircular() -> CLKComplicationTemplate {
         let template = CLKComplicationTemplateGraphicCircularImage()
         template.imageProvider = .init(fullColorImage: image(47))
-//        template.tintColor = UIColor(named: "haze")
         return template
     }
     
     private func image(_ size: CGFloat) -> UIImage {
         let middle = size * 0.5
+        let center = CGPoint(x: middle, y: middle)
         let radius = middle - 1
         
         UIGraphicsBeginImageContext(.init(width: size, height: size))
@@ -121,9 +121,16 @@ final class Complication: NSObject, CLKComplicationDataSource {
         c.drawPath(using: .fillStroke)
         
         switch app.phase {
-        case .waxingCrescent: c.addPath(waxingCrescent(middle, radius))
+        case .waxingCrescent: c.addPath(waxingCrescent(center, radius))
+        case .firstQuarter: c.addPath(firstQuarter(center, radius))
+        case .waxingGibbous: c.addPath(waxingGibbous(center, radius))
+        case .full: c.addPath(full(center, radius))
+        case .waningGibbous: c.addPath(waningGibbous(center, radius))
+        case .lastQuarter: c.addPath(lastQuarter(center, radius))
+        case .waningCrescent: c.addPath(waningCrescent(center, radius))
         default: break
         }
+        
         c.setFillColor(UIColor(named: "haze")!.cgColor)
         c.drawPath(using: .fill)
         
@@ -136,9 +143,9 @@ final class Complication: NSObject, CLKComplicationDataSource {
         return image
     }
     
-    private func waxingCrescent(_ middle: CGFloat, _ radius: CGFloat) -> CGPath {
+    private func waxingCrescent(_ center: CGPoint, _ radius: CGFloat) -> CGPath {
         {
-            $0.addArc(center: .init(x: middle, y: middle), radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
+            $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
             $0.addLine(to: .init(x: 0, y: -radius))
             $0.addCurve(to: CGPoint(x: 0, y: radius),
                         control1: CGPoint(x: ((app.fraction - 0.5) / -0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / 0.5) * radius),
@@ -146,61 +153,61 @@ final class Complication: NSObject, CLKComplicationDataSource {
             return $0
         } (CGMutablePath())
     }
-    /*
-    private func firstQuarter() -> CGPath {
+    
+    private func firstQuarter(_ center: CGPoint, _ radius: CGFloat) -> CGPath {
         {
-            $0.addArc(center: .init(), radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
+            $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
             return $0
         } (CGMutablePath())
     }
     
-    private func waxingGibbous() -> CGPath {
+    private func waxingGibbous(_ center: CGPoint, _ radius: CGFloat) -> CGPath {
         {
-            $0.addArc(center: .init(), radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
-            $0.addLine(to: .init(x: 0, y: -radius))
-            $0.addCurve(to: .init(x: 0, y: radius),
-                        control1: .init(x: .init((fraction - 0.5) / -0.5) * (radius * 1.35), y: .init((fraction - 0.5) / -0.5) * radius),
-                        control2: .init(x: .init((fraction - 0.5) / -0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius))
+            $0.addArc(center: center, radius: radius, startAngle: .pi / 2, endAngle: .pi / -2, clockwise: true)
+            $0.addLine(to: .init(x: center.x, y: center.y - radius))
+            $0.addCurve(to: CGPoint(x: center.x, y: center.y + radius),
+                        control1: CGPoint(x: ((app.fraction - 0.5) / -0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / -0.5) * radius),
+                        control2: CGPoint(x: ((app.fraction - 0.5) / -0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / 0.5) * radius))
             return $0
         } (CGMutablePath())
     }
     
-    private func full() -> CGPath {
+    private func full(_ center: CGPoint, _ radius: CGFloat) -> CGPath {
         {
-            $0.addArc(center: .init(), radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
+            $0.addArc(center: center, radius: radius, startAngle: 0, endAngle: .pi * 2, clockwise: true)
             return $0
         } (CGMutablePath())
     }
     
-    private func waningGibbous() -> CGPath {
+    private func waningGibbous(_ center: CGPoint, _ radius: CGFloat) -> CGPath {
         {
-            $0.addArc(center: .init(), radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
-            $0.addLine(to: .init(x: 0, y: radius))
-            $0.addCurve(to: .init(x: 0, y: -radius),
-                        control1: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius),
-                        control2: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / -0.5) * radius))
+            $0.addArc(center: center, radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
+            $0.addLine(to: .init(x: center.x, y: center.y + radius))
+            $0.addCurve(to: CGPoint(x: center.x, y: center.y - radius),
+                        control1: CGPoint(x: ((app.fraction - 0.5) / 0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / 0.5) * radius),
+                        control2: CGPoint(x: ((app.fraction - 0.5) / 0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / -0.5) * radius))
             return $0
         } (CGMutablePath())
     }
     
-    private func lastQuarter() -> CGPath {
+    private func lastQuarter(_ center: CGPoint, _ radius: CGFloat) -> CGPath {
         {
-            $0.addArc(center: .init(), radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
+            $0.addArc(center: center, radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
             return $0
         } (CGMutablePath())
     }
     
-    private func waningCrescent() -> CGPath {
+    private func waningCrescent(_ center: CGPoint, _ radius: CGFloat) -> CGPath {
         {
-            $0.addArc(center: .init(), radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
-            $0.addLine(to: .init(x: 0, y: radius))
-            $0.addCurve(to: .init(x: 0, y: -radius),
-                        control1: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / -0.5) * radius),
-                        control2: .init(x: .init((fraction - 0.5) / 0.5) * (radius * 1.35), y: .init((fraction - 0.5) / 0.5) * radius))
+            $0.addArc(center: center, radius: radius, startAngle: .pi / -2, endAngle: .pi / 2, clockwise: true)
+            $0.addLine(to: .init(x: center.x, y: center.y + radius))
+            $0.addCurve(to: CGPoint(x: center.x, y: center.y - radius),
+                        control1: CGPoint(x: ((app.fraction - 0.5) / 0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / -0.5) * radius),
+                        control2: CGPoint(x: ((app.fraction - 0.5) / 0.5) * (radius * 1.35), y: ((app.fraction - 0.5) / 0.5) * radius))
             return $0
         } (CGMutablePath())
     }
-    */
+    
     private func craters(_ middle: CGFloat, _ radius: CGFloat) -> CGPath {
         let path = CGMutablePath()
         path.addPath({

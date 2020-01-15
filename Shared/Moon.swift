@@ -2,13 +2,6 @@ import Moonraker
 import QuartzCore
 
 final class Moon: CAShapeLayer {
-    #if os(macOS)
-    let radians = CGFloat.pi / 2
-    #endif
-    #if os(iOS)
-    let radians = CGFloat.pi / -2
-    #endif
-    
     var phase = Phase.new
     var fraction = Double()
     var angle = Double()
@@ -97,8 +90,7 @@ final class Moon: CAShapeLayer {
     }
     
     private func animateMiddle() {
-        let translate = CATransform3DTranslate(CATransform3DIdentity, middle.x, middle.y, 0)
-        let rotate = CATransform3DRotate(translate, radians + .init(angle), 0, 0, 1)
+        let rotate = rotation(CATransform3DTranslate(CATransform3DIdentity, middle.x, middle.y, 0))
         let animation = CABasicAnimation(keyPath: "transform")
         animation.duration = 1.5
         animation.fromValue = transform
@@ -107,6 +99,17 @@ final class Moon: CAShapeLayer {
         transform = rotate
         add(animation, forKey: "transform")
     }
+    
+    #if os(macOS)
+    private func rotation(_ translate: CATransform3D) -> CATransform3D {
+        CATransform3DRotate(translate, (.pi / 2) - .init(angle), 0, 0, 1)
+    }
+    #endif
+    #if os(iOS)
+    private func rotation(_ translate: CATransform3D) -> CATransform3D {
+        CATransform3DRotate(translate, (.pi / -2) + .init(angle), 0, 0, 1)
+    }
+    #endif
     
     private func new() -> CGPath {
         CGMutablePath()

@@ -6,14 +6,10 @@ final class Menu: NSMenu {
     required init(coder: NSCoder) { fatalError() }
     init() {
         super.init(title: "")
-        items = [moonraker, window, help]
+        items = [moonraker, wheel, window, help]
         status.button!.image = NSImage(named: "status")
         status.button!.target = self
         status.button!.action = #selector(show)
-    }
-    
-    @objc func calendar() {
-        (NSApp.windows.first { $0 is Config } ?? Config()).makeKeyAndOrderFront(nil)
     }
 
     private var moonraker: NSMenuItem {
@@ -23,12 +19,7 @@ final class Menu: NSMenu {
                 {
                     $0.target = self
                     return $0
-                } (NSMenuItem(title: .key("Menu.about"), action: #selector(about), keyEquivalent: "")),
-                .separator(),
-                {
-                    $0.target = self
-                    return $0
-                } (NSMenuItem(title: .key("Menu.calendar"), action: #selector(calendar), keyEquivalent: ",")),
+                } (NSMenuItem(title: .key("Menu.about"), action: #selector(about), keyEquivalent: ",")),
                 .separator(),
                 .init(title: .key("Menu.hide"), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h"),
                 {
@@ -38,6 +29,35 @@ final class Menu: NSMenu {
                 .init(title: .key("Menu.showAll"), action: #selector(NSApplication.unhideAllApplications(_:)), keyEquivalent: ""),
                 .separator(),
                 .init(title: .key("Menu.quit"), action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")]
+            return $0
+        } (NSMenuItem(title: "", action: nil, keyEquivalent: ""))
+    }
+    
+    private var wheel: NSMenuItem {
+        {
+            $0.submenu = .init(title: .key("Menu.wheel"))
+            $0.submenu!.items = [
+                {
+                    $0.keyEquivalentModifierMask = []
+                    return $0
+                } (NSMenuItem(title: .key("Menu.calendar"), action: #selector(Wheel.middle), keyEquivalent: "\r")),
+                .separator(),
+                {
+                    $0.keyEquivalentModifierMask = []
+                    return $0
+                } (NSMenuItem(title: .key("Menu.up"), action: #selector(Wheel.up), keyEquivalent: String(Character(UnicodeScalar(NSUpArrowFunctionKey)!)))),
+                {
+                    $0.keyEquivalentModifierMask = []
+                    return $0
+                } (NSMenuItem(title: .key("Menu.down"), action: #selector(Wheel.down), keyEquivalent: String(Character(UnicodeScalar(NSDownArrowFunctionKey)!)))),
+                {
+                    $0.keyEquivalentModifierMask = []
+                    return $0
+                } (NSMenuItem(title: .key("Menu.left"), action: #selector(Wheel.left), keyEquivalent: String(Character(UnicodeScalar(NSLeftArrowFunctionKey)!)))),
+                {
+                    $0.keyEquivalentModifierMask = []
+                    return $0
+                } (NSMenuItem(title: .key("Menu.right"), action: #selector(Wheel.right), keyEquivalent: String(Character(UnicodeScalar(NSRightArrowFunctionKey)!))))]
             return $0
         } (NSMenuItem(title: "", action: nil, keyEquivalent: ""))
     }

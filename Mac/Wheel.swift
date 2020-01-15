@@ -10,7 +10,9 @@ final class Wheel: NSView {
     private weak var stats: Image!
     private var drag = Drag.no
     private let ratio = CGFloat(360)
+    private let offset = TimeInterval(518_400)
     
+    override var acceptsFirstResponder: Bool { true }
     override var mouseDownCanMoveWindow: Bool { false }
     
     required init?(coder: NSCoder) { nil }
@@ -89,30 +91,63 @@ final class Wheel: NSView {
     
     override func mouseUp(with: NSEvent) {
         switch drag {
-        case .drag: break
+        case .drag:
+            drag = .no
+            highlight()
         default:
             let point = convert(with.locationInWindow, from: nil)
             if forward.frame.contains(point) {
-                forward.alphaValue = 0.1
-                moonraker.offset += 518_400
+                right()
             } else if backward.frame.contains(point) {
-                backward.alphaValue = 0.1
-                moonraker.offset -= 518_400
+                left()
             } else if now.frame.contains(point) {
-                now.alphaValue = 0.1
-                moonraker.offset = 0
+                down()
             } else if zoom.frame.contains(point) {
-                zoom.alphaValue = 0.1
-                horizon.zoom.toggle()
+                up()
             } else if stats.frame.contains(point) {
-                stats.alphaValue = 0.1
-                (NSApp.mainMenu as! Menu).calendar()
+                middle()
             }
+            drag = .no
         }
-        drag = .no
         NSCursor.arrow.set()
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.highlight()
+    }
+    
+    @objc func up() {
+        animate(zoom)
+        horizon.zoom.toggle()
+    }
+    
+    @objc func middle() {
+        animate(stats)
+        (NSApp.windows.first { $0 is Config } ?? Config()).makeKeyAndOrderFront(nil)
+    }
+    
+    @objc func down() {
+        animate(now)
+        moonraker.offset = 0
+    }
+    
+    @objc func left() {
+        animate(backward)
+        moonraker.offset -= offset
+    }
+    
+    @objc func right() {
+        animate(forward)
+        moonraker.offset += offset
+    }
+    
+    private func animate(_ image: Image) {
+        NSAnimationContext.runAnimationGroup({
+            $0.duration = 0.1
+            $0.allowsImplicitAnimation = true
+            image.alphaValue = 0.1
+        }) {
+            NSAnimationContext.runAnimationGroup {
+                $0.duration = 0.5
+                $0.allowsImplicitAnimation = true
+                image.alphaValue = 1
+            }
         }
     }
     

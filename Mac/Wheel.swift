@@ -106,7 +106,7 @@ final class Wheel: NSView {
                 horizon.zoom.toggle()
             } else if stats.frame.contains(point) {
                 stats.alphaValue = 0.1
-//                (UIApplication.shared.delegate as! App).present(Stats(), animated: true)
+                (NSApp.mainMenu as! Menu).calendar()
             }
         }
         drag = .no

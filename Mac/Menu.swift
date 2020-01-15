@@ -11,6 +11,10 @@ final class Menu: NSMenu {
         status.button!.target = self
         status.button!.action = #selector(show)
     }
+    
+    @objc func calendar() {
+        (NSApp.windows.first { $0 is Config } ?? Config()).makeKeyAndOrderFront(nil)
+    }
 
     private var moonraker: NSMenuItem {
         {
@@ -19,7 +23,12 @@ final class Menu: NSMenu {
                 {
                     $0.target = self
                     return $0
-                } (NSMenuItem(title: .key("Menu.about"), action: #selector(about), keyEquivalent: ",")),
+                } (NSMenuItem(title: .key("Menu.about"), action: #selector(about), keyEquivalent: "")),
+                .separator(),
+                {
+                    $0.target = self
+                    return $0
+                } (NSMenuItem(title: .key("Menu.calendar"), action: #selector(calendar), keyEquivalent: ",")),
                 .separator(),
                 .init(title: .key("Menu.hide"), action: #selector(NSApplication.hide(_:)), keyEquivalent: "h"),
                 {

@@ -12,6 +12,27 @@ final class Graph: NSView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         
+        let base = CAShapeLayer()
+        base.fillColor = .clear
+        base.lineWidth = 3
+        base.strokeColor = .shade(0.4)
+        base.lineCap = .round
+        base.path = {
+            $0.addArc(center: .init(x: 120, y: 105), radius: 35, startAngle: .pi * 1.25, endAngle: .pi * -0.25, clockwise: true)
+            return $0
+        } (CGMutablePath())
+        layer = base
+        wantsLayer = true
+        
+        let ring = CAShapeLayer()
+        ring.fillColor = .clear
+        ring.lineWidth = 3
+        ring.strokeColor = .haze()
+        ring.lineCap = .round
+        ring.path = base.path
+        ring.strokeEnd = 0
+        base.addSublayer(ring)
+        
         let formatter = DateFormatter()
         formatter.timeStyle = .none
         formatter.dateStyle = .short
@@ -21,13 +42,15 @@ final class Graph: NSView {
         time.dateFormat = "h a"
         
         let label = Label([])
-        label.maximumNumberOfLines = 5
+        label.maximumNumberOfLines = 6
         addSubview(label)
         
         sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+            ring.strokeEnd = .init($0.fraction)
+            
             var attributed: [(String, NSFont, NSColor)] = [
                 ("\(Int(round($0.fraction * 1000) / 10))", .bold(20), .haze()), ("%", .regular(14), .shade()),
-                ("\n" + .key("Phase.\($0.phase)") + "\n\n", .regular(16), .haze())]
+                ("\n\n" + .key("Phase.\($0.phase)") + "\n\n", .regular(14), .haze())]
             if abs(moonraker.offset) > 3600 {
                 let date = moonraker.date.addingTimeInterval(moonraker.offset)
                 if abs(moonraker.offset) >= 86400 {
@@ -39,9 +62,9 @@ final class Graph: NSView {
         }
         
         widthAnchor.constraint(equalToConstant: 240).isActive = true
-        heightAnchor.constraint(equalToConstant: 115).isActive = true
-        
-        label.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
+        heightAnchor.constraint(equalToConstant: 150).isActive = true
+
+        label.topAnchor.constraint(equalTo: topAnchor, constant: 35).isActive = true
         label.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
 }

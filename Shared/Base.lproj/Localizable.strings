@@ -9,6 +9,7 @@ Stats.now="Today";
 Wheel.stats="Calendar";
 Menu.title="Moonraker";
 Menu.about="About";
+Menu.calendar="Calendar";
 Menu.hide="Hide";
 Menu.hideOthers="Hide others";
 Menu.showAll="Show all";

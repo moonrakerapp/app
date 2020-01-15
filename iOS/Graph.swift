@@ -16,6 +16,7 @@ final class Graph: UIView {
         formatter.dateStyle = .short
         
         let time = DateFormatter()
+        time.locale = .init(identifier: "en_US_POSIX")
         time.dateFormat = "h a"
         
         let label = Label([])
@@ -25,7 +26,7 @@ final class Graph: UIView {
         sub = moonraker.info.receive(on: DispatchQueue.main).sink {
             var attributed: [(String, UIFont, UIColor)] = [
                 ("\(Int(round($0.fraction * 1000) / 10))", .bold(20), .haze()), ("%", .regular(14), .shade()),
-                ("\n" + .key("Phase.\($0.phase)") + "\n\n", .medium(18), .haze())]
+                ("\n" + .key("Phase.\($0.phase)") + "\n\n", .regular(18), .haze())]
             if abs(moonraker.offset) > 3600 {
                 let date = moonraker.date.addingTimeInterval(moonraker.offset)
                 if abs(moonraker.offset) >= 86400 {

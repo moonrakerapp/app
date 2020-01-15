@@ -12,24 +12,36 @@ final class Graph: NSView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         
-        let phase = Label("", .medium(16), .haze())
-        addSubview(phase)
+        let formatter = DateFormatter()
+        formatter.timeStyle = .none
+        formatter.dateStyle = .short
         
-        let percent = Label([])
-        addSubview(percent)
+        let time = DateFormatter()
+        time.locale = .init(identifier: "en_US_POSIX")
+        time.dateFormat = "h a"
+        
+        let label = Label([])
+        label.maximumNumberOfLines = 5
+        addSubview(label)
         
         sub = moonraker.info.receive(on: DispatchQueue.main).sink {
-            phase.stringValue = .key("Phase.\($0.phase)")
-            percent.attributed([("\(Int(round($0.fraction * 1000) / 10))", .bold(16), .haze()), ("%", .regular(12), .shade())])
+            var attributed: [(String, NSFont, NSColor)] = [
+                ("\(Int(round($0.fraction * 1000) / 10))", .bold(20), .haze()), ("%", .regular(14), .shade()),
+                ("\n" + .key("Phase.\($0.phase)") + "\n\n", .regular(16), .haze())]
+            if abs(moonraker.offset) > 3600 {
+                let date = moonraker.date.addingTimeInterval(moonraker.offset)
+                if abs(moonraker.offset) >= 86400 {
+                    attributed.append((formatter.string(from: date), .medium(12), .shade()))
+                }
+                attributed.append(("\n" + time.string(from: date), .medium(12), .shade()))
+            }
+            label.attributed(attributed, align: .center)
         }
         
-        widthAnchor.constraint(equalToConstant: 220).isActive = true
-        bottomAnchor.constraint(equalTo: percent.bottomAnchor, constant: 5).isActive = true
+        widthAnchor.constraint(equalToConstant: 240).isActive = true
+        heightAnchor.constraint(equalToConstant: 115).isActive = true
         
-        phase.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
-        phase.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
-        percent.topAnchor.constraint(equalTo: phase.bottomAnchor, constant: 5).isActive = true
-        percent.centerXAnchor.constraint(equalTo: centerXAnchor, constant: 2).isActive = true
+        label.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
+        label.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
     }
 }

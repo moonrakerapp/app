@@ -2,8 +2,8 @@ import AppKit
 
 final class Window: NSWindow {
     init() {
-        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 250, y: NSScreen.main!.frame.midY - 250, width: 500, height: 500), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
-        minSize = .init(width: 320, height: 200)
+        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 300, y: NSScreen.main!.frame.midY - 400, width: 600, height: 800), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
+        minSize = .init(width: 200, height: 250)
         appearance = NSAppearance(named: .darkAqua)
         backgroundColor = .clear
         titlebarAppearsTransparent = true
@@ -20,24 +20,35 @@ final class Window: NSWindow {
         contentView!.layer!.borderColor = .shade(0.5)
         contentView!.layer!.cornerRadius = 5
         
-        let horizon = Horizon()
-        contentView!.addSubview(horizon)
-        
         let graph = Graph()
         contentView!.addSubview(graph)
+        
+        let equalizer = NSView()
+        equalizer.translatesAutoresizingMaskIntoConstraints = false
+        equalizer.wantsLayer = true
+        equalizer.layer!.addSublayer(Equalizer())
+        contentView!.addSubview(equalizer)
+        
+        let horizon = Horizon()
+        contentView!.addSubview(horizon)
         
         let wheel = Wheel()
         wheel.horizon = horizon
         contentView!.addSubview(wheel)
         
-        horizon.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 20).isActive = true
-        horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 40).isActive = true
-        horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -40).isActive = true
-        horizon.bottomAnchor.constraint(equalTo: graph.topAnchor).isActive = true
+        horizon.topAnchor.constraint(equalTo: contentView!.topAnchor).isActive = true
+        horizon.leftAnchor.constraint(equalTo: contentView!.leftAnchor, constant: 20).isActive = true
+        horizon.rightAnchor.constraint(equalTo: contentView!.rightAnchor, constant: -20).isActive = true
+        horizon.bottomAnchor.constraint(equalTo: graph.topAnchor, constant: 60).isActive = true
         
-        graph.topAnchor.constraint(greaterThanOrEqualTo: contentView!.topAnchor, constant: 130).isActive = true
+        equalizer.widthAnchor.constraint(equalToConstant: 160).isActive = true
+        equalizer.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        equalizer.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
+        equalizer.bottomAnchor.constraint(equalTo: wheel.topAnchor, constant: 20).isActive = true
+        
+        graph.topAnchor.constraint(greaterThanOrEqualTo: contentView!.topAnchor, constant: 140).isActive = true
         graph.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
-        graph.bottomAnchor.constraint(equalTo: wheel.topAnchor).isActive = true
+        graph.bottomAnchor.constraint(equalTo: equalizer.topAnchor).isActive = true
         
         wheel.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
         let bottom = wheel.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor, constant: -40)

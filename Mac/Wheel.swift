@@ -2,25 +2,14 @@ import AppKit
 
 final class Wheel: NSView {
     weak var horizon: Horizon!
-    private weak var date: Label!
-    private weak var offset: Label!
-    private weak var modifier: Label!
-    private weak var ring: CAShapeLayer!
-    private weak var outer: CAShapeLayer!
-    private weak var inner: CAShapeLayer!
+    private weak var disk: Disk!
     private weak var zoom: Image!
     private weak var now: Image!
     private weak var forward: Image!
     private weak var backward: Image!
-    private let components = DateComponentsFormatter()
-    private let formatter = DateFormatter()
+    private weak var stats: Image!
+    private var drag = Drag.no
     private let ratio = CGFloat(360)
-    
-    private var drag = Drag.no {
-        didSet {
-            highlight()
-        }
-    }
     
     override var mouseDownCanMoveWindow: Bool { false }
     
@@ -29,158 +18,36 @@ final class Wheel: NSView {
         super.init(frame: .zero)
         translatesAutoresizingMaskIntoConstraints = false
         wantsLayer = true
-        components.allowedUnits = [.year, .month, .weekOfMonth, .day, .hour, .minute]
-        components.unitsStyle = .abbreviated
-        formatter.timeStyle = .short
         
-        widthAnchor.constraint(equalToConstant: 200).isActive = true
-        heightAnchor.constraint(equalToConstant: 250).isActive = true
+        widthAnchor.constraint(equalToConstant: 300).isActive = true
+        heightAnchor.constraint(equalToConstant: 300).isActive = true
         
-        let ring = CAShapeLayer()
-        ring.fillColor = .clear
-        ring.lineWidth = 2
-        ring.path = {
-            $0.addArc(center: .init(x: 100, y: 100), radius: 92.5, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            return $0
-        } (CGMutablePath())
-        layer!.addSublayer(ring)
-        self.ring = ring
-        
-        let outer = CAShapeLayer()
-        outer.fillColor = .clear
-        outer.lineWidth = 5
-        outer.path = {
-            $0.addArc(center: .init(x: 100, y: 100), radius: 96, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            return $0
-        } (CGMutablePath())
-        layer!.addSublayer(outer)
-        self.outer = outer
-        
-        let inner = CAShapeLayer()
-        inner.path = {
-            $0.addArc(center: .init(x: 100, y: 100), radius: 32, startAngle: 0, endAngle: .pi * 2, clockwise: false)
-            return $0
-        } (CGMutablePath())
-        layer!.addSublayer(inner)
-        self.inner = inner
-        
-        let gradient = CAGradientLayer()
-        gradient.startPoint = CGPoint(x: 0.5, y: 0)
-        gradient.endPoint = CGPoint(x: 0.5, y: 1)
-        gradient.locations = [0, 1]
-        gradient.colors = [CGColor(gray: 0, alpha: 0.2), CGColor.clear]
-        gradient.cornerRadius = 30
-        gradient.frame = .init(x: 70, y: 70, width: 60, height: 60)
-        inner.addSublayer(gradient)
-        
-        let offset = Label("", .regular(12), .haze())
-        addSubview(offset)
-        self.offset = offset
-        
-        let modifier = Label("", .medium(14), .rain())
-        addSubview(modifier)
-        self.modifier = modifier
-        
-        let date = Label("", .regular(12), .haze())
-        addSubview(date)
-        self.date = date
+        let disk = Disk()
+        layer!.addSublayer(disk)
+        self.disk = disk
         
         zoom = control("zoom")
         now = control("now")
         forward = control("forward")
         backward = control("backward")
+        stats = control("stats")
         
-        offset.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
-        offset.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
-        modifier.centerYAnchor.constraint(equalTo: offset.centerYAnchor).isActive = true
-        modifier.rightAnchor.constraint(equalTo: offset.leftAnchor).isActive = true
-        
-        date.topAnchor.constraint(equalTo: offset.bottomAnchor).isActive = true
-        date.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
-        zoom.centerYAnchor.constraint(equalTo: topAnchor, constant: 82).isActive = true
+        zoom.centerYAnchor.constraint(equalTo: topAnchor, constant: 67).isActive = true
         zoom.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
-        now.centerYAnchor.constraint(equalTo: bottomAnchor, constant: -32).isActive = true
+        now.centerYAnchor.constraint(equalTo: bottomAnchor, constant: -67).isActive = true
         now.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         forward.centerYAnchor.constraint(equalTo: topAnchor, constant: 150).isActive = true
-        forward.centerXAnchor.constraint(equalTo: rightAnchor, constant: -32).isActive = true
+        forward.centerXAnchor.constraint(equalTo: rightAnchor, constant: -67).isActive = true
         
         backward.centerYAnchor.constraint(equalTo: topAnchor, constant: 150).isActive = true
-        backward.centerXAnchor.constraint(equalTo: leftAnchor, constant: 32).isActive = true
+        backward.centerXAnchor.constraint(equalTo: leftAnchor, constant: 67).isActive = true
+        
+        stats.centerYAnchor.constraint(equalTo: topAnchor, constant: 150).isActive = true
+        stats.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         
         highlight()
-        update()
-        
-        addTrackingArea(.init(rect: .zero, options: [.mouseEnteredAndExited, .mouseMoved, .activeInActiveApp, .inVisibleRect], owner: self))
-    }
-    
-    override func mouseMoved(with: NSEvent) {
-        if valid(convert(with.locationInWindow, from: nil)) {
-            NSCursor.pointingHand.set()
-        } else {
-            NSCursor.arrow.set()
-        }
-    }
-    
-    override func mouseExited(with: NSEvent) {
-        NSCursor.arrow.set()
-    }
-    
-    override func mouseDragged(with: NSEvent) {
-        let point = convert(with.locationInWindow, from: nil)
-        if valid(point) {
-            switch drag {
-            case .drag:
-                rotate(point, with.deltaX, with.deltaY)
-            case .start(var x, var y):
-                x += with.deltaX
-                y += with.deltaY
-                if abs(x) + abs(y) > 15 {
-                    rotate(point, x, y)
-                    drag = .drag
-                } else {
-                    drag = .start(x: x, y: y)
-                }
-            default: break
-            }
-        } else {
-            drag = .no
-        }
-    }
-    
-    override func mouseUp(with: NSEvent) {
-        var flashed = false
-        switch drag {
-        case .start(_, _):
-            let point = convert(with.locationInWindow, from: nil)
-            if forward.frame.contains(point) {
-                flash(forward)
-                moonraker.offset += 43_200
-                update()
-                flashed = true
-            } else if backward.frame.contains(point) {
-                flash(backward)
-                moonraker.offset -= 43_200
-                update()
-                flashed = true
-            } else if now.frame.contains(point) {
-                flash(now)
-                moonraker.offset = 0
-                update()
-                flashed = true
-            } else if zoom.frame.contains(point) {
-                flash(zoom)
-                horizon.zoom.toggle()
-                flashed = true
-            }
-        default: break
-        }
-        if !flashed {
-            drag = .no
-        }
     }
     
     override func mouseDown(with: NSEvent) {
@@ -191,112 +58,115 @@ final class Wheel: NSView {
         }
     }
     
+    override func mouseDragged(with: NSEvent) {
+        let point = convert(with.locationInWindow, from: nil)
+        if valid(point) {
+            NSCursor.pointingHand.set()
+            switch drag {
+            case .drag:
+                disk.rotate(atan2(point.x - 150, 150 - point.y))
+                rotate(point, with.deltaX, with.deltaY)
+            case .start(var x, var y):
+                x += with.deltaX
+                y += with.deltaY
+                if abs(x) + abs(y) > 15 {
+                    rotate(point, x, y)
+                    drag = .drag
+                    highlight()
+                } else {
+                    drag = .start(x: x, y: y)
+                }
+            default: break
+            }
+        } else {
+            switch drag {
+            case .start(_, _):
+                drag = .no
+            default: break
+            }
+        }
+    }
+    
+    override func mouseUp(with: NSEvent) {
+        switch drag {
+        case .drag: break
+        default:
+            let point = convert(with.locationInWindow, from: nil)
+            if forward.frame.contains(point) {
+                forward.alphaValue = 0.1
+                moonraker.offset += 518_400
+            } else if backward.frame.contains(point) {
+                backward.alphaValue = 0.1
+                moonraker.offset -= 518_400
+            } else if now.frame.contains(point) {
+                now.alphaValue = 0.1
+                moonraker.offset = 0
+            } else if zoom.frame.contains(point) {
+                zoom.alphaValue = 0.1
+                horizon.zoom.toggle()
+            } else if stats.frame.contains(point) {
+                stats.alphaValue = 0.1
+//                (UIApplication.shared.delegate as! App).present(Stats(), animated: true)
+            }
+        }
+        drag = .no
+        NSCursor.arrow.set()
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.highlight()
+        }
+    }
+    
     private func rotate(_ point: CGPoint, _ x: CGFloat, _ y: CGFloat) {
         var delta = CGFloat()
         
-        if point.y > 100 {
+        if point.y > 150 {
             delta += x
         } else {
             delta -= x
         }
         
-        if point.x > 100 {
+        if point.x > 150 {
             delta += y
         } else {
             delta -= y
         }
         
         moonraker.offset += .init(delta * ratio)
-        update()
-    }
-    
-    private func update() {
-        if moonraker.offset == 0 {
-            offset.stringValue = .key("Wheel.now")
-            modifier.stringValue = ""
-            date.stringValue = ""
-        } else {
-            offset.stringValue = components.string(from: abs(moonraker.offset)) ?? ""
-            modifier.stringValue = moonraker.offset > 0 ? "+" : "-"
-            if abs(moonraker.offset) > 3600 {
-                formatter.dateStyle = abs(moonraker.offset) >= 86400 ? .short : .none
-                date.stringValue = formatter.string(from: moonraker.date.addingTimeInterval(moonraker.offset))
-            }
-        }
     }
     
     private func highlight() {
         NSAnimationContext.runAnimationGroup {
-            $0.duration = 0.6
+            $0.duration = 0.7
             $0.allowsImplicitAnimation = true
             switch drag {
-            case .no:
-                ring.strokeColor = .shade(0.3)
-                outer.strokeColor = .shade(0.4)
-                inner.fillColor = .shade(0.4)
-                forward.alphaValue = 0.6
-                backward.alphaValue = 0.6
-                now.alphaValue = 0.6
-                zoom.alphaValue = 0.6
-                offset.alphaValue = 0.4
-                modifier.alphaValue = 0.4
-                date.alphaValue = 0.4
             case .drag:
-                ring.strokeColor = .black
-                outer.strokeColor = .shade()
-                inner.fillColor = .shade()
-                forward.alphaValue = 0.3
-                backward.alphaValue = 0.3
-                now.alphaValue = 0.3
-                zoom.alphaValue = 0.3
-                offset.alphaValue = 1
-                modifier.alphaValue = 1
-                date.alphaValue = 1
+                forward.alphaValue = 0
+                backward.alphaValue = 0
+                now.alphaValue = 0
+                zoom.alphaValue = 0
+                stats.alphaValue = 0
             default:
-                ring.strokeColor = .black
-                outer.strokeColor = .shade()
-                inner.fillColor = .shade()
                 forward.alphaValue = 1
                 backward.alphaValue = 1
                 now.alphaValue = 1
                 zoom.alphaValue = 1
+                stats.alphaValue = 1
             }
+            disk.animate(drag)
         }
     }
     
     private func valid(_ point: CGPoint) -> Bool {
-        let distance = pow(point.x - 100, 2) + pow(point.y - 100, 2)
-        return distance > 400 && distance < 12_100
-    }
-    
-    private func flash(_ image: Image) {
-        image.alphaValue = 1
-        image.layer!.backgroundColor = .shade(0.5)
-        offset.alphaValue = 1
-        modifier.alphaValue = 1
-        date.alphaValue = 1
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            NSAnimationContext.runAnimationGroup ({
-                $0.duration = 0.3
-                $0.allowsImplicitAnimation = true
-                image.layer!.backgroundColor = .clear
-            }) {
-                self.drag = .no
-            }
-        }
+        let distance = pow(point.x - 150, 2) + pow(point.y - 150, 2)
+        return distance > 900 && distance < 19_600
     }
     
     private func control(_ image: String) -> Image {
         let control = Image(image)
-        control.wantsLayer = true
-        control.layer!.borderColor = .clear
-        control.layer!.cornerRadius = 15
         addSubview(control)
         
         control.widthAnchor.constraint(equalToConstant: 30).isActive = true
         control.heightAnchor.constraint(equalToConstant: 30).isActive = true
-        
         return control
     }
 }

@@ -2,7 +2,7 @@ import AppKit
 
 final class Window: NSWindow {
     init() {
-        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 400, y: NSScreen.main!.frame.midY - 400, width: 800, height: 800), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
+        super.init(contentRect: .init(x: NSScreen.main!.frame.midX - 250, y: NSScreen.main!.frame.midY - 250, width: 500, height: 500), styleMask: [.borderless, .miniaturizable, .resizable, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
         minSize = .init(width: 320, height: 200)
         appearance = NSAppearance(named: .darkAqua)
         backgroundColor = .clear
@@ -23,9 +23,6 @@ final class Window: NSWindow {
         let horizon = Horizon()
         contentView!.addSubview(horizon)
         
-        let stats = Stats()
-        contentView!.addSubview(stats)
-        
         let graph = Graph()
         contentView!.addSubview(graph)
         
@@ -43,11 +40,7 @@ final class Window: NSWindow {
         graph.bottomAnchor.constraint(equalTo: wheel.topAnchor).isActive = true
         
         wheel.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
-        wheel.bottomAnchor.constraint(equalTo: stats.topAnchor, constant: -40).isActive = true
-        
-        stats.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
-        stats.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
-        let bottom = stats.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor)
+        let bottom = wheel.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor, constant: -40)
         bottom.priority = .defaultLow
         bottom.isActive = true
     }

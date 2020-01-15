@@ -15,8 +15,8 @@ final class Wheel: UIView {
     required init?(coder: NSCoder) { nil }
     init() {
         super.init(frame: .zero)
-        haptics.prepare()
         translatesAutoresizingMaskIntoConstraints = false
+        haptics.prepare()
         
         widthAnchor.constraint(equalToConstant: 300).isActive = true
         heightAnchor.constraint(equalToConstant: 300).isActive = true
@@ -142,25 +142,21 @@ final class Wheel: UIView {
     
     private func highlight() {
         UIView.animate(withDuration: 0.7) {
-            self.animate()
+            switch self.drag {
+            case .drag:
+                self.forward.alpha = 0
+                self.backward.alpha = 0
+                self.now.alpha = 0
+                self.zoom.alpha = 0
+                self.stats.alpha = 0
+            default:
+                self.forward.alpha = 1
+                self.backward.alpha = 1
+                self.now.alpha = 1
+                self.zoom.alpha = 1
+                self.stats.alpha = 1
+            }
             self.disk.animate(self.drag)
-        }
-    }
-    
-    private func animate() {
-        switch drag {
-        case .drag:
-            forward.alpha = 0
-            backward.alpha = 0
-            now.alpha = 0
-            zoom.alpha = 0
-            stats.alpha = 0
-        default:
-            forward.alpha = 1
-            backward.alpha = 1
-            now.alpha = 1
-            zoom.alpha = 1
-            stats.alpha = 1
         }
     }
     

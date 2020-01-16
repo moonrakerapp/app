@@ -16,7 +16,7 @@ final class About: NSWindow {
         isMovableByWindowBackground = true
         contentView!.wantsLayer = true
         contentView!.layer!.backgroundColor = .black
-        contentView!.layer!.borderColor = .shade(0.5)
+        contentView!.layer!.borderColor = .shade(0.6)
         contentView!.layer!.borderWidth = 1
         contentView!.layer!.cornerRadius = 5
         

@@ -14,7 +14,7 @@ final class Graph: NSView {
         
         let base = CAShapeLayer()
         base.fillColor = .clear
-        base.lineWidth = 3
+        base.lineWidth = 4
         base.strokeColor = .shade(0.4)
         base.lineCap = .round
         base.path = {
@@ -26,7 +26,7 @@ final class Graph: NSView {
         
         let ring = CAShapeLayer()
         ring.fillColor = .clear
-        ring.lineWidth = 3
+        ring.lineWidth = 6
         ring.strokeColor = .haze()
         ring.lineCap = .round
         ring.path = base.path

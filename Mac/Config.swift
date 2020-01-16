@@ -4,6 +4,7 @@ import Combine
 final class Config: NSWindow {
     private weak var year: Label!
     private weak var month: Label!
+    private var selected = DateComponents()
     private var sub: AnyCancellable!
     private let column = CGFloat(50)
     private let margin = CGFloat(30)
@@ -12,8 +13,12 @@ final class Config: NSWindow {
     private let monther = DateFormatter()
     
     init() {
-        super.init(contentRect: .init(x: 0, y: 0, width: 410, height: 540), styleMask: [.borderless, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
-        center()
+        let window = NSApp.windows.first { $0 is Window }!
+        super.init(contentRect: .init(
+            x: min(window.frame.maxX + 1, NSScreen.main!.frame.maxX - 410),
+            y: window.frame.maxY - 640,
+            width: 410, height: 640),
+                   styleMask: [.borderless, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
         appearance = NSAppearance(named: .darkAqua)
         backgroundColor = .clear
         titlebarAppearsTransparent = true
@@ -26,14 +31,14 @@ final class Config: NSWindow {
         isMovableByWindowBackground = true
         contentView!.wantsLayer = true
         contentView!.layer!.backgroundColor = .black
-        contentView!.layer!.borderColor = .shade(0.5)
+        contentView!.layer!.borderColor = .shade(0.6)
         contentView!.layer!.borderWidth = 1
         contentView!.layer!.cornerRadius = 5
         
-        yearer.dateFormat = "YYYY"
+        yearer.dateFormat = "yyyy"
         monther.dateFormat = "MMMM"
         
-        let year = Label("", .light(16), .haze())
+        let year = Label("", .regular(14), .shade())
         contentView!.addSubview(year)
         self.year = year
         
@@ -45,14 +50,12 @@ final class Config: NSWindow {
             let weekday = Label(.key("Config.weekday.\($0)"), .regular(12), .shade())
             contentView!.addSubview(weekday)
             
-            weekday.topAnchor.constraint(equalTo: month.bottomAnchor, constant: 20).isActive = true
+            weekday.topAnchor.constraint(equalTo: month.bottomAnchor, constant: 30).isActive = true
             weekday.centerXAnchor.constraint(equalTo: contentView!.leftAnchor, constant: (column * (.init($0) + 0.5)) + margin).isActive = true
         }
         
-        sub = moonraker.calendar.receive(on: DispatchQueue.main).sink {
-            let comp = self.calendar.dateComponents([.year, .month], from: $0)
-            year.stringValue = self.yearer.string(from: $0)
-            month.stringValue = self.monther.string(from: $0)
+        sub = moonraker.calendar.receive(on: DispatchQueue.main).sink { [weak self] in
+            self?.refresh($0)
         }
         
         year.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
@@ -60,5 +63,63 @@ final class Config: NSWindow {
         
         month.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
         month.topAnchor.constraint(equalTo: year.bottomAnchor, constant: 5).isActive = true
+    }
+    
+    func day(_ day: Int) {
+        selected.day = day
+        animate()
+        
+        moonraker.offset = calendar.date(from: selected)!.timeIntervalSince1970 - moonraker.date.timeIntervalSince1970
+    }
+    
+    private func refresh(_ date: Date) {
+        let new = calendar.dateComponents([.year, .month, .day, .timeZone], from: date)
+        guard new != selected else { return }
+        if new.year == selected.year && new.month == selected.month {
+            selected = new
+            animate()
+        } else {
+            changeDays(date)
+        }
+    }
+    
+    private func animate() {
+        NSAnimationContext.runAnimationGroup {
+            $0.duration = 0.7
+            $0.allowsImplicitAnimation = true
+            contentView!.subviews.compactMap { $0 as? Day }.forEach {
+                $0.selected = $0.day == selected.day!
+            }
+        }
+    }
+    
+    private func changeDays(_ date: Date) {
+        selected = calendar.dateComponents([.year, .month, .day], from: date)
+        year.stringValue = yearer.string(from: date)
+        month.stringValue = monther.string(from: date)
+        contentView!.subviews.filter { $0 is Day }.forEach { $0.removeFromSuperview() }
+        
+        let span = calendar.dateInterval(of: .month, for: date)!
+        let start = calendar.dateComponents([.weekday, .day], from: span.start)
+        var weekday = start.weekday!
+        var top = CGFloat(60)
+        var left = ((.init(weekday) - 0.5) * column) + margin
+        (start.day! ... calendar.component(.day, from: calendar.date(byAdding: .day, value: -1, to: span.end)!)).forEach {
+            let day = Day($0, self)
+            day.selected = $0 == selected.day!
+            contentView!.addSubview(day)
+            
+            day.topAnchor.constraint(equalTo: month.bottomAnchor, constant: top).isActive = true
+            day.centerXAnchor.constraint(equalTo: contentView!.leftAnchor, constant: left).isActive = true
+            
+            if weekday == 7 {
+                weekday = 1
+                top += column
+                left = (0.5 * column) + margin
+            } else {
+                weekday += 1
+                left += column
+            }
+        }
     }
 }

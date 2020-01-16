@@ -17,7 +17,7 @@ final class Window: NSWindow {
         contentView!.wantsLayer = true
         contentView!.layer!.backgroundColor = .black
         contentView!.layer!.borderWidth = 1
-        contentView!.layer!.borderColor = .shade(0.5)
+        contentView!.layer!.borderColor = .shade(0.6)
         contentView!.layer!.cornerRadius = 5
         
         let graph = Graph()
@@ -54,16 +54,6 @@ final class Window: NSWindow {
         let bottom = wheel.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor, constant: -40)
         bottom.priority = .defaultLow
         bottom.isActive = true
-    }
-
-    override func becomeKey() {
-        super.becomeKey()
-        contentView!.subviews.forEach { $0.alphaValue = 1 }
-    }
-    
-    override func resignKey() {
-        super.resignKey()
-        contentView!.subviews.forEach { $0.alphaValue = 0.5 }
     }
     
     override func close() {

@@ -25,7 +25,14 @@ final class Equalizer: CAShapeLayer {
                     return $0
                 } (CGMutablePath()))
             }
+            
+            let animation = CABasicAnimation(keyPath: "path")
+            animation.duration = 0.35
+            animation.fromValue = self.path
+            animation.toValue = path
+            animation.timingFunction = .init(name: .easeOut)
             self.path = path
+            self.add(animation, forKey: "path")
         }
     }
 }

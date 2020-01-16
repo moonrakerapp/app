@@ -1,6 +1,6 @@
 import AppKit
 
-final class Day: NSView {
+final class Day: Control {
     let day: Int
     private weak var config: Config!
     private weak var label: Label!
@@ -18,7 +18,7 @@ final class Day: NSView {
     init(_ day: Int, _ config: Config) {
         self.day = day
         self.config = config
-        super.init(frame: .zero)
+        super.init(config, #selector(config.day(_:)))
         translatesAutoresizingMaskIntoConstraints = false
         wantsLayer = true
         layer!.cornerRadius = 20
@@ -32,29 +32,5 @@ final class Day: NSView {
         
         label.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
         label.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        
-        addTrackingArea(.init(rect: .zero, options: [.mouseEnteredAndExited, .activeInActiveApp, .inVisibleRect], owner: self))
-    }
-    
-    override func resetCursorRects() {
-        addCursorRect(bounds, cursor: .pointingHand)
-    }
-    
-    override func mouseDown(with: NSEvent) {
-        alphaValue = 0.3
-    }
-    
-    override func mouseExited(with: NSEvent) {
-        alphaValue = 1
-    }
-    
-    override func mouseUp(with: NSEvent) {
-        window!.makeFirstResponder(nil)
-        if bounds.contains(convert(with.locationInWindow, from: nil)) && with.clickCount == 1 {
-            config.day(day)
-        } else {
-            super.mouseUp(with: with)
-        }
-        alphaValue = 1
     }
 }

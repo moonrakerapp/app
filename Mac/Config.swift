@@ -46,11 +46,28 @@ final class Config: NSWindow {
         contentView!.addSubview(month)
         self.month = month
         
+        let _today = Control(self, #selector(today))
+        _today.wantsLayer = true
+        _today.layer!.cornerRadius = 14
+        _today.layer!.backgroundColor = .shade()
+        contentView!.addSubview(_today)
+        
+        let label = Label(.key("Config.today"), .medium(14), .black)
+        _today.addSubview(label)
+        
+        let stats = Stats()
+        contentView!.addSubview(stats)
+        
+        control("prev", #selector(prevYear), year.centerYAnchor, left: nil, right: year.leftAnchor)
+        control("next", #selector(nextYear), year.centerYAnchor, left: year.rightAnchor, right: nil)
+        control("prev", #selector(prevMonth), month.centerYAnchor, left: nil, right: month.leftAnchor)
+        control("next", #selector(nextMonth), month.centerYAnchor, left: month.rightAnchor, right: nil)
+        
         (0 ..< 7).forEach {
             let weekday = Label(.key("Config.weekday.\($0)"), .regular(12), .shade())
             contentView!.addSubview(weekday)
             
-            weekday.topAnchor.constraint(equalTo: month.bottomAnchor, constant: 30).isActive = true
+            weekday.topAnchor.constraint(equalTo: month.bottomAnchor, constant: 40).isActive = true
             weekday.centerXAnchor.constraint(equalTo: contentView!.leftAnchor, constant: (column * (.init($0) + 0.5)) + margin).isActive = true
         }
         
@@ -62,18 +79,32 @@ final class Config: NSWindow {
         year.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: margin).isActive = true
         
         month.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
-        month.topAnchor.constraint(equalTo: year.bottomAnchor, constant: 5).isActive = true
+        month.topAnchor.constraint(equalTo: year.bottomAnchor, constant: 20).isActive = true
+        
+        _today.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
+        _today.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        _today.heightAnchor.constraint(equalToConstant: 28).isActive = true
+        _today.bottomAnchor.constraint(equalTo: stats.topAnchor).isActive = true
+        
+        label.centerXAnchor.constraint(equalTo: _today.centerXAnchor).isActive = true
+        label.centerYAnchor.constraint(equalTo: _today.centerYAnchor).isActive = true
+        
+        stats.leftAnchor.constraint(equalTo: contentView!.leftAnchor).isActive = true
+        stats.rightAnchor.constraint(equalTo: contentView!.rightAnchor).isActive = true
+        stats.bottomAnchor.constraint(equalTo: contentView!.bottomAnchor).isActive = true
     }
     
-    func day(_ day: Int) {
-        selected.day = day
+    @objc func day(_ day: Day) {
+        guard selected.day != day.day else { return }
+        selected.day = day.day
+        selected.hour = 12
         animate()
         
         moonraker.offset = calendar.date(from: selected)!.timeIntervalSince1970 - moonraker.date.timeIntervalSince1970
     }
     
     private func refresh(_ date: Date) {
-        let new = calendar.dateComponents([.year, .month, .day, .timeZone], from: date)
+        let new = calendar.dateComponents([.year, .month, .day, .timeZone, .hour], from: date)
         guard new != selected else { return }
         if new.year == selected.year && new.month == selected.month {
             selected = new
@@ -102,7 +133,7 @@ final class Config: NSWindow {
         let span = calendar.dateInterval(of: .month, for: date)!
         let start = calendar.dateComponents([.weekday, .day], from: span.start)
         var weekday = start.weekday!
-        var top = CGFloat(60)
+        var top = CGFloat(70)
         var left = ((.init(weekday) - 0.5) * column) + margin
         (start.day! ... calendar.component(.day, from: calendar.date(byAdding: .day, value: -1, to: span.end)!)).forEach {
             let day = Day($0, self)
@@ -121,5 +152,55 @@ final class Config: NSWindow {
                 left += column
             }
         }
+    }
+    
+    private func control(_ image: String, _ selector: Selector, _ center: NSLayoutYAxisAnchor, left: NSLayoutXAxisAnchor?, right: NSLayoutXAxisAnchor?) {
+        let control = Control(self, selector)
+        contentView!.addSubview(control)
+        
+        let image = Image(image)
+        control.addSubview(image)
+        
+        control.centerYAnchor.constraint(equalTo: center).isActive = true
+        control.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        control.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        image.topAnchor.constraint(equalTo: control.topAnchor).isActive = true
+        image.bottomAnchor.constraint(equalTo: control.bottomAnchor).isActive = true
+        image.leftAnchor.constraint(equalTo: control.leftAnchor).isActive = true
+        image.rightAnchor.constraint(equalTo: control.rightAnchor).isActive = true
+        
+        if let left = left {
+            control.leftAnchor.constraint(equalTo: left, constant: -12).isActive = true
+        }
+        if let right = right {
+            control.rightAnchor.constraint(equalTo: right, constant: 12).isActive = true
+        }
+    }
+    
+    private func add(_ amount: Int, _ component: Calendar.Component) {
+        selected.hour = 12
+        moonraker.offset = calendar.date(byAdding: component, value: amount, to:
+            calendar.date(from: selected)!)!.timeIntervalSince1970 - moonraker.date.timeIntervalSince1970
+    }
+    
+    @objc private func today() {
+        moonraker.offset = 0
+    }
+    
+    @objc private func prevMonth() {
+        add(-1, .month)
+    }
+    
+    @objc private func nextMonth() {
+        add(1, .month)
+    }
+    
+    @objc private func prevYear() {
+        add(-1, .year)
+    }
+    
+    @objc private func nextYear() {
+        add(1, .year)
     }
 }

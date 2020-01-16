@@ -28,8 +28,7 @@ final class Stats: UIViewController {
         date.timeStyle = .none
         
         let time = DateFormatter()
-        time.dateStyle = .none
-        time.timeStyle = .medium
+        time.dateFormat = "HH:mm"
         
         let outside = Button(self, #selector(close))
         view.addSubview(outside)

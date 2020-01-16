@@ -85,6 +85,7 @@
 		DACB8EE723BB843500ADBCB2 /* libMoonraker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */; };
 		DACB8EEA23BB843F00ADBCB2 /* libMoonraker.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */; };
 		DADF9E0C23D06DC30070A497 /* Day.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADF9E0B23D06DC30070A497 /* Day.swift */; };
+		DADF9E0E23D087BD0070A497 /* Control.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADF9E0D23D087BD0070A497 /* Control.swift */; };
 		DAE156AC23C33BD90050CB02 /* Wheel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE156AB23C33BD90050CB02 /* Wheel.swift */; };
 		DAE70A8E23C4760A0045FC2F /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAE70A8D23C4760A0045FC2F /* Stat.swift */; };
 		DAEAD2F223BC8FC10053EBEA /* TestIllumination.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */; };
@@ -256,6 +257,7 @@
 		DACB8EE423BB7DDD00ADBCB2 /* libMoonraker.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMoonraker.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		DACB8EE523BB7E2D00ADBCB2 /* Moonraker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moonraker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DADF9E0B23D06DC30070A497 /* Day.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Day.swift; sourceTree = "<group>"; };
+		DADF9E0D23D087BD0070A497 /* Control.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Control.swift; sourceTree = "<group>"; };
 		DAE156AB23C33BD90050CB02 /* Wheel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Wheel.swift; sourceTree = "<group>"; };
 		DAE70A8D23C4760A0045FC2F /* Stat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stat.swift; sourceTree = "<group>"; };
 		DAEAD2F123BC8FC10053EBEA /* TestIllumination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestIllumination.swift; sourceTree = "<group>"; };
@@ -453,6 +455,7 @@
 				DA10C57223C2009B005FD07E /* About.swift */,
 				DACB8ED723BB7C3F00ADBCB2 /* App.swift */,
 				DA83244E23CF3945000A16BC /* Config.swift */,
+				DADF9E0D23D087BD0070A497 /* Control.swift */,
 				DADF9E0B23D06DC30070A497 /* Day.swift */,
 				DAF0BF7723C214BE0035F416 /* Graph.swift */,
 				DA077C2523BDF81100682BFE /* Horizon.swift */,
@@ -883,6 +886,7 @@
 				DADF9E0C23D06DC30070A497 /* Day.swift in Sources */,
 				DAABA69423C5FE47002BD579 /* Drag.swift in Sources */,
 				DAF2E81F23C0A1200029EB87 /* String.swift in Sources */,
+				DADF9E0E23D087BD0070A497 /* Control.swift in Sources */,
 				DA46C02923C8A2CF003D19B0 /* Equalizer.swift in Sources */,
 				DA83244F23CF3945000A16BC /* Config.swift in Sources */,
 				DACB8EDE23BB7C4000ADBCB2 /* App.swift in Sources */,

@@ -14,7 +14,7 @@ final class Stat: NSView {
         let image = Image(image)
         addSubview(image)
         
-        let date = Label("", .regular(12), .shade())
+        let date = Label("", .regular(14), .shade())
         date.maximumNumberOfLines = 1
         addSubview(date)
         self.date = date
@@ -24,16 +24,16 @@ final class Stat: NSView {
         addSubview(counter)
         self.counter = counter
         
-        widthAnchor.constraint(equalToConstant: 80).isActive = true
+        widthAnchor.constraint(equalToConstant: 92).isActive = true
         bottomAnchor.constraint(equalTo: counter.bottomAnchor, constant: 5).isActive = true
         
         image.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        image.topAnchor.constraint(equalTo: topAnchor, constant: 5).isActive = true
+        image.topAnchor.constraint(equalTo: topAnchor, constant: 10).isActive = true
         image.widthAnchor.constraint(equalToConstant: 44).isActive = true
         image.heightAnchor.constraint(equalToConstant: 38).isActive = true
         
         date.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
-        date.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 10).isActive = true
+        date.topAnchor.constraint(equalTo: image.bottomAnchor, constant: 4).isActive = true
         
         counter.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         counter.topAnchor.constraint(equalTo: date.bottomAnchor).isActive = true

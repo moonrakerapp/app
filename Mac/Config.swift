@@ -16,8 +16,8 @@ final class Config: NSWindow {
         let window = NSApp.windows.first { $0 is Window }!
         super.init(contentRect: .init(
             x: min(window.frame.maxX + 1, NSScreen.main!.frame.maxX - 410),
-            y: window.frame.maxY - 640,
-            width: 410, height: 640),
+            y: window.frame.maxY - 680,
+            width: 410, height: 680),
                    styleMask: [.borderless, .closable, .titled, .unifiedTitleAndToolbar, .fullSizeContentView], backing: .buffered, defer: false)
         appearance = NSAppearance(named: .darkAqua)
         backgroundColor = .clear
@@ -47,6 +47,7 @@ final class Config: NSWindow {
         self.month = month
         
         let _today = Control(self, #selector(today))
+        _today.setAccessibilityLabel(.key("Config.today"))
         _today.wantsLayer = true
         _today.layer!.cornerRadius = 14
         _today.layer!.backgroundColor = .shade()
@@ -58,10 +59,10 @@ final class Config: NSWindow {
         let stats = Stats()
         contentView!.addSubview(stats)
         
-        control("prev", #selector(prevYear), year.centerYAnchor, left: nil, right: year.leftAnchor)
-        control("next", #selector(nextYear), year.centerYAnchor, left: year.rightAnchor, right: nil)
-        control("prev", #selector(prevMonth), month.centerYAnchor, left: nil, right: month.leftAnchor)
-        control("next", #selector(nextMonth), month.centerYAnchor, left: month.rightAnchor, right: nil)
+        control("prev", .key("Config.prev.year"), #selector(prevYear), year.centerYAnchor, left: nil, right: year.leftAnchor)
+        control("next", .key("Config.next.year"), #selector(nextYear), year.centerYAnchor, left: year.rightAnchor, right: nil)
+        control("prev", .key("Config.prev.month"), #selector(prevMonth), month.centerYAnchor, left: nil, right: month.leftAnchor)
+        control("next", .key("Config.next.month"), #selector(nextMonth), month.centerYAnchor, left: month.rightAnchor, right: nil)
         
         (0 ..< 7).forEach {
             let weekday = Label(.key("Config.weekday.\($0)"), .regular(12), .shade())
@@ -76,7 +77,7 @@ final class Config: NSWindow {
         }
         
         year.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
-        year.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: margin).isActive = true
+        year.topAnchor.constraint(equalTo: contentView!.topAnchor, constant: 50).isActive = true
         
         month.centerXAnchor.constraint(equalTo: contentView!.centerXAnchor).isActive = true
         month.topAnchor.constraint(equalTo: year.bottomAnchor, constant: 20).isActive = true
@@ -154,8 +155,9 @@ final class Config: NSWindow {
         }
     }
     
-    private func control(_ image: String, _ selector: Selector, _ center: NSLayoutYAxisAnchor, left: NSLayoutXAxisAnchor?, right: NSLayoutXAxisAnchor?) {
+    private func control(_ image: String, _ label: String, _ selector: Selector, _ center: NSLayoutYAxisAnchor, left: NSLayoutXAxisAnchor?, right: NSLayoutXAxisAnchor?) {
         let control = Control(self, selector)
+        control.setAccessibilityLabel(label)
         contentView!.addSubview(control)
         
         let image = Image(image)

@@ -71,13 +71,13 @@ final class Horizon: UIView {
         self.moon = moon
         
         sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+            self.azimuth = $0.azimuth
+            self.altitude = $0.altitude
             moon.phase = $0.phase
             moon.fraction = $0.fraction
             moon.angle = $0.angle
-            self.azimuth = $0.azimuth
-            self.altitude = $0.altitude
-            self.moon.middle = self.moonmiddle
-            self.moon.update()
+            moon.middle = self.moonmiddle
+            moon.update()
         }
     }
     

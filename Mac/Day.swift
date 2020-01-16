@@ -19,6 +19,7 @@ final class Day: Control {
         self.day = day
         self.config = config
         super.init(config, #selector(config.day(_:)))
+        setAccessibilityLabel("\(day)")
         translatesAutoresizingMaskIntoConstraints = false
         wantsLayer = true
         layer!.cornerRadius = 20

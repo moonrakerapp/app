@@ -24,7 +24,9 @@ public final class Moonraker {
         }
     }
     
-    public let info = CurrentValueSubject<Info, Never>(.init())
+    public let now = CurrentValueSubject<Info, Never>(.init())
+    public let travel = CurrentValueSubject<Info, Never>(.init())
+    public let calendar = CurrentValueSubject<Date, Never>(.init())
     public let times = CurrentValueSubject<Times, Never>(.down)
     public let phases = CurrentValueSubject<(Date, Date), Never>((.init(), .init()))
     private let queue = DispatchQueue(label: "", qos: .background, target: .global(qos: .background))
@@ -240,7 +242,10 @@ public final class Moonraker {
     
     private func makeInfo() {
         queue.async {
-            self.info.value = self.info(self.date.timeIntervalSince1970 + self.offset, self.coords.0, self.coords.1)
+            let offset = self.date.addingTimeInterval(self.offset)
+            self.now.value = self.info(self.date.timeIntervalSince1970, self.coords.0, self.coords.1)
+            self.travel.value = self.info(offset.timeIntervalSince1970, self.coords.0, self.coords.1)
+            self.calendar.value = offset
         }
     }
     

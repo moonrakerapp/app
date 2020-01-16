@@ -13,7 +13,7 @@ final class Equalizer: CAShapeLayer {
         lineWidth = 1
         lineCap = .round
         
-        sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+        sub = moonraker.travel.receive(on: DispatchQueue.main).sink {
             let point = (CGFloat($0.azimuth >= 0 ? (.pi * 1.5) - $0.altitude : $0.altitude + (.pi / 2)) / (.pi * 2)) * 29
             let path = CGMutablePath()
             (0 ..< 30).forEach {

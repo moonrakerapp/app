@@ -20,9 +20,6 @@ final class Pop: NSPopover {
         percent.alphaValue = 0.5
         contentViewController!.view.addSubview(percent)
         
-        let date = Label("", .regular(14), .textColor)
-        contentViewController!.view.addSubview(date)
-        
         let formatter = DateFormatter()
         formatter.dateStyle = .short
         formatter.timeStyle = .short
@@ -47,11 +44,11 @@ final class Pop: NSPopover {
         illumination.strokeEnd = 0
         container.layer!.addSublayer(illumination)
         
-        info = moonraker.info.receive(on: DispatchQueue.main).sink {
+        info = moonraker.now.receive(on: DispatchQueue.main).sink {
             phase.stringValue = .key("Phase.\($0.phase)")
             percent.attributed([("\(Int(round($0.fraction * 1000) / 10))", .bold(16), .textColor),
                                 ("%", .regular(14), .textColor)])
-            
+
             let animation = CABasicAnimation(keyPath: "strokeEnd")
             animation.duration = 1
             animation.fromValue = illumination.strokeEnd
@@ -59,10 +56,6 @@ final class Pop: NSPopover {
             animation.timingFunction = .init(name: .easeOut)
             illumination.strokeEnd = .init($0.fraction)
             illumination.add(animation, forKey: "strokeEnd")
-            
-            if moonraker.offset != 0 {
-                date.stringValue = formatter.string(from: moonraker.date.addingTimeInterval(moonraker.offset))
-            }
         }
         
         phase.topAnchor.constraint(equalTo: contentViewController!.view.topAnchor, constant: 40).isActive = true
@@ -70,9 +63,6 @@ final class Pop: NSPopover {
         
         percent.topAnchor.constraint(equalTo: phase.topAnchor).isActive = true
         percent.rightAnchor.constraint(equalTo: contentViewController!.view.rightAnchor, constant: -20).isActive = true
-        
-        date.topAnchor.constraint(equalTo: container.bottomAnchor, constant: 15).isActive = true
-        date.centerXAnchor.constraint(equalTo: container.centerXAnchor).isActive = true
         
         container.leftAnchor.constraint(equalTo: phase.leftAnchor).isActive = true
         container.topAnchor.constraint(equalTo: phase.bottomAnchor, constant: 15).isActive = true

@@ -45,7 +45,7 @@ final class Graph: NSView {
         label.maximumNumberOfLines = 6
         addSubview(label)
         
-        sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+        sub = moonraker.travel.receive(on: DispatchQueue.main).sink {
             ring.strokeEnd = .init($0.fraction)
             
             var attributed: [(String, NSFont, NSColor)] = [

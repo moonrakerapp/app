@@ -77,7 +77,7 @@ final class Horizon: NSView {
         path.addSublayer(moon)
         self.moon = moon
         
-        sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+        sub = moonraker.travel.receive(on: DispatchQueue.main).sink {
             moon.phase = $0.phase
             moon.fraction = $0.fraction
             moon.angle = $0.angle

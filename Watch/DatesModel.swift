@@ -13,8 +13,7 @@ final class DatesModel: ObservableObject {
         remains.allowedUnits = [.month, .weekOfMonth, .day]
         
         let date = DateFormatter()
-        date.dateStyle = .short
-        date.timeStyle = .none
+        date.dateFormat = "d/M"
         
         sub = app.moonraker.phases.receive(on: DispatchQueue.main).sink {
             let now = Date()

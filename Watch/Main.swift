@@ -14,6 +14,7 @@ private struct Content: View {
     var body: some View {
         ZStack {
             Sky(ratio: $ratio)
+                .edgesIgnoringSafeArea(.all)
             VStack {
                 Spacer()
                 HStack {
@@ -28,7 +29,6 @@ private struct Content: View {
                 Text(model.name)
                     .font(Font.caption.bold())
                     .foregroundColor(Color("haze"))
-                    .padding(.bottom, 20)
             }
             .contentShape(Rectangle())
             .onTapGesture {
@@ -37,33 +37,36 @@ private struct Content: View {
                     ratio = model.zoom ? 0 : 1
                 }
             }
-            .digitalCrownRotation($crown)
-            .onReceive(Just(crown)) {
-                let offset = TimeInterval($0 * 500)
-                if app.moonraker.offset != offset {
-                    app.moonraker.offset = offset
-                }
-            }
             if !model.date.isEmpty {
-//                VStack {
-//                    Button(action: {
-//                        self.crown = 0
-//                    }) {
-//                        Image("now")
-//                    }.background(Color.clear)
-//                        .accentColor(.clear)
-//                        .foregroundColor(Color("haze"))
-//                        .padding(.top, 25)
-//                    Spacer()
-//                }
-            }
-        }.edgesIgnoringSafeArea(.all)
-            .navigationBarTitle(model.date)
-            .onAppear {
-                withAnimation(.easeOut(duration: 2)) {
-                    self.ratio = 1
+                VStack {
+                    Button(action: {
+                        crown = 0
+                    }) {
+                        Image("now")
+                            .font(.title)
+                            .foregroundColor(Color("haze"))
+                            .frame(width: 50, height: 50)
+                    }
+                    .buttonStyle(PlainButtonStyle())
+                    .contentShape(Rectangle())
+                    Spacer()
                 }
             }
+        }
+        .navigationBarTitle(model.date)
+        .focusable()
+        .digitalCrownRotation($crown)
+        .onReceive(Just(crown)) {
+            let offset = TimeInterval($0 * 500)
+            if app.moonraker.offset != offset {
+                app.moonraker.offset = offset
+            }
+        }
+        .onAppear {
+            withAnimation(.easeOut(duration: 2)) {
+                ratio = 1
+            }
+        }
     }
 }
 

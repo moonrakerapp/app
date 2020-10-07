@@ -18,6 +18,8 @@ struct DatesContent: View {
                     .font(.footnote)
                     .foregroundColor(Color("haze"))
             }
+            Spacer()
+                .frame(width: 15)
             VStack {
                 Image("full")
                 Text(model.fullDate)

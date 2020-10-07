@@ -10,10 +10,10 @@ final class TimesModel: ObservableObject {
     let timer = DispatchSource.makeTimerSource(queue: .main)
     
     init() {
-        let counter = DateComponentsFormatter()
+        let counter = RelativeDateTimeFormatter()
+        counter.unitsStyle = .short
         let time = DateFormatter()
-        time.dateStyle = .none
-        time.timeStyle = .medium
+        time.dateFormat = "HH:mm"
         
         sub = app.moonraker.times.receive(on: DispatchQueue.main).sink {
             switch $0 {
@@ -44,12 +44,12 @@ final class TimesModel: ObservableObject {
             let now = Date()
             switch app.moonraker.times.value {
             case .rise(let time):
-                self.riseCounter = counter.string(from: now, to: time) ?? ""
+                self.riseCounter = counter.localizedString(for: time, relativeTo: now)
             case .set(let time):
-                self.setCounter = counter.string(from: now, to: time) ?? ""
+                self.setCounter = counter.localizedString(for: time, relativeTo: now)
             case .both(let _rise, let _set):
-                self.riseCounter = counter.string(from: now, to: _rise) ?? ""
-                self.setCounter = counter.string(from: now, to: _set) ?? ""
+                self.riseCounter = counter.localizedString(for: _rise, relativeTo: now)
+                self.setCounter = counter.localizedString(for: _set, relativeTo: now)
             default: break
             }
         }

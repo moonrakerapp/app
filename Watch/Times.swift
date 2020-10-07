@@ -30,6 +30,8 @@ struct TimesContent: View {
                     .font(.footnote)
                     .foregroundColor(Color("haze"))
             }
+            Spacer()
+                .frame(width: 15)
             VStack {
                 Image("set")
                 Text(model.setDate)

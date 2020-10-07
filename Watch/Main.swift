@@ -42,13 +42,17 @@ private struct Content: View {
                     Button(action: {
                         crown = 0
                     }) {
-                        Image("now")
-                            .font(.title)
-                            .foregroundColor(Color("haze"))
-                            .frame(width: 50, height: 50)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 14)
+                                .frame(width: 28, height: 28)
+                                .foregroundColor(Color("haze"))
+                            Image("now")
+                                .font(.title)
+                        }
+                        .frame(width: 40, height: 40)
+                        .contentShape(Rectangle())
                     }
                     .buttonStyle(PlainButtonStyle())
-                    .contentShape(Rectangle())
                     Spacer()
                 }
             }

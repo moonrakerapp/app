@@ -15,6 +15,7 @@ final class Complication: NSObject, CLKComplicationDataSource {
             case .graphicCircular: return graphicCircular()
             case .graphicBezel: return graphicBezel()
             case .graphicRectangular: return graphicRectangular()
+            case .graphicExtraLarge: return graphicRectangular()
             @unknown default: return .init() }
         } (complication.family)))
     }

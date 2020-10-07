@@ -14,51 +14,48 @@ private struct Content: View {
     var body: some View {
         ZStack {
             Sky(ratio: $ratio)
-                .edgesIgnoringSafeArea(.all)
-            Button(action: {
-                self.model.zoom.toggle()
+            VStack {
+                Spacer()
+                HStack {
+                    Text(model.percent)
+                        .font(Font.body.bold())
+                        .foregroundColor(Color("haze"))
+                        .padding(.trailing, -7)
+                    Text("%")
+                        .font(.footnote)
+                        .foregroundColor(Color("shade"))
+                }
+                Text(model.name)
+                    .font(Font.caption.bold())
+                    .foregroundColor(Color("haze"))
+                    .padding(.bottom, 20)
+            }
+            .contentShape(Rectangle())
+            .onTapGesture {
+                model.zoom.toggle()
                 withAnimation(.easeOut(duration: 0.6)) {
-                    self.ratio = self.model.zoom ? 0 : 1
+                    ratio = model.zoom ? 0 : 1
                 }
-            }) {
-                VStack {
-                    Spacer()
-                    HStack {
-                        Text(model.percent)
-                            .font(Font.body.bold())
-                            .foregroundColor(Color("haze"))
-                            .padding(.trailing, -7)
-                        Text("%")
-                            .font(.footnote)
-                            .foregroundColor(Color("shade"))
-                    }
-                    Text(model.name)
-                        .font(Font.caption.bold())
-                        .foregroundColor(Color("haze"))
-                        .padding(.bottom, 12)
+            }
+            .digitalCrownRotation($crown)
+            .onReceive(Just(crown)) {
+                let offset = TimeInterval($0 * 500)
+                if app.moonraker.offset != offset {
+                    app.moonraker.offset = offset
                 }
-            }.background(Color.clear)
-                .accentColor(.clear)
-                .focusable()
-                .digitalCrownRotation($crown)
-                .onReceive(Just(crown)) {
-                    let offset = TimeInterval($0 * 500)
-                    if app.moonraker.offset != offset {
-                        app.moonraker.offset = offset
-                    }
-                }
+            }
             if !model.date.isEmpty {
-                VStack {
-                    Button(action: {
-                        self.crown = 0
-                    }) {
-                        Image("now")
-                    }.background(Color.clear)
-                        .accentColor(.clear)
-                        .foregroundColor(Color("haze"))
-                        .padding(.top, 25)
-                    Spacer()
-                }
+//                VStack {
+//                    Button(action: {
+//                        self.crown = 0
+//                    }) {
+//                        Image("now")
+//                    }.background(Color.clear)
+//                        .accentColor(.clear)
+//                        .foregroundColor(Color("haze"))
+//                        .padding(.top, 25)
+//                    Spacer()
+//                }
             }
         }.edgesIgnoringSafeArea(.all)
             .navigationBarTitle(model.date)
@@ -75,7 +72,7 @@ private struct Sky: View {
     @Binding var ratio: CGFloat
     
     var body: some View {
-        Group {
+        ZStack {
             Horizon(ratio: ratio, points: model.points, start: model.start)
                 .stroke(Color("shade"), style: .init(lineWidth: 3, lineCap: .round))
             Dash(ratio: ratio, middle: model.middle, amplitude: model.amplitude)
@@ -93,10 +90,10 @@ private struct Moon: View {
     @EnvironmentObject var model: MainModel
     
     var body: some View {
-        Group {
+        ZStack {
             Outer(radius: model.radius)
                 .fill(Color.black)
-                .shadow(color: Color("haze"), radius: model.radius, x: model.radius, y: model.radius)
+                .shadow(color: Color("haze"), radius: model.radius)
             Outer(radius: model.radius)
                 .stroke(Color("shade"), style: .init(lineWidth: 2, lineCap: .round))
             Face(radius: model.radius, fraction: model.fraction, phase: model.phase)

@@ -1,5 +1,6 @@
 import Moonraker
 import WatchKit
+import ClockKit
 import CoreLocation
 import Combine
 
@@ -16,7 +17,7 @@ final class App: NSObject, WKExtensionDelegate, CLLocationManagerDelegate {
     override init() {
         super.init()
         app = self
-        sub = complication.info.sink {
+        sub = complication.travel.sink {
             self.phase = $0.phase
             self.fraction = .init($0.fraction)
             CLKComplicationServer.sharedInstance().activeComplications?.forEach(CLKComplicationServer.sharedInstance().reloadTimeline(for:))

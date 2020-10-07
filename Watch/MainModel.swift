@@ -37,7 +37,7 @@ final class MainModel: ObservableObject {
         let time = DateFormatter()
         time.dateFormat = "h a"
         
-        sub = app.moonraker.info.receive(on: DispatchQueue.main).sink {
+        sub = app.moonraker.travel.receive(on: DispatchQueue.main).sink {
             self.phase = $0.phase
             self.fraction = .init($0.fraction)
             self.angle = $0.angle
@@ -60,7 +60,7 @@ final class MainModel: ObservableObject {
     
     private func render() {
         let size = WKInterfaceDevice.current().screenBounds.size
-        middle = CGPoint(x: size.width / 2, y: (size.height / 2) + 32)
+        middle = CGPoint(x: size.width / 2, y: (size.height / 2))
         worldRadius = (min(size.width, size.height) * 0.5) - 2
         amplitude = worldRadius / 3
         start = .init(x: middle.x - worldRadius, y: middle.y + amplitude)

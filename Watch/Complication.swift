@@ -15,7 +15,12 @@ final class Complication: NSObject, CLKComplicationDataSource {
             case .graphicCircular: return graphicCircular()
             case .graphicBezel: return graphicBezel()
             case .graphicRectangular: return graphicRectangular()
-            case .graphicExtraLarge: return graphicRectangular()
+            case .graphicExtraLarge:
+            if #available(watchOSApplicationExtension 7.0, *) {
+                return graphicExtra()
+            } else {
+                return .init()
+            }
             @unknown default: return .init() }
         } (complication.family)))
     }
@@ -125,6 +130,13 @@ final class Complication: NSObject, CLKComplicationDataSource {
     
     private func graphicRectangular() -> CLKComplicationTemplateGraphicRectangularLargeImage {
         let template = CLKComplicationTemplateGraphicRectangularLargeImage()
+        template.imageProvider = .init(fullColorImage: .make(54))
+        template.tintColor = UIColor(named: "haze")
+        return template
+    }
+    
+    @available(watchOSApplicationExtension 7.0, *) private func graphicExtra() -> CLKComplicationTemplateGraphicExtraLargeCircular {
+        let template = CLKComplicationTemplateGraphicExtraLargeCircularImage()
         template.imageProvider = .init(fullColorImage: .make(54))
         template.tintColor = UIColor(named: "haze")
         return template

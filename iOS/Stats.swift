@@ -18,14 +18,12 @@ final class Stats: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .init(white: 0, alpha: 0.85)
-        
-        let counter = DateComponentsFormatter()
+        let counter = RelativeDateTimeFormatter()
         let remains = DateComponentsFormatter()
         remains.allowedUnits = [.month, .weekOfMonth, .day]
         
         let date = DateFormatter()
-        date.dateStyle = .short
-        date.timeStyle = .none
+        date.dateFormat = "d/M"
         
         let time = DateFormatter()
         time.dateFormat = "HH:mm"
@@ -115,12 +113,12 @@ final class Stats: UIViewController {
             let now = Date()
             switch moonraker.times.value {
             case .rise(let time):
-                rise.counter.text = counter.string(from: now, to: time) ?? ""
+                rise.counter.text = counter.localizedString(for: time, relativeTo: now)
             case .set(let time):
-                set.counter.text = counter.string(from: now, to: time) ?? ""
+                set.counter.text = counter.localizedString(for: time, relativeTo: now)
             case .both(let _rise, let _set):
-                rise.counter.text = counter.string(from: now, to: _rise) ?? ""
-                set.counter.text = counter.string(from: now, to: _set) ?? ""
+                rise.counter.text = counter.localizedString(for: _rise, relativeTo: now)
+                set.counter.text = counter.localizedString(for: _set, relativeTo: now)
             default: break
             }
         }

@@ -70,7 +70,7 @@ final class Horizon: UIView {
         path.addSublayer(moon)
         self.moon = moon
         
-        sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+        sub = moonraker.travel.receive(on: DispatchQueue.main).sink {
             self.azimuth = $0.azimuth
             self.altitude = $0.altitude
             moon.phase = $0.phase

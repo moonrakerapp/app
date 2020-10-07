@@ -23,7 +23,7 @@ final class Graph: UIView {
         label.numberOfLines = 5
         addSubview(label)
         
-        sub = moonraker.info.receive(on: DispatchQueue.main).sink {
+        sub = moonraker.travel.receive(on: DispatchQueue.main).sink {
             var attributed: [(String, UIFont, UIColor)] = [
                 ("\(Int(round($0.fraction * 1000) / 10))", .bold(20), .haze()), ("%", .regular(14), .shade()),
                 ("\n" + .key("Phase.\($0.phase)") + "\n\n", .regular(18), .haze())]
